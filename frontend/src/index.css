@@ -1,5 +1,9 @@
 body {
   margin: 0;
   box-sizing: border-box;
+}
+
+main {
   min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
 }
