@@ -1,9 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   margin: 0;
   box-sizing: border-box;
+  background-color: #f4fbef;
 }
 
 main {
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
 }
