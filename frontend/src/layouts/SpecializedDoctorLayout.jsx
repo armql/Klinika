@@ -1,13 +1,12 @@
 import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
 
-export default function GuestLayout() {
+export default function SpecializedDoctorLayout() {
   return (
     <Fragment>
       {/* TODO: Header */}
       <main>
         <Outlet />
-        {/* <Background /> */}
       </main>
       {/* TODO: Footer */}
     </Fragment>

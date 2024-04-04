@@ -1,17 +1,65 @@
 import { createBrowserRouter } from "react-router-dom";
-import NotFound from "../pages/NotFound";
-import GuestLayout from "../layouts/GuestLayout";
+import {
+  AdministrationLayout,
+  SpecializedDoctorLayout,
+  PrimaryDoctorLayout,
+  PatientLayout,
+  GuestLayout,
+  DeveloperLayout,
+  NotFound,
+  BlankLoader,
+} from "./global";
+import { Suspense } from "react";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <GuestLayout />,
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <GuestLayout />
+      </Suspense>
+    ),
   },
-  /*
-    TODO: Phase 1
-   * Integration of all roles layouts,
-   * All layouts must be wrapped with suspense to avoid instant rendering, 
-   */
+  {
+    path: "/administrative",
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <AdministrationLayout />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/patient",
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <PatientLayout />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/specialized",
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <SpecializedDoctorLayout />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/primary",
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <PrimaryDoctorLayout />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/development",
+    element: (
+      <Suspense fallback={<BlankLoader />}>
+        <DeveloperLayout />
+      </Suspense>
+    ),
+  },
   {
     path: "*",
     element: <NotFound />,
