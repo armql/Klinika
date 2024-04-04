@@ -7,7 +7,7 @@ export default function GuestLayout() {
   return (
     <Fragment>
       <Navbar />
-      <main>
+      <main className="relative">
         <Outlet />
         {/* <Background /> */}
       </main>
