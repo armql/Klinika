@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   AdministrationLayout,
   SpecializedDoctorLayout,
@@ -9,6 +9,7 @@ import {
   NotFound,
   BlankLoader,
 } from "./global";
+import { Home, HelpCenter, About, Register, Login } from "./pages";
 import { Suspense } from "react";
 
 const router = createBrowserRouter([
@@ -19,6 +20,52 @@ const router = createBrowserRouter([
         <GuestLayout />
       </Suspense>
     ),
+    children: [
+      {
+        path: "/",
+        element: <Navigate to="home" />,
+      },
+      {
+        path: "home",
+        element: (
+          <Suspense>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "help-center",
+        element: (
+          <Suspense>
+            <HelpCenter />
+          </Suspense>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Suspense>
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: "login",
+        element: (
+          <Suspense>
+            <Login />
+          </Suspense>
+        ),
+      },
+      {
+        path: "register",
+        element: (
+          <Suspense>
+            <Register />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/administrative",

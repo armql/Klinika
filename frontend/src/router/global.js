@@ -12,7 +12,7 @@ const AdministrationLayout = lazy(() =>
   import("../layouts/AdministrationLayout")
 );
 const GuestLayout = lazy(() => import("../layouts/GuestLayout"));
-import { BlankLoader } from "../features/layouts/layout__";
+import { BlankLoader } from "../features/layouts/__layout";
 export {
   AdministrationLayout,
   SpecializedDoctorLayout,
