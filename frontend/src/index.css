@@ -2,11 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 body {
-  margin: 0;
-  box-sizing: border-box;
-  background-color: #f4fbef;
+  @apply bg-gradient-to-r from-[#f4fbef] via-green-100 to-white;
 }
 
+* {
+  user-select: none;
+  margin: 0;
+  box-sizing: border-box;
+}
 main {
   min-height: 100vh;
 }
