@@ -1,32 +1,73 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "Microsoft.AspNetCore.SpaProxy/6.0.24": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Microsoft.AspNetCore.SpaProxy.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.SpaProxy.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ],
+        "build": {
+          "build/Microsoft.AspNetCore.SpaProxy.targets": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Microsoft.AspNetCore.SpaProxy/6.0.24": {
+      "sha512": "nLQWtgGBBOfnY3aBq4QE72gg88X0tl2GP1a4+chcrpIwmChFeoJS3GcALa9xde7Ckk/ivd1ku3vTxlqjtpoe1A==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.spaproxy/6.0.24",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "build/Microsoft.AspNetCore.SpaProxy.targets",
+        "lib/net6.0/Microsoft.AspNetCore.SpaProxy.dll",
+        "microsoft.aspnetcore.spaproxy.6.0.24.nupkg.sha512",
+        "microsoft.aspnetcore.spaproxy.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Microsoft.AspNetCore.SpaProxy >= 6.0.24"
+    ]
   },
   "packageFolders": {
-    "/Users/am/.nuget/packages/": {}
+    "C:\\Users\\38344\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Applications/XAMPP/xamppfiles/htdocs/Klinika/Klinika/Klinika.csproj",
+      "projectUniqueName": "C:\\Users\\38344\\source\\repos\\Klinika\\Klinika\\Klinika.csproj",
       "projectName": "Klinika",
-      "projectPath": "/Applications/XAMPP/xamppfiles/htdocs/Klinika/Klinika/Klinika.csproj",
-      "packagesPath": "/Users/am/.nuget/packages/",
-      "outputPath": "/Applications/XAMPP/xamppfiles/htdocs/Klinika/Klinika/obj/",
+      "projectPath": "C:\\Users\\38344\\source\\repos\\Klinika\\Klinika\\Klinika.csproj",
+      "packagesPath": "C:\\Users\\38344\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\38344\\source\\repos\\Klinika\\Klinika\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/am/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\38344\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -44,6 +85,12 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.SpaProxy": {
+            "target": "Package",
+            "version": "[6.0.24, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -63,7 +110,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

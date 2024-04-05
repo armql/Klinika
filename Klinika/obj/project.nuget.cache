@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ncsmEZMlwFcB6MrITCkdivb/yjlzz+6it6xetDsPirkJOm+L1DSVxTK7Q0xGHvkNAtJUErb/VLzIRPeL7qtIcw==",
+  "dgSpecHash": "P+fBPKJDP1uQaBussGzUAT5iR9TdgMf/zxGWuvpFR1HF7nkQm65zInV8nODmkXgeHGXg25eGWIcLWg5ZIMjmbg==",
   "success": true,
-  "projectFilePath": "/Applications/XAMPP/xamppfiles/htdocs/Klinika/Klinika/Klinika.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\38344\\source\\repos\\Klinika\\Klinika\\Klinika.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\38344\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\6.0.24\\microsoft.aspnetcore.spaproxy.6.0.24.nupkg.sha512"
+  ],
   "logs": []
 }
