@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:5173",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "C:\\Users\\38344\\source\\repos\\Klinika\\Klinika\\Klinika.Server\\..\\klinika.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}
