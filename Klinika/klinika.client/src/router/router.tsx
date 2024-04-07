@@ -12,7 +12,7 @@ import {
 import { Home, HelpCenter, About, Register, Login } from "./pages";
 import { Suspense } from "react";
 
-const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -112,5 +112,3 @@ const router = createBrowserRouter([
     element: <NotFound />,
   },
 ]);
-
-export default router;
