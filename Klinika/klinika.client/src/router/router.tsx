@@ -11,6 +11,7 @@ import {
 } from "./global";
 import { Home, HelpCenter, About, Register, Login } from "./pages";
 import { Suspense } from "react";
+import ProtectedRoutes from "../lib/ProtectedRoutes";
 
 export const router = createBrowserRouter([
   {
@@ -70,41 +71,47 @@ export const router = createBrowserRouter([
   {
     path: "/administrative",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <AdministrationLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
+    children: [
+      {
+        path: "about",
+        element: <About />,
+      },
+    ],
   },
   {
     path: "/patient",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <PatientLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
   },
   {
     path: "/specialized",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <SpecializedDoctorLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
   },
   {
     path: "/primary",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <PrimaryDoctorLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
   },
   {
     path: "/development",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <DeveloperLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
   },
   {

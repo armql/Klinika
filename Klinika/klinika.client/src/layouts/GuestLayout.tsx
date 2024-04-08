@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "../../src/pages/Navbar";
+import Navbar from "../components/Navbar";
 import Footer from "../../src/pages/Footer";
 
 export default function GuestLayout() {

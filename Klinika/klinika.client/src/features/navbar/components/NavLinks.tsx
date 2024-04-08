@@ -10,17 +10,17 @@ export default function NavLinks() {
     <Fragment>
       <ul className="gap-4 sm:flex hidden">
         {nav_data.map((item) => (
-          <li key={item.id} className="">
+          <li key={item.id}>
             <NavLink
               to={item.to}
               className={({ isActive }) =>
-                `p-2 ${
+                `px-4 py-2.5 ${
                   isActive
                     ? "font-medium"
                     : "hover:text-compact/70 text-compact"
                 } ${
                   item.to === "register" &&
-                  "bg-primary text-black hover:bg-primary/90 rounded-md"
+                  "bg-primary text-compact hover:bg-primary/90 rounded-md"
                 } ${isActive && "cursor-default"}`
               }
             >
@@ -42,7 +42,7 @@ export default function NavLinks() {
         <div className="fixed w-full h-full z-10 bottom-0 left-0 right-0 top-0 bg-white backdrop-blur-sm bg-opacity-95">
           <ul className="gap-8 flex flex-col w-full h-full items-center justify-center">
             {nav_data.map((item) => (
-              <li key={item.id} className="">
+              <li key={item.id}>
                 <NavLink
                   to={item.to}
                   onClick={close}
@@ -53,7 +53,7 @@ export default function NavLinks() {
                         : "hover:text-compact/70 text-compact"
                     } ${
                       item.to === "register" &&
-                      "bg-primary text-black hover:bg-primary/90 rounded-md px-4"
+                      "bg-primary text-compact hover:bg-primary/90 rounded-md px-4"
                     } ${isActive && "cursor-default"}`
                   }
                 >
