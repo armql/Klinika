@@ -1,14 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../features/authentication/__auth";
+import { Input, schema_login } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-type FormFields = z.infer<typeof schema>;
+type FormFields = z.infer<typeof schema_login>;
 
 export default function Login() {
   const {
@@ -17,7 +12,7 @@ export default function Login() {
     formState: { errors },
   } = useForm<FormFields>({
     mode: "onChange",
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema_login),
   });
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     // TODO: Implementation with backend
@@ -26,7 +21,7 @@ export default function Login() {
 
   return (
     <section className="w-full h-[80vh] flex">
-      <div className="w-[50%] h-full bg-white flex justify-center items-center">
+      <div className="w-[100%] md:w-[50%] h-full bg-white flex justify-center items-center">
         <div className="w-[400px] flex flex-col gap-8 ">
           <div className="w-96 text-start gap-4 flex flex-col">
             <h1 className="font-medium text-5xl">Login</h1>
@@ -63,7 +58,7 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-zinc-600"></div>
+      <div className="w-[50%] h-full bg-zinc-600 md:block hidden"></div>
     </section>
   );
 }

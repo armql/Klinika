@@ -16,11 +16,11 @@ export default function NavLinks() {
               className={({ isActive }) =>
                 `px-4 py-2.5 ${
                   isActive
-                    ? "font-medium"
+                    ? "text-compact/70"
                     : "hover:text-compact/70 text-compact"
                 } ${
                   item.to === "register" &&
-                  "bg-primary text-compact hover:bg-primary/90 rounded-md"
+                  "bg-primary/50 text-compact hover:bg-primary/70 rounded-md"
                 } ${isActive && "cursor-default"}`
               }
             >
