@@ -15,15 +15,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   return (
     <div className="flex flex-col gap-2 relative">
-      <label htmlFor={htmlFor} className="font-medium">
-        {labelName}
+      <label
+        htmlFor={htmlFor}
+        className="font-medium sm:text-base text-sm text-compact"
+      >
+        {labelName}*
       </label>
       <input
         type={type}
         placeholder={placeholder}
         autoComplete="off"
         ref={ref}
-        className={`border-2 rounded-md w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary ${
+        className={`border-2 rounded-md sm:text-base text-sm w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary ${
           error && "border-red-200"
         }`}
         {...props}

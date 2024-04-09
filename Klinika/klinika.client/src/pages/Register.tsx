@@ -22,10 +22,10 @@ export default function Register() {
   };
 
   return (
-    <section className="w-full h-[90vh] flex">
-      <div className="w-[50%] h-full bg-white flex justify-center items-center">
-        <div className="w-[400px] flex flex-col gap-8 ">
-          <div className="w-96 text-start gap-4 flex flex-col">
+    <section className="w-full h-full flex py-12 gap-12 bg-white px-12">
+      <div className="w-[100%] md:w-[50%] h-full flex justify-center items-center">
+        <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
+          <div className="w-full sm:text-start text-center gap-4 flex flex-col">
             <h1 className="font-medium text-5xl">Register</h1>
             <span className="text-lg text-zinc-700">
               Empower your health journey with a simple click. Register now and
@@ -33,7 +33,7 @@ export default function Register() {
             </span>
           </div>
           <form
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-6"
             onSubmit={handleSubmit(onSubmit)}
           >
             <Input
@@ -85,7 +85,13 @@ export default function Register() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-zinc-600"></div>
+      <div className="w-[50%] max-h-screen bg-gradient-to-b from-compact/80 to-primary/50 md:block hidden rounded-md">
+        <div className="w-full h-full flex justify-end p-4 flex-col items-start">
+          <h1 className="text-4xl font-manrope text-compact">
+            Lorem ipsum dorum
+          </h1>
+        </div>
+      </div>
     </section>
   );
 }

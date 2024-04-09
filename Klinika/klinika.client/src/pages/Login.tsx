@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Input, schema_login } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SliderCard from "../features/authentication/components/SliderCard";
 
 type FormFields = z.infer<typeof schema_login>;
 
@@ -20,13 +21,14 @@ export default function Login() {
   };
 
   return (
-    <section className="w-full h-[80vh] flex">
-      <div className="w-[100%] md:w-[50%] h-full bg-white flex justify-center items-center">
-        <div className="w-[400px] flex flex-col gap-8 ">
-          <div className="w-96 text-start gap-4 flex flex-col">
-            <h1 className="font-medium text-5xl">Login</h1>
+    <section className="w-full h-full flex py-12 gap-12 bg-white px-12">
+      <div className="w-[100%] md:w-[50%] h-full flex justify-center items-center">
+        <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
+          <div className="w-full sm:text-start text-center gap-4 flex flex-col">
+            <h1 className="font-medium text-5xl">Register</h1>
             <span className="text-lg text-zinc-700">
-              You are just a click away from prioritizing your health journey.
+              Empower your health journey with a simple click. Register now and
+              prioritize your well-being today.
             </span>
           </div>
           <form
@@ -58,7 +60,7 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-zinc-600 md:block hidden"></div>
+      <SliderCard />
     </section>
   );
 }
