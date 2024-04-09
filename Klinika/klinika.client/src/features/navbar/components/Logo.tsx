@@ -6,7 +6,7 @@ interface InnerProp {
 
 export default function Logo({ children }: InnerProp) {
   return (
-    <span className="font-medium font-manrope text-5xl sm:text-start text-center">
+    <span className="font-semibold text-5xl sm:text-start text-center">
       {children}
     </span>
   );
