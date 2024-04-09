@@ -15,6 +15,7 @@ export default function Login() {
     mode: "onChange",
     resolver: zodResolver(schema_login),
   });
+
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     // TODO: Implementation with backend
     console.log(data);
@@ -22,10 +23,10 @@ export default function Login() {
 
   return (
     <section className="w-full h-full flex py-12 gap-12 bg-white px-12">
-      <div className="w-[100%] md:w-[50%] h-full flex justify-center items-center">
+      <div className="w-full md:w-[50%] h-full flex justify-center items-center">
         <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
-            <h1 className="font-medium text-5xl">Register</h1>
+            <h1 className="font-medium text-5xl">Login</h1>
             <span className="text-lg text-zinc-700">
               Empower your health journey with a simple click. Register now and
               prioritize your well-being today.

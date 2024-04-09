@@ -5,7 +5,7 @@ export default function PatientLayout() {
   return (
     <Fragment>
       {/* TODO: Header */}
-      <main>
+      <main className="relative overflow-hidden">
         <Outlet />
       </main>
       {/* TODO: Footer */}
