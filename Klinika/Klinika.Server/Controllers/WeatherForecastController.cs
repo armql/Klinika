@@ -1,3 +1,4 @@
+using Klinika.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Klinika.Server.Controllers

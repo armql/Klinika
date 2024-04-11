@@ -1,4 +1,4 @@
-namespace Klinika.Server
+namespace Klinika.Server.Models
 {
     public class WeatherForecast
     {
