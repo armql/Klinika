@@ -4,7 +4,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 type InputProps = {
   htmlFor: string;
   labelName: string;
-  placeholder: string;
+  placeholder: string | undefined;
   type: string;
   error: string | undefined;
 } & UseFormRegisterReturn;
@@ -31,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         }`}
         {...props}
       />
-      <span className="absolute -bottom-5 px-2 text-sm text-red-600">
+      <span className="absolute sm:-bottom-5 truncate -bottom-4 px-2 sm:text-sm text-xs text-red-600">
         {error}
       </span>
     </div>

@@ -25,6 +25,7 @@ const schema_login = z.object({
     .refine((value) => /\W|_/.test(value), {
       message: "Password must contain at least one special character",
     }),
+  remember_me: z.boolean(),
 });
 
 const schema_register = z.object({
@@ -63,6 +64,36 @@ const schema_register = z.object({
     .min(8, "Password should be at least 8 characters long")
     .refine((value) => value.length > 0, {
       message: "Password is required",
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .refine((value) => /[a-z]/.test(value), {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .refine((value) => /[0-9]/.test(value), {
+      message: "Password must contain at least one digit",
+    })
+    .refine((value) => /\W|_/.test(value), {
+      message: "Password must contain at least one special character",
+    }),
+  confirm_password: z
+    .string()
+    .min(8, "Password should be at least 8 characters long")
+    .refine((value) => value.length > 0, {
+      message: "Password is required",
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .refine((value) => /[a-z]/.test(value), {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .refine((value) => /[0-9]/.test(value), {
+      message: "Password must contain at least one digit",
+    })
+    .refine((value) => /\W|_/.test(value), {
+      message: "Password must contain at least one special character",
     }),
   age: z
     .string()
@@ -72,6 +103,7 @@ const schema_register = z.object({
     .refine((value) => new Date(value) <= new Date(), {
       message: "Age cannot be from a future date",
     }),
+  gender: z.string(),
 });
 
 export { schema_login, schema_register };

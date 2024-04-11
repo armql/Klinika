@@ -1,13 +1,12 @@
 import { lazy } from "react";
+
 const SpecializedDoctorLayout = lazy(
   () => import("../../src/layouts/SpecializedDoctorLayout")
 );
 const PrimaryDoctorLayout = lazy(
   () => import("../../src/layouts/PrimaryDoctorLayout")
 );
-const PatientLayout = lazy(
-  () => import("../../src/layouts/AdministrationLayout")
-);
+const PatientLayout = lazy(() => import("../../src/layouts/PatientLayout"));
 const DeveloperLayout = lazy(() => import("../../src/layouts/DeveloperLayout"));
 const NotFound = lazy(() => import("../../src/layouts/NotFound"));
 const AdministrationLayout = lazy(

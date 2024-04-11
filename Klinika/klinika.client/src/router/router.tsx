@@ -9,9 +9,18 @@ import {
   NotFound,
   BlankLoader,
 } from "./global";
-import { Home, HelpCenter, About, Register, Login } from "./pages";
+import {
+  Home,
+  HelpCenter,
+  About,
+  Login,
+  PatientDashboard,
+  PatientReports,
+} from "./pages";
 import { Suspense } from "react";
 import ProtectedRoutes from "../lib/ProtectedRoutes";
+import { sidebar_data } from "../features/sidebar/data/sidebar_data";
+import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
   {
@@ -60,11 +69,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "register",
-        element: (
-          <Suspense>
-            <Register />
-          </Suspense>
-        ),
+        element: <Register />,
       },
     ],
   },
@@ -89,6 +94,27 @@ export const router = createBrowserRouter([
         <PatientLayout />
       </ProtectedRoutes>
     ),
+    children: [
+      {
+        path: "/patient",
+        element: <Navigate to="dashboard" />,
+      },
+      {
+        path: "dashboard",
+        element: <PatientDashboard />,
+      },
+      {
+        path: "reports",
+        element: <PatientReports />,
+      },
+      // ...sidebar_data.map((link) => {
+      //   const Component = link.links[0].component;
+      //   return {
+      //     path: link.links[0].to,
+      //     element: <Component />,
+      //   };
+      // }),
+    ],
   },
   {
     path: "/specialized",

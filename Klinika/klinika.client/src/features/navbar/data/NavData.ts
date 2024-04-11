@@ -34,5 +34,5 @@ export const nav_data = [
     to: "register",
     label: "Register",
   },
-  ...(user.token ? patient_data : []),
+  // ...(user.token ? patient_data : []),
 ];

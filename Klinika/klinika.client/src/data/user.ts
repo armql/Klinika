@@ -1,4 +1,5 @@
 export const user = {
-  token: null,
+  token: "hasToken",
   role: "customer",
+  name: "Arlind",
 };
