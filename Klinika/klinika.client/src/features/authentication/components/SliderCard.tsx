@@ -1,45 +1,73 @@
-import { Fragment } from "react/jsx-runtime";
 import { login_data } from "../data/slider-data";
 import { useState } from "react";
-
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 export default function SliderCard() {
   const [slider, setSlider] = useState({
     active: 1,
   });
-  console.log("logged re-render");
-  function next(index: unknown) {
-    console.log("logged run");
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove(event) {
+    const { currentTarget, clientX, clientY } = event;
+    const { left, top } = currentTarget.getBoundingClientRect();
+
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  function handleSlider(index: number) {
     setSlider((prev) => ({
       ...prev,
-      active: login_data.length > index ? index + 1 : 1,
+      active: index,
     }));
   }
-  function prev(index: unknown) {
-    console.log("logged run");
-    setSlider((prev) => ({
-      ...prev,
-      active: index > 1 ? index - 1 : login_data.length,
-    }));
-  }
+
   return (
-    <div className="w-[50%] max-h-screen bg-gradient-to-b from-compact/80 to-primary/50 md:block hidden rounded-md">
-      <div className="w-full h-full flex justify-end p-4 flex-col items-start">
+    <div
+      onMouseMove={handleMouseMove}
+      className="w-[50%] relative z-10 group overflow-hidden max-h-screen bg-primary/80 md:block hidden rounded-md"
+    >
+      <motion.div
+        className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 transition duration-700 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`
+            radial-gradient(
+              650px circle at ${mouseX}px ${mouseY}px,
+              rgba(110, 180, 64, 0.6),
+              transparent 80%
+            )
+          `,
+        }}
+      />
+      <div className="w-full h-full flex justify-center p-4 flex-col items-center">
         {login_data
           .filter((item) => item.id === slider.active)
           .map((item) => (
-            <Fragment key={item.id}>
-              <h1 className="text-4xl font-manrope text-compact">
-                {item.header}
-              </h1>
-              <p>{item.description}</p>
-              <button type="button" onClick={() => next(item.id)}>
-                next
-              </button>
-              <button type="button" onClick={() => prev(item.id)}>
-                prev
-              </button>
-            </Fragment>
+            <div
+              key={item.id}
+              className="flex gap-2 flex-col items-center justify-between h-full"
+            >
+              <div className="flex flex-col gap-2">
+                <h1 className="xl:text-8xl lg:text-7xl md:text-6xl font-bold text-compact/80">
+                  {item.header}
+                </h1>
+                <p className="xl:text-2xl lg:text-xl md:text-lg font-regular text-compact/60">
+                  {item.description}
+                </p>
+              </div>
+            </div>
           ))}
+        <div className="flex gap-2">
+          {login_data.map((item) => (
+            <div
+              onClick={() => handleSlider(item.id)}
+              className={`bg-white h-2 rounded-full transition-all duration-500 ${
+                item.id === slider.active ? "w-8" : "w-4 cursor-pointer"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
