@@ -61,7 +61,7 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/register": {
+      "^/api/Auth": {
         target,
         secure: false,
       },

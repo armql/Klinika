@@ -3,6 +3,7 @@ import { Input } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema_register } from "../features/authentication/__auth";
+import axios from "axios";
 
 type FormFields = z.infer<typeof schema_register>;
 
@@ -16,37 +17,32 @@ export default function Register() {
     resolver: zodResolver(schema_register),
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      console.log("not yet");
-
-      const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-          "content-type": "Application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    axios
+      .post(
+        "api/Auth",
+        {
           firstName: data.first_name,
           lastName: data.last_name,
           email: data.email,
           password: data.password,
           birthDate: data.age,
           gender: data.gender,
-        }),
+        },
+        {
+          headers: {
+            "content-type": "Application/json",
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      console.log("Went through api");
-      if (!response.ok) {
-        throw new Error(`register error ${response}`);
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-      return responseData;
-    } catch (error) {
-      // handle network error
-      console.error(error);
-    }
   };
 
   return (
@@ -111,6 +107,14 @@ export default function Register() {
               placeholder="Enter your birth date"
               {...register("age")}
               error={errors.age?.message}
+            />
+            <Input
+              htmlFor="gender"
+              labelName="Age"
+              type="number"
+              placeholder="Enter your Gender date"
+              {...register("gender")}
+              error={errors.gender?.message}
             />
             <button
               type="submit"

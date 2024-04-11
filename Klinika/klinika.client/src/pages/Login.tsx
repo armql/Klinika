@@ -3,6 +3,7 @@ import { Input, schema_login } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SliderCard from "../features/authentication/components/SliderCard";
+import axios from "axios";
 
 type FormFields = z.infer<typeof schema_login>;
 
@@ -16,32 +17,28 @@ export default function Login() {
     resolver: zodResolver(schema_login),
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    // TODO: Implementation with backend
-    try {
-      console.log("not yet");
-      const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-          "content-type": "Application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    axios
+      .post(
+        "/api/Auth/login",
+        {
           Email: data.email,
           password: data.password,
-        }),
+        },
+        {
+          headers: {
+            "content-type": "Application/json",
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      console.log("Went through api");
-      if (!response.ok) {
-        throw new Error(`register error ${response}`);
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-      return responseData;
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
