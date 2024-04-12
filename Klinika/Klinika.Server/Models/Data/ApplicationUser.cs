@@ -17,5 +17,8 @@ namespace Klinika.Server.Models.Data
 
         [Column(TypeName = "date")]
         public DateTime birthDate { get; set; }
+
+        [MaxLength(255)]
+        public string? password { get; set; }
     }
 }

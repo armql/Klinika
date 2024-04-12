@@ -14,6 +14,20 @@ namespace Klinika.Server.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager = sm;
         private readonly UserManager<ApplicationUser> _userManager = um;
 
+        public string HashPassword(string password)
+        {
+            var hasher = new PasswordHasher<object>();
+            string hashedPassword = hasher.HashPassword(null, password);
+            return hashedPassword;
+        }
+
+        public bool VerifyPassword(string hashedPassword, string providedPassword)
+        {
+            var hasher = new PasswordHasher<object>();
+            var result = hasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
+            return result == PasswordVerificationResult.Success;
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
         {
@@ -22,6 +36,8 @@ namespace Klinika.Server.Controllers
 
             try
             {
+                var hashedPassword = HashPassword(user.password);
+
                 ApplicationUser newUser = new ApplicationUser()
                 {
                     firstName = user.firstName,
@@ -29,6 +45,8 @@ namespace Klinika.Server.Controllers
                     birthDate = user.birthDate,
                     gender = user.gender,
                     Email = user.Email,
+                    UserName = user.Email,
+                    PasswordHash = hashedPassword
                 };
                 result = await _userManager.CreateAsync(newUser);
 
@@ -64,9 +82,6 @@ namespace Klinika.Server.Controllers
                 }
 
                 message = "Login Successful.";
-
-
-                message = "Registered Successfully.";
             }
             catch (Exception ex)
             {

@@ -20,7 +20,7 @@ export default function Register() {
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
       .post(
-        "api/Auth",
+        "api/Auth/register",
         {
           firstName: data.first_name,
           lastName: data.last_name,
@@ -110,8 +110,8 @@ export default function Register() {
             />
             <Input
               htmlFor="gender"
-              labelName="Age"
-              type="number"
+              labelName="Gender"
+              type="text"
               placeholder="Enter your Gender date"
               {...register("gender")}
               error={errors.gender?.message}
