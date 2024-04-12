@@ -1,7 +1,12 @@
-import { PatientDashboard, PatientReports } from "../../../router/pages";
-import { router } from "../../../router/router";
+import {
+  DeveloperDashboard,
+  DeveloperSpecializationData,
+  DeveloperUserData,
+  PatientDashboard,
+  PatientReports,
+} from "../../../router/pages";
 
-export const sidebar_data = [
+const patient_sidebar_data = [
   {
     id: 1,
     category: "Portal",
@@ -23,3 +28,39 @@ export const sidebar_data = [
     ],
   },
 ];
+
+const developer_sidebar_data = [
+  {
+    id: 1,
+    category: "Portal",
+    links: [
+      { to: "dashboard", text: "Dashboard", component: DeveloperDashboard },
+    ],
+  },
+  {
+    id: 2,
+    category: "Data Manage",
+    links: [
+      { to: "user-data", text: "User List", component: DeveloperUserData },
+      {
+        to: "specialization-data",
+        text: "Specialization List",
+        component: DeveloperSpecializationData,
+      },
+    ],
+  },
+  {
+    id: 3,
+    category: "Community",
+    links: [
+      { to: "learn-more", text: "Learn More", component: DeveloperUserData },
+      {
+        to: "ask-question",
+        text: "Ask Questions",
+        component: DeveloperUserData,
+      },
+    ],
+  },
+];
+
+export { developer_sidebar_data, patient_sidebar_data };

@@ -16,10 +16,14 @@ import {
   Login,
   PatientDashboard,
   PatientReports,
+  DeveloperDashboard,
 } from "./pages";
 import { Suspense } from "react";
 import ProtectedRoutes from "../lib/ProtectedRoutes";
-import { sidebar_data } from "../features/sidebar/data/sidebar_data";
+import {
+  developer_sidebar_data,
+  patient_sidebar_data,
+} from "../features/sidebar/data/sidebar_data";
 import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
@@ -103,17 +107,17 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: <PatientDashboard />,
       },
-      {
-        path: "reports",
-        element: <PatientReports />,
-      },
-      // ...sidebar_data.map((link) => {
-      //   const Component = link.links[0].component;
-      //   return {
-      //     path: link.links[0].to,
-      //     element: <Component />,
-      //   };
-      // }),
+      ...patient_sidebar_data
+        .map((category) => {
+          return category.links.map((link) => {
+            const Component = link.component;
+            return {
+              path: link.to,
+              element: <Component />,
+            };
+          });
+        })
+        .flat(),
     ],
   },
   {
@@ -139,6 +143,27 @@ export const router = createBrowserRouter([
         <DeveloperLayout />
       </ProtectedRoutes>
     ),
+    children: [
+      {
+        path: "/development",
+        element: <Navigate to="dashboard" />,
+      },
+      {
+        path: "dashboard",
+        element: <DeveloperDashboard />,
+      },
+      ...developer_sidebar_data
+        .map((category) => {
+          return category.links.map((link) => {
+            const Component = link.component;
+            return {
+              path: link.to,
+              element: <Component />,
+            };
+          });
+        })
+        .flat(),
+    ],
   },
   {
     path: "*",
