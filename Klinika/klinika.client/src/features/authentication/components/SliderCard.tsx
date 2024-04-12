@@ -26,15 +26,15 @@ export default function SliderCard() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="w-[50%] relative z-10 group overflow-hidden max-h-screen bg-primary/80 md:block hidden rounded-md"
+      className="w-[50%] relative z-10 group overflow-hidden h-[550px] bg-zinc-50 border-2 md:block hidden rounded-md"
     >
       <motion.div
-        className="pointer-events-none absolute -inset-px -z-10 rounded-xl opacity-0 transition duration-700 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px -z-10 rounded-md opacity-0 transition duration-700 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`
             radial-gradient(
               650px circle at ${mouseX}px ${mouseY}px,
-              rgba(110, 180, 64, 0.6),
+              #e3e3e3,
               transparent 80%
             )
           `,
@@ -62,8 +62,10 @@ export default function SliderCard() {
           {login_data.map((item) => (
             <div
               onClick={() => handleSlider(item.id)}
-              className={`bg-white h-2 rounded-full transition-all duration-500 ${
-                item.id === slider.active ? "w-8" : "w-4 cursor-pointer"
+              className={`h-2 rounded-full transition-all duration-500 ${
+                item.id === slider.active
+                  ? "w-8 bg-primary"
+                  : "w-4 cursor-pointer bg-primary/80 "
               }`}
             />
           ))}

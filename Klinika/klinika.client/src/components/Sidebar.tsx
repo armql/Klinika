@@ -1,6 +1,9 @@
 import { ReactNode, Fragment, useState } from "react";
 import useToggle from "../hooks/useToggle";
-import { sidebar_data } from "../features/sidebar/data/sidebar_data";
+import {
+  patient_sidebar_data as dev,
+  developer_sidebar_data as patient,
+} from "../features/sidebar/data/sidebar_data";
 import { CaretDown } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import { categoryRender } from "../lib/category-render";
@@ -12,6 +15,7 @@ import {
 } from "../features/sidebar/__sidebar";
 
 interface InnerProp {
+  user: string;
   children: ReactNode;
 }
 
@@ -28,7 +32,7 @@ type LinkProp = {
   recent_links: string[];
 };
 
-export default function Sidebar({ children }: InnerProp) {
+export default function Sidebar({ user, children }: InnerProp) {
   const { auto, effect } = useToggle();
   const [links, setLinks] = useState<LinkProp>({
     active_link: "dashboard",
@@ -38,6 +42,7 @@ export default function Sidebar({ children }: InnerProp) {
     recent_links: ["dashboard"],
   });
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const filtered = user !== "dev" ? dev : patient;
 
   function handleCategory(id: number) {
     if (isCollapsed) {
@@ -96,13 +101,13 @@ export default function Sidebar({ children }: InnerProp) {
           {effect && (
             <div className="flex flex-col items-center justify-between w-full px-2 py-1.5">
               <Profile effect={isCollapsed} />
-              <Recent
+              {/* <Recent
                 handler={() => handleRecent(item.to)}
                 effect={isCollapsed}
                 links={links}
-              />
-              <div className="flex flex-col justify-between w-full">
-                {sidebar_data.map((link) => (
+              /> */}
+              <div className="flex flex-col justify-between w-full mt-4">
+                {filtered.map((link) => (
                   <Fragment key={link.id}>
                     <button
                       type="button"

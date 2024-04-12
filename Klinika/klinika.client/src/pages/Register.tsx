@@ -118,14 +118,14 @@ export default function Register() {
             />
             <button
               type="submit"
-              className="mt-4 py-2.5 font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md"
+              className="mt-4 py-2.5 font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
               Register
             </button>
             <span className="font-medium">
               Already have an account?{" "}
               <Link
-                to="/register"
+                to="/login"
                 className="text-primary/80 hover:underline hover:text-primary focus:cursor-wait"
               >
                 Login now

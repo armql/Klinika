@@ -88,7 +88,7 @@ export default function Login() {
             />
             <button
               type="submit"
-              className="mt-4 py-2.5 hover:bg-primary/70 text-compact bg-primary/50 rounded-md"
+              className="mt-4 py-2.5 hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
               Login
             </button>

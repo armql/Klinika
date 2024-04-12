@@ -5,8 +5,7 @@ import Sidebar from "../components/Sidebar";
 export default function PatientLayout() {
   return (
     <Fragment>
-      {/* TODO: Header */}
-      <Sidebar>
+      <Sidebar user="patient">
         <main className="relative overflow-hidden">
           <Outlet />
         </main>
