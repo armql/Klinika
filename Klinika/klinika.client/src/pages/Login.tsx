@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SliderCard from "../features/authentication/components/SliderCard";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 type FormFields = z.infer<typeof schema_login>;
 
@@ -64,14 +65,19 @@ export default function Login() {
               error={errors.email?.message}
               {...register("email")}
             />
-            <Input
-              htmlFor="password"
-              labelName="Password"
-              type="password"
-              placeholder="Your password goes here"
-              {...register("password")}
-              error={errors.password?.message}
-            />
+            <div className="relative w-full">
+              <Input
+                htmlFor="password"
+                labelName="Password"
+                type="password"
+                placeholder="Your password goes here"
+                {...register("password")}
+                error={errors.password?.message}
+              />
+              <span className="text-sm hover:text-red-500 cursor-pointer text-red-600 underline absolute right-0 top-0">
+                Forgot Password?
+              </span>
+            </div>
             <Input
               htmlFor="rememberMe"
               labelName="Remember Me"
@@ -82,10 +88,19 @@ export default function Login() {
             />
             <button
               type="submit"
-              className="mt-4 py-2.5 hover:bg-primary/70 font-manrope text-compact bg-primary/50 rounded-md"
+              className="mt-4 py-2.5 hover:bg-primary/70 text-compact bg-primary/50 rounded-md"
             >
               Login
             </button>
+            <span className="font-medium">
+              Don&rsquo;t have an account yet?{" "}
+              <Link
+                to="/register"
+                className="text-primary/80 hover:underline hover:text-primary focus:cursor-wait"
+              >
+                Register now
+              </Link>
+            </span>
           </form>
         </div>
       </div>

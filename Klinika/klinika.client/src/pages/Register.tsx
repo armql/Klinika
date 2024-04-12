@@ -1,9 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../features/authentication/__auth";
+import { Input, Select } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema_register } from "../features/authentication/__auth";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 type FormFields = z.infer<typeof schema_register>;
 
@@ -108,34 +109,28 @@ export default function Register() {
               {...register("age")}
               error={errors.age?.message}
             />
-            <div className="flex flex-col gap-1 relative">
-              <label
-                htmlFor="gender"
-                className="font-medium sm:text-base text-sm text-compact"
-              >
-                Gender
-              </label>
-              <select
-                title="Select a gender"
-                {...register("gender")}
-                className={`border-2 rounded-md sm:text-base text-sm w-full py-2 px-2 font-light placeholder-zinc-500 focus:outline-primary`}
-              >
-                <option value="Not specified" selected disabled>
-                  Not specified
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-            <span className="absolute sm:-bottom-5 truncate -bottom-4 px-2 sm:text-sm text-xs text-red-600">
-              {errors.gender?.message}
-            </span>
+            <Select
+              htmlFor="gender"
+              labelName="Gender"
+              {...register("gender")}
+              options={["Not Specified", "Male", "Female"]}
+              error={errors.gender?.message}
+            />
             <button
               type="submit"
               className="mt-4 py-2.5 font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md"
             >
               Register
             </button>
+            <span className="font-medium">
+              Already have an account?{" "}
+              <Link
+                to="/register"
+                className="text-primary/80 hover:underline hover:text-primary focus:cursor-wait"
+              >
+                Login now
+              </Link>
+            </span>
           </form>
         </div>
       </div>

@@ -1,7 +1,7 @@
-import { Eye, EyeClosed } from "@phosphor-icons/react";
 import { forwardRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import useToggle from "../../../hooks/useToggle";
+import ExtrasInput from "./ExtrasInput";
 
 type InputProps = {
   htmlFor: string;
@@ -35,15 +35,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           }`}
           {...props}
         />
-        {type === "password" && (
-          <button
-            type="button"
-            onClick={auto}
-            className="absolute bottom-0 top-0 right-0 flex justify-center items-center px-2"
-          >
-            {effect ? <Eye size={24} /> : <EyeClosed size={24} />}
-          </button>
-        )}
+        <ExtrasInput type={type} effect={effect} auto={auto} />
       </div>
       <span className="absolute sm:-bottom-5 truncate -bottom-4 px-2 sm:text-sm text-xs text-red-600">
         {error}
