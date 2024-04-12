@@ -1,13 +1,13 @@
 const login_data = [
   {
     id: 1,
-    header: "Stay Connected, Stay Informed",
+    header: "Stay Connected and Inform",
     description:
       "Log in to remain connected with your healthcare network. Stay informed about upcoming appointments, medication reminders, and personalized health updates.",
   },
   {
     id: 2,
-    header: "Your Health Hub Awaits",
+    header: "Your Health Hub awaits log now",
     description:
       "Unlock your health hub by logging in. Access personalized health insights, track progress, and communicate securely with your healthcare team.",
   },

@@ -104,14 +104,9 @@ const schema_register = z
       .refine((value) => new Date(value) <= new Date(), {
         message: "Age cannot be from a future date",
       }),
-    gender: z
-      .string()
-      .refine((value) => value.length > 0, {
-        message: "Gender is required",
-      })
-      .refine((value) => value === "male" || value === "female", {
-        message: "Gender must be male or female",
-      }),
+    gender: z.string().refine((value) => value.length > 0, {
+      message: "Gender is required",
+    }),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords don't match",
