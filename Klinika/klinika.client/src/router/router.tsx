@@ -15,11 +15,10 @@ import {
   About,
   Login,
   PatientDashboard,
-  PatientReports,
   DeveloperDashboard,
 } from "./pages";
 import { Suspense } from "react";
-import ProtectedRoutes from "../lib/ProtectedRoutes";
+import ProtectedRoutes from "../util/ProtectedRoutes";
 import {
   developer_sidebar_data,
   patient_sidebar_data,
