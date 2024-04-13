@@ -1,16 +1,15 @@
 import { NotePencil, X, CaretRight, CaretLeft } from "@phosphor-icons/react";
 import Skeleton from "./skeleton/Table";
-import { useSpecialized } from "../handata";
+import { usePagination } from "../handata";
+import { useEffect, useState } from "react";
+import { Specialization } from "../../../pages/developer/SpecializationData";
+import axios_instance from "../../../../api/axios";
 
-type TableProps<T> = {
+type TableProps = {
   headers: Array<string>;
-  data: Array<T>;
 };
 
-export default function Table<T extends { [key: string]: any }>({
-  headers,
-  data,
-}: TableProps<T>) {
+export default function Table({ headers }: TableProps) {
   const HEADER_COLUMN = headers.length + 3;
   const {
     currentPage,
@@ -21,14 +20,27 @@ export default function Table<T extends { [key: string]: any }>({
     endIndex,
     max,
     min,
-  } = useSpecialized();
+    setDataLength,
+    setLoading,
+  } = usePagination();
+  const [data, setData] = useState<Specialization[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios_instance.get("/data");
+        setData(result.data.specializations);
+        setDataLength(result.data.specializations.length);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const refined_data = data.slice(startIndex, endIndex);
-  console.log("Current page:", currentPage);
-  console.log("Total pages:", totalPages);
-  console.log("Start index:", startIndex);
-  console.log("End index:", endIndex);
-  console.log("Refined data:", refined_data);
 
   if (loading) {
     return <Skeleton column={HEADER_COLUMN} headers={headers} />;

@@ -6,13 +6,8 @@ import {
 } from "../features/sidebar/data/sidebar_data";
 import { CaretDown } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
-import { categoryRender } from "../lib/category-render";
-import {
-  Header,
-  Profile,
-  Recent,
-  Resizer,
-} from "../features/sidebar/__sidebar";
+import { categoryRender } from "../util/category-render";
+import { Header, Profile, Resizer } from "../features/sidebar/__sidebar";
 
 interface InnerProp {
   user: string;
