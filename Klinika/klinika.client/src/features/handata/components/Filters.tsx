@@ -7,15 +7,21 @@ import {
 
 type FiltersProps = {
   name: string;
+  create: () => void;
 };
 
-export default function Filters({ name }: FiltersProps) {
+export default function Filters({ name, create }: FiltersProps) {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-medium text-xl text-compact">{name}</h1>
       <div className="w-full flex justify-between items-center rounded-lg bg-zinc-100 p-3">
         <div className="flex gap-2 items-center justify-center">
-          <button title="Add item" type="button" className="hover:opacity-60">
+          <button
+            title="Add item"
+            onClick={create}
+            type="button"
+            className="hover:opacity-60"
+          >
             <Plus size={22} />
           </button>
           <button

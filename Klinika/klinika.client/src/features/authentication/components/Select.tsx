@@ -5,7 +5,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 type SelectProps = {
   htmlFor: string;
   labelName: string;
-  options: Array<string>;
+  options: Array<string> | undefined;
   error: string | undefined;
 } & UseFormRegisterReturn;
 
@@ -28,11 +28,18 @@ const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
           ref={ref}
           className={`border-2 appearance-none rounded-md sm:text-base text-sm w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary`}
         >
-          {options.map((data: string) => (
-            <option value={data} className="capitalize">
-              {data}
-            </option>
-          ))}
+          <option value="" selected disabled>
+            Select an option
+          </option>
+          {options ? (
+            options.map((data: string) => (
+              <option value={data} className="capitalize">
+                {data}
+              </option>
+            ))
+          ) : (
+            <option>No options received.</option>
+          )}
         </select>
         <span className="absolute group-focus:opacity-40 right-4 bottom-0 top-0 flex justify-center items-center">
           <CaretUpDown size={24} />

@@ -6,8 +6,9 @@ import { schema_register } from "../features/authentication/__auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Spinner } from "@phosphor-icons/react";
+import { Spinner, X } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
+import GlobalError from "../features/validation/components/GlobalError";
 
 type FormFields = z.infer<typeof schema_register>;
 
@@ -120,22 +121,7 @@ export default function Register() {
               options={["Not Specified", "Male", "Female"]}
               error={errors.gender?.message}
             />
-            {globalError && (
-              <div className="absolute top-4 right-4 z-20 shadow-sm bg-red-50 sm:w-[400px] sm:h-[100px] rounded-md w-[340px] h-[120px]">
-                <div className="flex flex-col p-4 items-start relative">
-                  <button
-                    type="button"
-                    title="Close error modal"
-                    onClick={() => setGlobalError("")}
-                    className="absolute right-0 top-0 p-2 hover:opacity-60"
-                  >
-                    <X size={20} className="rounded-full" />
-                  </button>
-                  <span className="font-medium text-red-900">Error</span>
-                  <span className="text-red-600 text-sm">{globalError}</span>
-                </div>
-              </div>
-            )}
+            <GlobalError error={globalError} close={() => setGlobalError("")} />
             <button
               type="submit"
               className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"

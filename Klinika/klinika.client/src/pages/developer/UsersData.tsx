@@ -1,4 +1,4 @@
-import DataList from "../../components/DataList";
+import DataList from "../../features/handata/components/DataList";
 
 export default function UsersData() {
   return <DataList name="Users CRUD">New Data</DataList>;
