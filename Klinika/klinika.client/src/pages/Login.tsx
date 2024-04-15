@@ -5,6 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SliderCard from "../features/authentication/components/SliderCard";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Fragment, useState } from "react";
+import { Spinner, X } from "@phosphor-icons/react";
+import Checkbox from "../features/authentication/components/Checkbox";
+import getErrorMessage from "../util/http-handler";
 
 type FormFields = z.infer<typeof schema_login>;
 
@@ -12,11 +16,12 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_login),
   });
+  const [globalError, setGlobalError] = useState("");
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
@@ -34,16 +39,16 @@ export default function Login() {
         }
       )
       .then((response) => {
-        console.log(response.data);
         return response.data;
       })
       .catch((error) => {
-        console.error(error);
+        const errorMessage = getErrorMessage(error);
+        setGlobalError(errorMessage);
       });
   };
 
   return (
-    <section className="w-full h-full flex py-12 gap-12 bg-white px-12">
+    <section className="w-full h-full flex py-12 gap-12 bg-white sm:px-12 px-4">
       <div className="w-full md:w-[50%] h-full flex justify-center items-center">
         <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
@@ -78,19 +83,37 @@ export default function Login() {
                 Forgot Password?
               </span>
             </div>
-            <Input
+            <Checkbox
               htmlFor="rememberMe"
-              labelName="Remember Me"
-              type="checkbox"
-              placeholder=""
+              labelName="Remember me?"
               {...register("remember_me")}
               error={errors.remember_me?.message}
             />
+            {globalError && (
+              <div className="absolute top-4 right-4 z-20 shadow-sm bg-red-50 sm:w-[400px] sm:h-[100px] rounded-md w-[340px] h-[120px]">
+                <div className="flex flex-col p-4 items-start relative">
+                  <button
+                    type="button"
+                    title="Close error modal"
+                    onClick={() => setGlobalError("")}
+                    className="absolute right-0 top-0 p-2 hover:opacity-60"
+                  >
+                    <X size={20} className="rounded-full" />
+                  </button>
+                  <span className="font-medium text-red-900">Error</span>
+                  <span className="text-red-600 text-sm">{globalError}</span>
+                </div>
+              </div>
+            )}
             <button
               type="submit"
-              className="mt-4 py-2.5 hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
+              className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
-              Login
+              {isSubmitting ? (
+                <Spinner size={24} className="animate-spin" />
+              ) : (
+                "Login"
+              )}
             </button>
             <span className="font-medium">
               Don&rsquo;t have an account yet?{" "}

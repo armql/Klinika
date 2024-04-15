@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Filters } from "../features/handata/handata";
+import { Filters } from "../handata";
 
 type DataProps = {
   name: string;
