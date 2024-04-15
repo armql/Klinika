@@ -1,8 +1,10 @@
 import axios from "axios";
+// import { target } from '../../vite.config';
 
 // Creates an instance of axios
 const axios_instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://localhost:3001", // THIS IS EXPRESS
+  // baseURL: target, // THIS IS SUPPOSEDLY ASP.NET
   timeout: 10000,
 });
 

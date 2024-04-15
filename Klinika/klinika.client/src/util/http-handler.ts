@@ -5,6 +5,36 @@ interface ErrorDetail {
   request?: any;
 }
 
+type AxiosError = {
+  message: string;
+  name: string;
+  stack: string;
+  config: {
+    transitional: {
+      silentJSONParsing: boolean;
+      forcedJSONParsing: boolean;
+      clarifyTimeoutError: boolean;
+    };
+    adapter: string[];
+    transformRequest: any[];
+    transformResponse: any[];
+    timeout: number;
+    xsrfCookieName: string;
+    xsrfHeaderName: string;
+    maxContentLength: number;
+    maxBodyLength: number;
+    env: {};
+    headers: {
+      Accept: string;
+    };
+    baseURL: string;
+    method: string;
+    url: string;
+  };
+  code: string;
+  status: null | number;
+};
+
 interface ErrorResponse {
   error?: ErrorDetail;
 }
@@ -36,6 +66,16 @@ export default function getErrorMessage({ error }: ErrorResponse) {
   } else {
     return "An error occurred while setting up the request. Please check your network connection and try again.";
   }
+}
+
+export function isAxiosError(error: unknown): error is AxiosError {
+  return (
+    (error as AxiosError).message !== undefined &&
+    (error as AxiosError).name !== undefined &&
+    (error as AxiosError).stack !== undefined &&
+    (error as AxiosError).config !== undefined &&
+    (error as AxiosError).code !== undefined
+  );
 }
 
 // function getErrorMessage(error) {
