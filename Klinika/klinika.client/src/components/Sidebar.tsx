@@ -61,30 +61,6 @@ export default function Sidebar({ user, children }: InnerProp) {
     });
   }
 
-  function handleRecent(recent: string) {
-    if (links.recent_links.length <= 3) {
-      setLinks((prev) => {
-        const isActive = prev.recent_links.includes(recent);
-        if (isActive) {
-          return {
-            ...prev,
-            recent_links: prev.recent_links.filter(
-              (recents) => recents !== recent
-            ),
-          };
-        } else {
-          return {
-            ...prev,
-            recent_links: [...prev.recent_links, recent],
-            active_link: recent,
-          };
-        }
-      });
-    } else {
-      console.log("filled stack");
-    }
-  }
-
   return (
     <div className="z-10 flex flex-row bg-white">
       <div
@@ -138,7 +114,10 @@ export default function Sidebar({ user, children }: InnerProp) {
                     {!isCollapsed &&
                       links.active_category.includes(link.id) &&
                       link.links.map((links) => (
-                        <div className="flex flex-col gap-2 py-1">
+                        <div
+                          key={links.text}
+                          className="flex flex-col gap-2 py-1"
+                        >
                           <div className="relative flex flex-col hover:text-sky-900">
                             <NavLink
                               key={links.to}
@@ -178,3 +157,27 @@ export default function Sidebar({ user, children }: InnerProp) {
     </div>
   );
 }
+
+// function handleRecent(recent: string) {
+//   if (links.recent_links.length <= 3) {
+//     setLinks((prev) => {
+//       const isActive = prev.recent_links.includes(recent);
+//       if (isActive) {
+//         return {
+//           ...prev,
+//           recent_links: prev.recent_links.filter(
+//             (recents) => recents !== recent
+//           ),
+//         };
+//       } else {
+//         return {
+//           ...prev,
+//           recent_links: [...prev.recent_links, recent],
+//           active_link: recent,
+//         };
+//       }
+//     });
+//   } else {
+//     console.log("filled stack");
+//   }
+// }

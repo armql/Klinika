@@ -12,7 +12,7 @@ type InputProps = {
 } & UseFormRegisterReturn;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { htmlFor, labelName, placeholder, type, error, ...props },
+  { htmlFor, labelName, placeholder, type, error, ...rest },
   ref
 ) {
   const { auto, effect } = useToggle();
@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           className={`border-2 rounded-md sm:text-base text-sm w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary ${
             error && "border-red-200"
           }`}
-          {...props}
+          {...rest}
         />
         <ExtrasInput type={type} effect={effect} auto={auto} />
       </div>

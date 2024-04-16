@@ -4,12 +4,13 @@ import { Input, Select } from "../../authentication/__auth";
 import { Fragment } from "react/jsx-runtime";
 import { Spinner, X } from "@phosphor-icons/react";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getErrorMessage from "../../../util/http-handler";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
 import { createGlobalSchema } from "../../validation/__validation";
 import GlobalError from "../../validation/components/GlobalError";
+import { useFormStore } from "../store/FormStore";
 export type FormField = {
   type: string;
   identifier: string;
@@ -21,20 +22,23 @@ export type FormField = {
 type FormProps<T> = {
   header: string;
   fields: FormField[];
-  api: (data: T) => Promise<T>;
+  update: (data: T) => Promise<T>;
+  get: (id: number) => Promise<T>;
   close: () => void;
 };
 
-export default function CreateForm<T>({
+export default function EditForm<T>({
   header,
   fields,
-  api,
+  get,
+  update,
   close,
 }: FormProps<T>) {
   const global_schema = createGlobalSchema(fields);
   type RefinedInputs = z.infer<typeof global_schema>;
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RefinedInputs>({
@@ -42,18 +46,54 @@ export default function CreateForm<T>({
     resolver: zodResolver(global_schema),
   });
   const [globalError, setGlobalError] = useState("");
+  const [loadingData, setLoadingData] = useState(true);
+  const { selectedItem } = useFormStore();
+
+  useEffect(() => {
+    const getData = async (id: number | null) => {
+      setLoadingData(true);
+      try {
+        if (id) {
+          const response = await get(id);
+          if (response) {
+            // set input data values
+            fields.forEach((field) => {
+              if (
+                field.identifier !== "id" &&
+                field.identifier !== "created_by" &&
+                field.identifier !== "created_date"
+              ) {
+                setValue(field.identifier, response[field.identifier]);
+              }
+            });
+          } else {
+            setGlobalError("Failed getting the id with needed data");
+          }
+        } else {
+          setGlobalError("No id received");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      setLoadingData(false);
+    };
+    getData(selectedItem);
+  }, []);
 
   const onSubmit = async (data: RefinedInputs) => {
     try {
-      const response = await api(data);
-
-      Swal.fire({
-        icon: "success",
-        title: "Your work has been saved",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      close();
+      const response = await update(selectedItem, data);
+      if (response) {
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        close();
+      } else {
+        setGlobalError("Response failed for some unknown reason.");
+      }
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         const errorMessage = getErrorMessage(error);
@@ -117,10 +157,21 @@ export default function CreateForm<T>({
     return <Fragment key={field.identifier}>{inputElement}</Fragment>;
   };
 
+  if (loadingData) {
+    return (
+      <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black ">
+        <div className="flex overflow-y-auto flex-col gap-12 relative justify-center sm:px-40 px-4 items-center w-[700px] h-[600px] rounded-md bg-white">
+          <h1 className="text-4xl font-bold">Loading data</h1>
+          <Spinner size={32} className="animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black ">
       <div className="flex overflow-y-auto flex-col gap-12 relative justify-center sm:px-40 px-4 items-center w-[700px] h-[600px] rounded-md bg-white">
-        <h1 className="font-medium text-3xl">Create {header}</h1>
+        <h1 className="font-medium text-3xl">Edit {header}</h1>
         <button
           title="Close create modal"
           type="button"

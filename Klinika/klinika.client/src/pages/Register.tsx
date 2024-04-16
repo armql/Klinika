@@ -6,7 +6,7 @@ import { schema_register } from "../features/authentication/__auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Spinner, X } from "@phosphor-icons/react";
+import { Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
 import GlobalError from "../features/validation/components/GlobalError";
 

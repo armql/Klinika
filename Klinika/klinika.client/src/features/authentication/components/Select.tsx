@@ -10,7 +10,7 @@ type SelectProps = {
 } & UseFormRegisterReturn;
 
 const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
-  { htmlFor, labelName, options, error, ...props },
+  { htmlFor, labelName, options, error, ...rest },
   ref
 ) {
   return (
@@ -24,16 +24,17 @@ const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
       <div className="relative group">
         <select
           title="Select a gender"
-          {...props}
           ref={ref}
+          {...rest}
           className={`border-2 appearance-none rounded-md sm:text-base text-sm w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary`}
+          defaultValue="select"
         >
-          <option value="" selected disabled>
+          <option value="select" disabled>
             Select an option
           </option>
           {options ? (
             options.map((data: string) => (
-              <option value={data} className="capitalize">
+              <option key={data} value={data} className="capitalize">
                 {data}
               </option>
             ))

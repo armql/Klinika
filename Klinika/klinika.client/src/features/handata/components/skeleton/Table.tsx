@@ -4,6 +4,7 @@ type FilterProps = {
   headers: Array<string>;
   column: number;
 };
+
 export default function Table({ headers, column }: FilterProps) {
   return (
     <div className="w-full h-[675px] mt-6 rounded-sm">

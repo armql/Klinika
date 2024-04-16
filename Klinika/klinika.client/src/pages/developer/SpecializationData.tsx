@@ -7,13 +7,14 @@ import { ApiService } from "../../services/ApiServices";
 import CreateForm, {
   FormField,
 } from "../../features/handata/components/CreateForm";
-
+import { useHandler } from "../../features/handata/handata";
+import EditForm from "../../features/handata/components/EditForm";
 // interface ApiResponse {
 //   specialization: Specialization[];
 // }
 
 export type Specialization = {
-  specialization_id: number;
+  id: number;
   name: string;
   created_by: string;
   created_date: string;
@@ -29,15 +30,13 @@ const formFields: FormField[] = [
 ];
 
 export default function SpecializationData() {
-  const [handler, setHandler] = useState({
-    create_modal: false,
-    refetch_data: false,
-  });
+  const { handler, openCreate, openEdit, closeCreate, closeEdit } =
+    useHandler();
 
   const specialization_api = new ApiService<Specialization>(
     {
       getAll: "/data",
-      get: "/data/edit",
+      get: "/data",
       create: "/data/add",
       update: "/data/edit",
       delete: "/data/remove",
@@ -47,34 +46,30 @@ export default function SpecializationData() {
 
   return (
     <DataList>
-      <Filters
-        name="Specialization List"
-        create={() =>
-          setHandler((prev) => ({
-            ...prev,
-            create_modal: true,
-          }))
-        }
-      />
-      <Table
+      <Filters name="Specialization List" create={openCreate} />
+      <Table<Specialization>
         headers={["Specialization id", "Name", "Created by", "Created in"]}
         all={specialization_api.getAll}
         delete={specialization_api.delete}
         dataKey="specializations"
         handler={handler.refetch_data}
+        edit={openEdit}
       />
+      {handler.edit_modal && (
+        <EditForm<Specialization>
+          header="Specialization"
+          get={specialization_api.get}
+          update={specialization_api.update}
+          fields={formFields}
+          close={closeEdit}
+        />
+      )}
       {handler.create_modal && (
         <CreateForm<Specialization>
           header="Specialization"
           api={specialization_api.create}
           fields={formFields}
-          close={() =>
-            setHandler((prev) => ({
-              ...prev,
-              create_modal: false,
-              refetch_data: !handler.refetch_data,
-            }))
-          }
+          close={closeCreate}
         />
       )}
     </DataList>

@@ -61,6 +61,7 @@ export default function SliderCard() {
         <div className="flex gap-2">
           {login_data.map((item) => (
             <div
+              key={item.id}
               onClick={() => handleSlider(item.id)}
               className={`h-2 rounded-full transition-all duration-500 ${
                 item.id === slider.active

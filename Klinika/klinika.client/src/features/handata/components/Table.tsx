@@ -8,26 +8,28 @@ import {
 import Skeleton from "./skeleton/Table";
 import { usePagination } from "../handata";
 import { useFormStore } from "../store/FormStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 type TableProps<T> = {
   headers: Array<string>;
   all: () => Promise<T>;
-  delete: (id: string) => Promise<number>;
+  delete: (id: number) => Promise<T>;
   dataKey: string;
   handler: boolean;
+  edit: () => void;
 };
 
 export default function Table<T>({
   headers,
   all,
+  edit,
   dataKey,
   delete: getDeleted,
   handler,
 }: TableProps<T>) {
-  const additionalColumns = 3;
-  const HEADER_COLUMN = headers.length + additionalColumns;
+  const HEADER_COLUMN = headers.length + 3;
+
   const {
     currentPage,
     setCurrentPage,
@@ -41,22 +43,41 @@ export default function Table<T>({
     setLoading,
   } = usePagination();
   const {
-    data,
     selectedItems,
     selectItem,
     deselectItem,
     selectAll,
     deselectAll,
+    setSelectedItem,
   } = useFormStore();
+  const [data, setData] = useState<T[]>([]);
   const fetchData = async () => {
     try {
       const response = await all();
-      useFormStore.setState({ data: response[dataKey] });
+      setData(response[dataKey]);
 
       setDataLength(response[dataKey].length);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  };
+
+  // SELECTING ALL
+  const handleSelectAll = (event: any) => {
+    if (event.target.checked) {
+      selectAll();
+    } else {
+      deselectAll();
+    }
+  };
+
+  // For "select 1 item"
+  const handleSelectItem = (id: number, event: any) => {
+    if (event.target.checked) {
+      selectItem(id);
+    } else {
+      deselectItem(id);
     }
   };
 
@@ -110,8 +131,8 @@ export default function Table<T>({
             <input
               title="Select all items"
               type="checkbox"
-              checked={selectedItems.length === data.length}
-              onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
+              checked={selectedItems.length === endIndex}
+              onChange={handleSelectAll}
               className={`relative appearance-none bg-white w-full h-full checked:bg-black`}
             />
             <span className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
@@ -128,7 +149,7 @@ export default function Table<T>({
       <div className="h-full overflow-x-auto bg-zinc-50">
         {refined_data.map((item) => (
           <ul
-            key={item.specialization_id}
+            key={item.id}
             className={`grid group bg-white grid-cols-${HEADER_COLUMN} hover:bg-zinc-50 transition-colors items-center px-2 border-b text-xs py-2.5`}
           >
             <li>
@@ -138,12 +159,8 @@ export default function Table<T>({
                 <input
                   title="Select item"
                   type="checkbox"
-                  checked={selectedItems.includes(item.specialization_id)}
-                  onChange={(e) =>
-                    e.target.checked
-                      ? selectItem(item.specialization_id)
-                      : deselectItem(item.specialization_id)
-                  }
+                  checked={selectedItems.includes(item.id)}
+                  onChange={(event) => handleSelectItem(item.id, event)}
                   className={`relative appearance-none bg-white w-full h-full checked:bg-black`}
                 />
                 <span className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
@@ -158,6 +175,10 @@ export default function Table<T>({
               <button
                 title="Edit item"
                 type="button"
+                onClick={() => {
+                  setSelectedItem(item.id);
+                  edit();
+                }}
                 className="flex items-center gap-1 px-4 py-1 rounded-lg bg-blue-200 text-blue-950 hover:bg-blue-300"
               >
                 <NotePencil size={14} />
@@ -168,7 +189,7 @@ export default function Table<T>({
               <button
                 title="Remove item"
                 type="button"
-                onClick={() => deleteItem(item.specialization_id)}
+                onClick={() => deleteItem(item.id)}
                 className="flex items-center gap-1 px-4 py-1 rounded-lg bg-red-200 text-red-950 hover:bg-red-300"
               >
                 <X size={14} />
