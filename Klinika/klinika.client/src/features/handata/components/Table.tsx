@@ -43,13 +43,9 @@ export default function Table<T>({
   const fetchData = async () => {
     try {
       const response: ResponseType<T> = await all();
-      if (response) {
-        setData(response[dataKey]);
-        setDataLength(response[dataKey].length);
-        setLoading(false);
-      } else {
-        setGlobalError("No response was returned from api");
-      }
+      setData(response);
+      setDataLength(response.length);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

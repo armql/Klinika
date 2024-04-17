@@ -5,14 +5,17 @@ type InputProps = {
   htmlFor: string;
   labelName: string;
   error: string | undefined;
+  hidden: boolean | undefined;
 } & UseFormRegisterReturn;
 
 const Checkbox = forwardRef<HTMLInputElement, InputProps>(function Checkbox(
-  { htmlFor, labelName, error, ...rest },
+  { htmlFor, labelName, error, hidden, ...rest },
   ref
 ) {
   return (
-    <div className="flex flex-row px-1 gap-2 items-center">
+    <div
+      className={`flex flex-row px-1 gap-2 items-center ${hidden && "hidden"}`}
+    >
       <input
         type="checkbox"
         ref={ref}

@@ -22,6 +22,7 @@ export type FormField = {
   name: string;
   options?: string[];
   placeholder?: string;
+  isHidden?: boolean;
 };
 
 type FormProps<T> = {
@@ -48,7 +49,7 @@ export default function EditForm<T>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const { openEdit: close, setGlobalError } = useHandler();
+  const { closeEdit: close, setGlobalError } = useHandler();
   const [loadingData, setLoadingData] = useState(true);
   const { selectedItem } = useFormStore();
 
@@ -60,13 +61,7 @@ export default function EditForm<T>({
           const response = await get(id);
           if (response) {
             fields.forEach((field) => {
-              if (
-                field.identifier !== "id" &&
-                field.identifier !== "created_by" &&
-                field.identifier !== "created_date"
-              ) {
-                setValue(field.identifier, response[field.identifier]);
-              }
+              setValue(field.identifier, response[field.identifier]);
             });
           } else {
             setGlobalError("Failed getting the id with needed data");
@@ -84,7 +79,7 @@ export default function EditForm<T>({
 
   const onSubmit = async (data: RefinedInputs) => {
     try {
-      const response = await update(selectedItem, data);
+      const response = await update(data);
       if (response) {
         Swal.fire({
           icon: "success",
@@ -117,6 +112,7 @@ export default function EditForm<T>({
             placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
         break;
@@ -128,6 +124,7 @@ export default function EditForm<T>({
             options={field.options}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
         break;
@@ -140,13 +137,13 @@ export default function EditForm<T>({
             placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
     }
 
     return <Fragment key={field.identifier}>{inputElement}</Fragment>;
   };
-
   if (loadingData) {
     return (
       <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black ">

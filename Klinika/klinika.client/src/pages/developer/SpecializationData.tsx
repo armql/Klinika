@@ -28,6 +28,19 @@ const formFields: FormField[] = [
     identifier: "createdBy",
     name: "Specialization Created by",
     placeholder: "Enter your specialization created by",
+    isHidden: false,
+  },
+  {
+    type: "number",
+    identifier: "id",
+    name: "Specialization id",
+    isHidden: true,
+  },
+  {
+    type: "date",
+    identifier: "creationDate",
+    name: "Specialization date",
+    isHidden: true,
   },
 ];
 

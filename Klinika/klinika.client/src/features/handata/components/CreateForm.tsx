@@ -20,6 +20,7 @@ export type FormField = {
   name: string;
   options?: string[];
   placeholder?: string;
+  isHidden?: boolean;
 };
 
 type FormProps<T> = {
@@ -73,6 +74,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
             placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
         break;
@@ -84,6 +86,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
             options={field.options}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
         break;
@@ -96,6 +99,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
             placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
           />
         );
     }

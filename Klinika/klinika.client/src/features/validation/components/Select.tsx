@@ -7,14 +7,15 @@ type SelectProps = {
   labelName: string;
   options: Array<string> | undefined;
   error: string | undefined;
+  hidden: boolean | undefined;
 } & UseFormRegisterReturn;
 
 const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
-  { htmlFor, labelName, options, error, ...rest },
+  { htmlFor, labelName, options, error, hidden, ...rest },
   ref
 ) {
   return (
-    <div className="flex flex-col gap-1 relative">
+    <div className={`flex flex-col gap-1 relative${hidden && "hidden"}`}>
       <label
         htmlFor={htmlFor}
         className="font-medium sm:text-base text-sm text-compact"

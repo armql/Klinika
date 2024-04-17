@@ -27,7 +27,7 @@ export class ApiService<T> {
 
   get = async (id: string): Promise<T> => {
     const response: AxiosResponse<T> = await this.axiosInstance.get(
-      `${this.endpoints.get}/${id}`
+      `${this.endpoints.get}/?id=${id}`
     );
     return response.data;
   };
@@ -40,15 +40,15 @@ export class ApiService<T> {
     return response.data;
   };
 
-  update = async (id: string, item: T): Promise<T> => {
-    const response: AxiosResponse<T> = await this.axiosInstance.put(
-      `${this.endpoints.update}/${id}`,
+  update = async (item: T): Promise<T> => {
+    const response: AxiosResponse<T> = await this.axiosInstance.post(
+      `${this.endpoints.update}`,
       item
     );
     return response.data;
   };
 
   delete = async (id: string): Promise<void> => {
-    await this.axiosInstance.delete(`${this.endpoints.delete}/${id}`);
+    await this.axiosInstance.delete(`${this.endpoints.delete}?id=${id}`);
   };
 }
