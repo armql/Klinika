@@ -16,8 +16,8 @@ import EditForm from "../../features/handata/components/EditForm";
 export type Specialization = {
   id: number;
   name: string;
-  created_by: string;
-  created_date: string;
+  createdBy: string;
+  creationData: string;
 };
 
 const formFields: FormField[] = [
@@ -35,11 +35,11 @@ export default function SpecializationData() {
 
   const specialization_api = new ApiService<Specialization>(
     {
-      getAll: "/data",
-      get: "/data",
-      create: "/data/add",
-      update: "/data/edit",
-      delete: "/data/remove",
+      getAll: "api/Specialization/getAll",
+      get: "api/Specialization/get",
+      create: "api/Specialization/create",
+      update: "api/Specialization/update",
+      delete: "api/Specialization/delete",
     },
     axios_instance
   );

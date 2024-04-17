@@ -19,6 +19,7 @@ namespace Klinika.Server.Controllers
             _logger = logger;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

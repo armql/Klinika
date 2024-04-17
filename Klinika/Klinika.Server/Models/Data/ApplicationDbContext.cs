@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Klinika.Server.Models.Data
 {
@@ -12,12 +14,16 @@ namespace Klinika.Server.Models.Data
         {
         }
 
+        public DbSet<Specialization> Specializations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+            builder.Entity<Specialization>()
+                .HasKey(u => u.id);
         }
         public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         {

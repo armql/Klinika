@@ -53,10 +53,6 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/weatherforecast": {
-        target,
-        secure: false,
-      },
       "^/pingauth": {
         target,
         secure: false,
@@ -66,6 +62,30 @@ export default defineConfig({
         secure: false,
       },
       "^/api/Auth/login": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization/get": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization/create": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization/update": {
+        target,
+        secure: false,
+      },
+      "^/api/Specialization/delete": {
         target,
         secure: false,
       },

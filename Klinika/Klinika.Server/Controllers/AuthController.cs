@@ -14,6 +14,7 @@ namespace Klinika.Server.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager = sm;
         private readonly UserManager<ApplicationUser> _userManager = um;
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public string HashPassword(string password)
         {
             var hasher = new PasswordHasher<object>();
@@ -21,6 +22,7 @@ namespace Klinika.Server.Controllers
             return hashedPassword;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public bool VerifyPassword(string hashedPassword, string providedPassword)
         {
             var hasher = new PasswordHasher<object>();
