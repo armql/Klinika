@@ -1,75 +1,64 @@
-import { ReactNode, Fragment, useState } from "react";
-import useToggle from "../hooks/useToggle";
+import { ReactNode, Fragment, useEffect } from "react";
 import {
-  patient_sidebar_data as dev,
-  developer_sidebar_data as patient,
+  patient_sidebar_data as patient,
+  developer_sidebar_data as dev,
 } from "../features/sidebar/data/sidebar_data";
 import { CaretDown } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import { categoryRender } from "../util/category-render";
 import { Header, Profile, Resizer } from "../features/sidebar/__sidebar";
+import { useNavigation } from "../features/navigation/__navigation";
 
 interface InnerProp {
   user: string;
   children: ReactNode;
 }
 
-type Link = {
-  to: string;
-  text: string;
-};
-
-type LinkProp = {
-  active_link: string;
-  recent: Link[];
-  isRecent: boolean;
-  active_category: number[];
-  recent_links: string[];
-};
-
 export default function Sidebar({ user, children }: InnerProp) {
-  const { auto, effect } = useToggle();
-  const [links, setLinks] = useState<LinkProp>({
-    active_link: "dashboard",
-    recent: [{ to: "dashboard", text: "Dashboard" }],
-    isRecent: true,
-    active_category: [1],
-    recent_links: ["dashboard"],
-  });
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const filtered = user !== "dev" ? dev : patient;
+  const {
+    sidebar,
+    notification,
+    isCollapsed,
+    handleCategory,
+    active_category,
+    setData,
+    data,
+    type,
+    setType,
+    collapse,
+    handleActiveLink,
+  } = useNavigation();
 
-  function handleCategory(id: number) {
-    if (isCollapsed) {
-      setIsCollapsed(false);
+  useEffect(() => {
+    setType(user);
+  }, [user]);
+
+  const filteredData = () => {
+    switch (type) {
+      case "dev":
+        setData(dev);
+        break;
+      case "patient":
+        setData(patient);
+        break;
+      default:
+        break;
     }
-    setLinks((prev) => {
-      const isActive = prev.active_category.includes(id);
-      if (isActive) {
-        return {
-          ...prev,
-          active_category: prev.active_category.filter(
-            (cat_id) => cat_id !== id
-          ),
-        };
-      } else {
-        return {
-          ...prev,
-          active_category: [...prev.active_category, id],
-        };
-      }
-    });
-  }
+  };
+
+  useEffect(() => {
+    filteredData();
+  }, [type]);
 
   return (
     <div className="z-10 flex flex-row bg-white">
       <div
         className={`z-40 relative border-r-2 transition-all duration-300 overflow-hidden ${
-          effect ? `${isCollapsed ? "w-20" : "w-72"} max-h-fit` : "h-0 w-0"
+          sidebar ? `${isCollapsed ? "w-20" : "w-80"} max-h-fit` : "h-0 w-0"
         }`}
       >
         <div className="flex items-center justify-center">
-          {effect && (
+          {sidebar && (
             <div className="flex flex-col items-center justify-between w-full px-2 py-1.5">
               <Profile effect={isCollapsed} />
               {/* <Recent
@@ -78,11 +67,16 @@ export default function Sidebar({ user, children }: InnerProp) {
                 links={links}
               /> */}
               <div className="flex flex-col justify-between w-full mt-4">
-                {filtered.map((link) => (
+                {data.map((link) => (
                   <Fragment key={link.id}>
                     <button
                       type="button"
-                      onClick={() => handleCategory(link.id)}
+                      onClick={() => {
+                        handleCategory(link.id);
+                        {
+                          isCollapsed && collapse();
+                        }
+                      }}
                       className={`flex w-full select-none items-center justify-around px-2 py-2 text-sm text-black active:bg-gray-50 `}
                     >
                       <div
@@ -91,7 +85,7 @@ export default function Sidebar({ user, children }: InnerProp) {
                             ? "w-full justify-center hover:opacity-70"
                             : "w-40 justify-start"
                         } gap-1 transition duration-300 ${
-                          links.active_category.includes(link.id)
+                          active_category.includes(link.id)
                             ? "text-black"
                             : "text-neutral-600"
                         }`}
@@ -102,7 +96,7 @@ export default function Sidebar({ user, children }: InnerProp) {
                       {!isCollapsed && (
                         <span
                           className={`transition duration-500 ${
-                            links.active_category.includes(link.id)
+                            active_category.includes(link.id)
                               ? "rotate-180 text-black"
                               : "text-gray-400"
                           }`}
@@ -112,7 +106,7 @@ export default function Sidebar({ user, children }: InnerProp) {
                       )}
                     </button>
                     {!isCollapsed &&
-                      links.active_category.includes(link.id) &&
+                      active_category.includes(link.id) &&
                       link.links.map((links) => (
                         <div
                           key={links.text}
@@ -122,12 +116,13 @@ export default function Sidebar({ user, children }: InnerProp) {
                             <NavLink
                               key={links.to}
                               to={links.to}
+                              onClick={() => handleActiveLink(links.text)}
                               className={({ isActive }) =>
                                 `text-black ${
                                   isActive
-                                    ? "translate-x-1 border-l-2 border-gray-400 bg-gray-100 text-gray-900"
-                                    : "-translate-x-3 text-gray-600 hover:text-gray-800"
-                                } rounded-sm px-4 py-2 text-start text-[13px] font-normal transition duration-300`
+                                    ? "translate-x-2 border-l-2 border-gray-400 bg-gray-100 text-gray-900"
+                                    : " text-gray-600 hover:text-gray-800"
+                                } rounded-sm pl-6 py-2 text-start text-[13px] font-normal transition duration-300`
                               }
                             >
                               {!isCollapsed && links.text}
@@ -144,16 +139,16 @@ export default function Sidebar({ user, children }: InnerProp) {
       </div>
 
       <div className="flex flex-col w-full relative">
-        {effect && (
-          <Resizer
-            effect={isCollapsed}
-            auto={() => setIsCollapsed(!isCollapsed)}
-          />
-        )}
+        {sidebar && <Resizer />}
 
-        <Header auto={auto} effect={effect} />
+        <Header />
         {children}
       </div>
+      <div
+        className={`z-40 relative border-l-2 transition-all duration-300 overflow-hidden ${
+          notification ? "w-80 max-h-fit" : "h-0 w-0"
+        }`}
+      ></div>
     </div>
   );
 }

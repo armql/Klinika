@@ -5,8 +5,9 @@ import {
   PatientDashboard,
   PatientReports,
 } from "../../../router/pages";
+import { Data } from "../../navigation/store/useNavigationStore";
 
-const patient_sidebar_data = [
+const patient_sidebar_data: Data[] = [
   {
     id: 1,
     category: "Portal",
