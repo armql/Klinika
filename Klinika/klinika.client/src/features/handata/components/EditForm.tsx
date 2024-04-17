@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input, Select } from "../../authentication/__auth";
 import { Fragment } from "react/jsx-runtime";
 import { Spinner, X } from "@phosphor-icons/react";
 import { z } from "zod";
@@ -8,9 +7,15 @@ import { useEffect, useState } from "react";
 import getErrorMessage from "../../../util/http-handler";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
-import { createGlobalSchema } from "../../validation/__validation";
-import GlobalError from "../../validation/components/GlobalError";
+import {
+  Checkbox,
+  createGlobalSchema,
+  GlobalError,
+  Input,
+  Select,
+} from "../../validation/__validation";
 import { useFormStore } from "../store/FormStore";
+import { useHandler } from "../__handata";
 export type FormField = {
   type: string;
   identifier: string;
@@ -22,9 +27,8 @@ export type FormField = {
 type FormProps<T> = {
   header: string;
   fields: FormField[];
-  update: (data: T) => Promise<T>;
-  get: (id: number) => Promise<T>;
-  close: () => void;
+  get: (id: string) => Promise<T>;
+  update: (id: string, item: T) => Promise<T>;
 };
 
 export default function EditForm<T>({
@@ -32,7 +36,6 @@ export default function EditForm<T>({
   fields,
   get,
   update,
-  close,
 }: FormProps<T>) {
   const global_schema = createGlobalSchema(fields);
   type RefinedInputs = z.infer<typeof global_schema>;
@@ -45,7 +48,7 @@ export default function EditForm<T>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const [globalError, setGlobalError] = useState("");
+  const { openEdit: close, setGlobalError } = useHandler();
   const [loadingData, setLoadingData] = useState(true);
   const { selectedItem } = useFormStore();
 
@@ -56,7 +59,6 @@ export default function EditForm<T>({
         if (id) {
           const response = await get(id);
           if (response) {
-            // set input data values
             fields.forEach((field) => {
               if (
                 field.identifier !== "id" &&
@@ -88,7 +90,7 @@ export default function EditForm<T>({
           icon: "success",
           title: "Your work has been saved",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
         });
         close();
       } else {
@@ -104,24 +106,12 @@ export default function EditForm<T>({
 
   const generateInputs = (field: FormField) => {
     let inputElement;
-
+    console.log(errors);
     switch (field.type) {
-      case "text":
+      case "checkbox":
         inputElement = (
-          <Input
-            type="text"
-            htmlFor={field.identifier}
-            labelName={field.name}
-            placeholder={field.placeholder}
-            {...register(field.identifier)}
-            error={errors[field.identifier]?.message}
-          />
-        );
-        break;
-      case "date":
-        inputElement = (
-          <Input
-            type="date"
+          <Checkbox
+            type="checkbox"
             htmlFor={field.identifier}
             labelName={field.name}
             placeholder={field.placeholder}
@@ -197,7 +187,7 @@ export default function EditForm<T>({
           </button>
         </form>
       </div>
-      <GlobalError error={globalError} close={() => setGlobalError("")} />
+      <GlobalError />
     </div>
   );
 }

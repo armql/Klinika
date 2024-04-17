@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Filters } from "../handata";
+import { Filters } from "../__handata";
 
 type DataProps = {
   children: ReactNode;

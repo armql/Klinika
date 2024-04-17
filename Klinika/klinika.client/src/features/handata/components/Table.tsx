@@ -1,47 +1,32 @@
-import {
-  NotePencil,
-  X,
-  CaretRight,
-  CaretLeft,
-  Check,
-} from "@phosphor-icons/react";
+import { NotePencil, X, Check } from "@phosphor-icons/react";
 import Skeleton from "./skeleton/Table";
-import { usePagination } from "../handata";
+import { useHandler, usePagination } from "../__handata";
 import { useFormStore } from "../store/FormStore";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Pagination from "./Pagination";
 
-type TableProps<T> = {
-  headers: Array<string>;
-  all: () => Promise<T>;
-  delete: (id: number) => Promise<T>;
+interface TableProps<T> {
+  headers: string[];
+  all: () => Promise<T[]>;
+  delete: (id: string) => Promise<void>;
   dataKey: string;
-  handler: boolean;
-  edit: () => void;
-};
+}
+
+interface ResponseType<T> {
+  [key: string]: T[];
+}
 
 export default function Table<T>({
   headers,
   all,
-  edit,
   dataKey,
   delete: getDeleted,
-  handler,
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
-
-  const {
-    currentPage,
-    setCurrentPage,
-    loading,
-    totalPages,
-    max,
-    min,
-    startIndex,
-    endIndex,
-    setDataLength,
-    setLoading,
-  } = usePagination();
+  const { openEdit: edit, refetch_data: handler } = useHandler();
+  const { loading, startIndex, endIndex, setDataLength, setLoading } =
+    usePagination();
   const {
     selectedItems,
     selectItem,
@@ -50,12 +35,11 @@ export default function Table<T>({
     deselectAll,
     setSelectedItem,
   } = useFormStore();
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<T[] | undefined>([]);
   const fetchData = async () => {
     try {
-      const response = await all();
+      const response: ResponseType<T> = await all();
       setData(response[dataKey]);
-
       setDataLength(response[dataKey].length);
       setLoading(false);
     } catch (error) {
@@ -63,8 +47,8 @@ export default function Table<T>({
     }
   };
 
-  // SELECTING ALL
-  const handleSelectAll = (event: any) => {
+  // Selecting all
+  const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       selectAll();
     } else {
@@ -73,7 +57,10 @@ export default function Table<T>({
   };
 
   // For "select 1 item"
-  const handleSelectItem = (id: number, event: any) => {
+  const handleSelectItem = (
+    id: string,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.checked) {
       selectItem(id);
     } else {
@@ -199,43 +186,7 @@ export default function Table<T>({
           </ul>
         ))}
       </div>
-      <div className="flex gap-2 items-center justify-end py-2">
-        <button
-          title="Previous item page"
-          type="button"
-          disabled={min}
-          className={`hover:bg-zinc-50 px-2 py-2 rounded-md ${
-            min ? "cursor-not-allowed opacity-40" : "cursor-pointer"
-          }`}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          <CaretLeft size={16} weight="bold" />
-        </button>
-        <ul className="flex gap-2">
-          {[...Array(totalPages)].map((_, i) => (
-            <li
-              key={i}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                i + 1 === currentPage ? "bg-zinc-100" : "hover:bg-zinc-50"
-              }`}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </li>
-          ))}
-        </ul>
-        <button
-          title="Next item page"
-          type="button"
-          disabled={max}
-          className={`hover:bg-zinc-50 px-2 py-2 rounded-md ${
-            max ? "cursor-not-allowed opacity-40" : "cursor-pointer"
-          }`}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          <CaretRight size={16} weight="bold" />
-        </button>
-      </div>
+      <Pagination />
     </div>
   );
 }
