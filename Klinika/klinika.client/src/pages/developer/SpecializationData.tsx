@@ -1,17 +1,14 @@
-import { useState } from "react";
 import axios_instance from "../../api/axios";
-import DataList from "../../features/handata/components/DataList";
-import Table from "../../features/handata/components/Table";
-import { Filters } from "../../features/handata/handata";
 import { ApiService } from "../../services/ApiServices";
-import CreateForm, {
-  FormField,
-} from "../../features/handata/components/CreateForm";
-import { useHandler } from "../../features/handata/handata";
-import EditForm from "../../features/handata/components/EditForm";
-// interface ApiResponse {
-//   specialization: Specialization[];
-// }
+import { FormField } from "../../features/handata/components/CreateForm";
+import {
+  useHandler,
+  EditForm,
+  Table,
+  CreateForm,
+  Filters,
+  DataList,
+} from "../../features/handata/__handata";
 
 export type Specialization = {
   id: number;
@@ -19,7 +16,6 @@ export type Specialization = {
   createdBy: string;
   creationData: string;
 };
-
 const formFields: FormField[] = [
   {
     type: "text",
@@ -30,8 +26,7 @@ const formFields: FormField[] = [
 ];
 
 export default function SpecializationData() {
-  const { handler, openCreate, openEdit, closeCreate, closeEdit } =
-    useHandler();
+  const { create_modal: create, edit_modal: edit } = useHandler();
 
   const specialization_api = new ApiService<Specialization>(
     {
@@ -46,30 +41,26 @@ export default function SpecializationData() {
 
   return (
     <DataList>
-      <Filters name="Specialization List" create={openCreate} />
+      <Filters name="Specialization List" />
       <Table<Specialization>
         headers={["Specialization id", "Name", "Created by", "Created in"]}
         all={specialization_api.getAll}
         delete={specialization_api.delete}
         dataKey="specializations"
-        handler={handler.refetch_data}
-        edit={openEdit}
       />
-      {handler.edit_modal && (
+      {edit && (
         <EditForm<Specialization>
           header="Specialization"
           get={specialization_api.get}
           update={specialization_api.update}
           fields={formFields}
-          close={closeEdit}
         />
       )}
-      {handler.create_modal && (
+      {create && (
         <CreateForm<Specialization>
           header="Specialization"
           api={specialization_api.create}
           fields={formFields}
-          close={closeCreate}
         />
       )}
     </DataList>

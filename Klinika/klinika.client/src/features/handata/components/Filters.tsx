@@ -4,13 +4,14 @@ import {
   MagnifyingGlass,
   Plus,
 } from "@phosphor-icons/react";
+import { useHandler } from "../__handata";
 
 type FiltersProps = {
   name: string;
-  create: () => void;
 };
 
-export default function Filters({ name, create }: FiltersProps) {
+export default function Filters({ name }: FiltersProps) {
+  const { openCreate: create } = useHandler();
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-medium text-xl text-compact">{name}</h1>

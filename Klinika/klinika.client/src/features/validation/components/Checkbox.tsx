@@ -25,6 +25,7 @@ const Checkbox = forwardRef<HTMLInputElement, InputProps>(function Checkbox(
       >
         {labelName}
       </label>
+      <span>{error}</span>
     </div>
   );
 });

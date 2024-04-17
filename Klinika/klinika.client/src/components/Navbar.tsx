@@ -1,4 +1,4 @@
-import { Logo, NavLinks } from "../features/navbar/__navbar";
+import { Logo, NavLinks } from "../features/navigation/__navigation";
 
 export default function Navbar() {
   return (

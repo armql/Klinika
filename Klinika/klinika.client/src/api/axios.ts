@@ -1,10 +1,14 @@
 import axios from "axios";
-// import { target } from '../../vite.config';
+
+// const target = process.env.ASPNETCORE_HTTPS_PORT
+//   ? `https://localhost:${process.env.ASPNETCORE_HTTPS_PORT}`
+//   : process.env.ASPNETCORE_URLS
+//   ? process.env.ASPNETCORE_URLS.split(";")[0]
+//   : "https://localhost:7045";
 
 // Creates an instance of axios
 const axios_instance = axios.create({
-  baseURL: "http://localhost:3001", // THIS IS EXPRESS
-  // baseURL: target, // THIS IS SUPPOSEDLY ASP.NET
+  baseURL: "http://localhost:3001", // for .net use target target
   timeout: 10000,
 });
 

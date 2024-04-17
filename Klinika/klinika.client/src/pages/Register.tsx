@@ -1,14 +1,17 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Input, Select } from "../features/authentication/__auth";
+import { schema_register } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schema_register } from "../features/authentication/__auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
-import GlobalError from "../features/validation/components/GlobalError";
+import { useHandler } from "../features/handata/__handata";
+import {
+  GlobalError,
+  Input,
+  Select,
+} from "../features/validation/__validation";
 
 type FormFields = z.infer<typeof schema_register>;
 
@@ -21,8 +24,7 @@ export default function Register() {
     mode: "onChange",
     resolver: zodResolver(schema_register),
   });
-  const [globalError, setGlobalError] = useState("");
-
+  const { setGlobalError } = useHandler();
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
       .post(
@@ -118,10 +120,10 @@ export default function Register() {
               htmlFor="gender"
               labelName="Gender"
               {...register("gender")}
-              options={["Not Specified", "Male", "Female"]}
+              options={["Male", "Female"]}
               error={errors.gender?.message}
             />
-            <GlobalError error={globalError} close={() => setGlobalError("")} />
+            <GlobalError />
             <button
               type="submit"
               className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
