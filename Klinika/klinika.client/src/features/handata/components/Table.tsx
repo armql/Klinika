@@ -24,7 +24,11 @@ export default function Table<T>({
   delete: getDeleted,
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
-  const { openEdit: edit, refetch_data: handler } = useHandler();
+  const {
+    openEdit: edit,
+    refetch_data: handler,
+    setGlobalError,
+  } = useHandler();
   const { loading, startIndex, endIndex, setDataLength, setLoading } =
     usePagination();
   const {
@@ -39,9 +43,13 @@ export default function Table<T>({
   const fetchData = async () => {
     try {
       const response: ResponseType<T> = await all();
-      setData(response[dataKey]);
-      setDataLength(response[dataKey].length);
-      setLoading(false);
+      if (response) {
+        setData(response[dataKey]);
+        setDataLength(response[dataKey].length);
+        setLoading(false);
+      } else {
+        setGlobalError("No response was returned from api");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -108,9 +116,7 @@ export default function Table<T>({
 
   return (
     <div className="w-full h-[675px] mt-6 rounded-sm">
-      <ul
-        className={`grid grid-cols-${HEADER_COLUMN} py-2 px-2 border-b-2 text-compact/40`}
-      >
+      <ul className={`grid grid-cols-7 py-2 px-2 border-b-2 text-compact/40`}>
         <li>
           <label
             className={`flex justify-center items-center border border-zinc-200 hover:border-zinc-300 overflow-hidden w-5 h-5 rounded-md relative cursor-pointer`}
@@ -137,7 +143,7 @@ export default function Table<T>({
         {refined_data.map((item) => (
           <ul
             key={item.id}
-            className={`grid group bg-white grid-cols-${HEADER_COLUMN} hover:bg-zinc-50 transition-colors items-center px-2 border-b text-xs py-2.5`}
+            className={`grid group bg-white grid-cols-7 hover:bg-zinc-50 transition-colors items-center px-2 border-b text-xs py-2.5`}
           >
             <li>
               <label

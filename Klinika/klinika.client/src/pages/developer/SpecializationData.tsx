@@ -23,6 +23,12 @@ const formFields: FormField[] = [
     name: "Specialization Name",
     placeholder: "Enter your specialization name",
   },
+  {
+    type: "text",
+    identifier: "createdBy",
+    name: "Specialization Created by",
+    placeholder: "Enter your specialization created by",
+  },
 ];
 
 export default function SpecializationData() {
@@ -30,11 +36,11 @@ export default function SpecializationData() {
 
   const specialization_api = new ApiService<Specialization>(
     {
-      getAll: "api/Specialization/getAll",
-      get: "api/Specialization/get",
-      create: "api/Specialization/create",
-      update: "api/Specialization/update",
-      delete: "api/Specialization/delete",
+      getAll: "/api/Specialization/getAll",
+      get: "/api/Specialization/get",
+      create: "/api/Specialization/create",
+      update: "/api/Specialization/update",
+      delete: "/api/Specialization/delete",
     },
     axios_instance
   );

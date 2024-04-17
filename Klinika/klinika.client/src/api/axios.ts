@@ -1,4 +1,5 @@
 import axios from "axios";
+// import process from "process";
 
 // const target = process.env.ASPNETCORE_HTTPS_PORT
 //   ? `https://localhost:${process.env.ASPNETCORE_HTTPS_PORT}`
@@ -8,8 +9,8 @@ import axios from "axios";
 
 // Creates an instance of axios
 const axios_instance = axios.create({
-  baseURL: "http://localhost:3001", // for .net use target target
-  timeout: 10000,
+  baseURL: "",
+  timeout: 40000,
 });
 
 axios_instance.interceptors.request.use(
