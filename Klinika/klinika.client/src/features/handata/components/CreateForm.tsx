@@ -12,16 +12,12 @@ import {
   Checkbox,
   Input,
   Select,
+  File,
 } from "../../validation/__validation";
 import { useHandler } from "../__handata";
-export type FormField = {
-  type: string;
-  identifier: string;
-  name: string;
-  options?: string[];
-  placeholder?: string;
-  isHidden?: boolean;
-};
+import Textarea from "../../validation/components/Textarea";
+import { FormField } from "../utils/form-fields";
+import { useQuery } from "react-query";
 
 type FormProps<T> = {
   header: string;
@@ -36,12 +32,16 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm<RefinedInputs>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
   const { closeCreate: close, setGlobalError } = useHandler();
+
   const onSubmit = async (data: RefinedInputs) => {
+    const fileInput = watch(data.file);
+    console.log(fileInput);
     try {
       const response = await api(data);
       if (response) {
@@ -63,7 +63,6 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
 
   const generateInputs = (field: FormField) => {
     let inputElement;
-    console.log(errors);
     switch (field.type) {
       case "checkbox":
         inputElement = (
@@ -78,12 +77,37 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
           />
         );
         break;
+      case "file":
+        inputElement = (
+          <File
+            type={field.type}
+            htmlFor={field.identifier}
+            labelName={field.name}
+            placeholder={field.placeholder}
+            {...register(field.identifier)}
+            error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
+          />
+        );
+        break;
       case "select":
         inputElement = (
           <Select
             htmlFor={field.identifier}
             labelName={field.name}
-            options={field.options}
+            options={isLoading ? data : []}
+            {...register(field.identifier)}
+            error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
+          />
+        );
+        break;
+      case "textarea":
+        inputElement = (
+          <Textarea
+            htmlFor={field.identifier}
+            labelName={field.name}
+            placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
             hidden={field.isHidden}
@@ -108,14 +132,14 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
   };
 
   return (
-    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black ">
-      <div className="flex overflow-y-auto flex-col gap-12 relative justify-center sm:px-40 px-4 items-center w-[700px] h-[600px] rounded-md bg-white">
+    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black">
+      <div className="flex overflow-y-auto flex-col gap-12 py-12 relative justify-center sm:px-40 px-4 items-center w-[700px] max-h-[900px] rounded-md bg-white">
         <h1 className="font-medium text-3xl">Create {header}</h1>
         <button
           title="Close create modal"
           type="button"
           onClick={close}
-          className="absolute top-0 right-0 p-2 hover:opacity-70"
+          className="absolute top-2 right-2 p-4 hover:bg-zinc-50 rounded-full hover:opacity-70"
         >
           <X size={24} />
         </button>

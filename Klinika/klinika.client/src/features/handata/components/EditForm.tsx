@@ -16,14 +16,8 @@ import {
 } from "../../validation/__validation";
 import { useFormStore } from "../store/FormStore";
 import { useHandler } from "../__handata";
-export type FormField = {
-  type: string;
-  identifier: string;
-  name: string;
-  options?: string[];
-  placeholder?: string;
-  isHidden?: boolean;
-};
+import Textarea from "../../validation/components/Textarea";
+import { FormField } from "../utils/form-fields";
 
 type FormProps<T> = {
   header: string;
@@ -101,7 +95,6 @@ export default function EditForm<T>({
 
   const generateInputs = (field: FormField) => {
     let inputElement;
-    console.log(errors);
     switch (field.type) {
       case "checkbox":
         inputElement = (
@@ -122,6 +115,19 @@ export default function EditForm<T>({
             htmlFor={field.identifier}
             labelName={field.name}
             options={field.options}
+            {...register(field.identifier)}
+            error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
+          />
+        );
+        break;
+      case "textarea":
+        inputElement = (
+          <Textarea
+            type="textarea"
+            htmlFor={field.identifier}
+            labelName={field.name}
+            placeholder={field.placeholder}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
             hidden={field.isHidden}
@@ -160,10 +166,10 @@ export default function EditForm<T>({
       <div className="flex overflow-y-auto flex-col gap-12 relative justify-center sm:px-40 px-4 items-center w-[700px] h-[600px] rounded-md bg-white">
         <h1 className="font-medium text-3xl">Edit {header}</h1>
         <button
-          title="Close create modal"
+          title="Close edit modal"
           type="button"
           onClick={close}
-          className="absolute top-0 right-0 p-2 hover:opacity-70"
+          className="absolute top-2 right-2 p-4 rounded-full hover:bg-zinc-50 hover:opacity-70"
         >
           <X size={24} />
         </button>

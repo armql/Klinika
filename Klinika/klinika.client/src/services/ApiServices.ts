@@ -2,6 +2,7 @@ import { AxiosInstance, AxiosResponse } from "axios";
 
 // Define a type for your API endpoints
 type ApiEndpoints = {
+  category?: string;
   getAll: string;
   get: string;
   create: string;
@@ -17,6 +18,17 @@ export class ApiService<T> {
     this.endpoints = endpoints;
     this.axiosInstance = axiosInstance;
   }
+
+  category = async (): Promise<T[]> => {
+    if (this.endpoints.category) {
+      const response: AxiosResponse<T[]> = await this.axiosInstance.get(
+        this.endpoints.category
+      );
+      return response.data;
+    } else {
+      throw new Error("Category endpoint is undefined");
+    }
+  };
 
   getAll = async (): Promise<T[]> => {
     const response: AxiosResponse<T[]> = await this.axiosInstance.get(

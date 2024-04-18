@@ -2,19 +2,16 @@ import { NotePencil, X, Check } from "@phosphor-icons/react";
 import Skeleton from "./skeleton/Table";
 import { useHandler, usePagination } from "../__handata";
 import { useFormStore } from "../store/FormStore";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, CSSProperties } from "react";
 import Swal from "sweetalert2";
 import Pagination from "./Pagination";
+import { useQuery } from "react-query";
 
 interface TableProps<T> {
   headers: string[];
   all: () => Promise<T[]>;
   delete: (id: string) => Promise<void>;
   dataField: string[];
-}
-
-interface ResponseType<T> {
-  [key: string]: T[];
 }
 
 export default function Table<T>({
@@ -25,8 +22,7 @@ export default function Table<T>({
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
   const { openEdit: edit, refetch_data: handler } = useHandler();
-  const { loading, startIndex, endIndex, setDataLength, setLoading } =
-    usePagination();
+  const { startIndex, endIndex, setDataLength } = usePagination();
   const {
     selectedItems,
     selectItem,
@@ -35,17 +31,15 @@ export default function Table<T>({
     deselectAll,
     setSelectedItem,
   } = useFormStore();
-  const [data, setData] = useState<T[] | undefined>([]);
-  const fetchData = async () => {
-    try {
-      const response: ResponseType<T> = await all();
-      setData(response);
-      setDataLength(response.length);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const {
+    data,
+    isLoading: loading,
+    refetch,
+  } = useQuery(["all", handler], all, {
+    onSuccess: (data) => {
+      setDataLength(data.length | 1);
+    },
+  });
 
   // Selecting all
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +55,7 @@ export default function Table<T>({
     id: string,
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    const stringId = String(id); // Convert id to string
+    const stringId = String(id);
     if (event.target.checked) {
       selectItem(stringId);
     } else {
@@ -76,11 +70,6 @@ export default function Table<T>({
     }
     return false;
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [handler]);
-
   const deleteItem = async (id: string) => {
     try {
       Swal.fire({
@@ -99,7 +88,7 @@ export default function Table<T>({
               title: "Deleted",
               text: "Succesfuly deleted",
             }).then(() => {
-              fetchData();
+              refetch();
             });
           });
         }
@@ -115,9 +104,14 @@ export default function Table<T>({
     return <Skeleton column={HEADER_COLUMN} headers={headers} />;
   }
 
+  const styles: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: `repeat(${HEADER_COLUMN}, minmax(0, 1fr))`,
+  };
+
   return (
     <div className="w-full h-[675px] mt-6 rounded-sm">
-      <ul className={`grid grid-cols-7 py-2 px-2 border-b-2 text-compact/40`}>
+      <ul className={`py-2 px-2 border-b-2 text-compact/40`} style={styles}>
         <li>
           <label
             className={`flex justify-center items-center border border-zinc-200 hover:border-zinc-300 overflow-hidden w-5 h-5 rounded-md relative cursor-pointer`}
@@ -144,7 +138,8 @@ export default function Table<T>({
         {refined_data.map((item) => (
           <ul
             key={item.id}
-            className={`grid group bg-white grid-cols-7 hover:bg-zinc-50 transition-colors items-center px-2 border-b text-xs py-2.5`}
+            style={styles}
+            className={`group bg-white hover:bg-zinc-50 transition-colors items-center px-2 border-b text-xs py-2.5`}
           >
             <li>
               <label
