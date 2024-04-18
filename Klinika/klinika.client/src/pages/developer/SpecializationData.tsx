@@ -17,35 +17,34 @@ export type Specialization = {
   creationData: string;
 };
 const createFields: FormField[] = [
-    {
-        type: "text",
-        identifier: "name",
-        name: "Specialization Name",
-        placeholder: "Enter your specialization name",
-    },
+  {
+    type: "text",
+    identifier: "name",
+    name: "Specialization Name",
+    placeholder: "Enter your specialization name",
+  },
 ];
 
 const editFields: FormField[] = [
-    {
-        type: "number",
-        identifier: "id",
-        name: "Specialization id",
-        isHidden: true,
-    },
-    {
-        type: "text",
-        identifier: "name",
-        name: "Specialization Name",
-        placeholder: "Enter your specialization name",
-    },
-    {
-        type: "text",
-        identifier: "createdBy",
-        name: "Specialization Created by",
-        placeholder: "Enter your specialization created by",
-        isHidden: true,
-    },
-
+  {
+    type: "number",
+    identifier: "id",
+    name: "Specialization id",
+    isHidden: true,
+  },
+  {
+    type: "text",
+    identifier: "name",
+    name: "Specialization Name",
+    placeholder: "Enter your specialization name",
+  },
+  {
+    type: "text",
+    identifier: "createdBy",
+    name: "Specialization Created by",
+    placeholder: "Enter your specialization created by",
+    isHidden: true,
+  },
 ];
 
 export default function SpecializationData() {
@@ -66,10 +65,10 @@ export default function SpecializationData() {
     <DataList>
       <Filters name="Specialization List" />
       <Table<Specialization>
-        headers={["Specialization #ID", "Name", "Created by", "Created in"]}
+        headers={["Specialization ID", "Name", "Created by", "Created in"]}
         all={specialization_api.getAll}
         delete={specialization_api.delete}
-        dataKey="specializations"
+        dataField={["id", "name", "createdBy", "creationDate"]}
       />
       {edit && (
         <EditForm<Specialization>

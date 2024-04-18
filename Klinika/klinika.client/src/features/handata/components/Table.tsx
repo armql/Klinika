@@ -10,7 +10,7 @@ interface TableProps<T> {
   headers: string[];
   all: () => Promise<T[]>;
   delete: (id: string) => Promise<void>;
-  dataKey: string;
+  dataField: string[];
 }
 
 interface ResponseType<T> {
@@ -20,15 +20,11 @@ interface ResponseType<T> {
 export default function Table<T>({
   headers,
   all,
-  dataKey,
   delete: getDeleted,
+  dataField,
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
-  const {
-    openEdit: edit,
-    refetch_data: handler,
-    setGlobalError,
-  } = useHandler();
+  const { openEdit: edit, refetch_data: handler } = useHandler();
   const { loading, startIndex, endIndex, setDataLength, setLoading } =
     usePagination();
   const {
@@ -65,11 +61,20 @@ export default function Table<T>({
     id: string,
     event: ChangeEvent<HTMLInputElement>
   ) => {
+    const stringId = String(id); // Convert id to string
     if (event.target.checked) {
-      selectItem(id);
+      selectItem(stringId);
     } else {
-      deselectItem(id);
+      deselectItem(stringId);
     }
+  };
+
+  const handleItem = (id: number) => {
+    const stringId = String(id);
+    if (selectedItems.includes(stringId)) {
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
@@ -103,8 +108,8 @@ export default function Table<T>({
       console.log(error);
     }
   };
-
   const refined_data = data ? data.slice(startIndex, endIndex) : [];
+  const allItemsSelected = selectedItems.length === refined_data.length;
 
   if (loading) {
     return <Skeleton column={HEADER_COLUMN} headers={headers} />;
@@ -120,7 +125,7 @@ export default function Table<T>({
             <input
               title="Select all items"
               type="checkbox"
-              checked={selectedItems.length === endIndex}
+              checked={allItemsSelected}
               onChange={handleSelectAll}
               className={`relative appearance-none bg-white w-full h-full checked:bg-black`}
             />
@@ -148,7 +153,7 @@ export default function Table<T>({
                 <input
                   title="Select item"
                   type="checkbox"
-                  checked={selectedItems.includes(item.id)}
+                  checked={handleItem(item.id)}
                   onChange={(event) => handleSelectItem(item.id, event)}
                   className={`relative appearance-none bg-white w-full h-full checked:bg-black`}
                 />
@@ -157,8 +162,16 @@ export default function Table<T>({
                 </span>
               </label>
             </li>
-            {Object.keys(item).map((key) => (
-              <li key={key}>{item[key]}</li>
+            {dataField.map((key) => (
+              <li title={item[key]} key={key} className="line-clamp-1">
+                {key === "creationDate"
+                  ? new Date(item[key]).toLocaleString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })
+                  : item[key]}
+              </li>
             ))}
             <li>
               <button

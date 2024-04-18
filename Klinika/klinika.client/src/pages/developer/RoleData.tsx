@@ -64,10 +64,10 @@ export default function RoleData() {
     <DataList>
       <Filters name="Role List" />
       <Table<IdentityRole>
-        headers={["Role #ID", "Name", "Normalized Name", "Concurrency Stamp"]}
+        headers={["Role id", "Role Name"]}
         all={role_api.getAll}
         delete={role_api.delete}
-        dataKey="roles"
+        dataField={["id", "name"]}
       />
       {edit && (
         <EditForm<IdentityRole>

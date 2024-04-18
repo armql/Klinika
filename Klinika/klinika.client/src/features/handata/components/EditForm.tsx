@@ -29,7 +29,7 @@ type FormProps<T> = {
   header: string;
   fields: FormField[];
   get: (id: string) => Promise<T>;
-  update: (id: string, item: T) => Promise<T>;
+  update: (item: T) => Promise<T>;
 };
 
 export default function EditForm<T>({
