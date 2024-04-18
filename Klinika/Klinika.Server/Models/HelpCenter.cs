@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Metrics;
+using System.Text.Json.Serialization;
 
 namespace Klinika.Server.Models
 {
@@ -29,6 +30,7 @@ namespace Klinika.Server.Models
 
 
         [ForeignKey(nameof(categoryId))]
-        public virtual HelpCenterCategory HelpCenterCategory { get; set; }
+        [JsonIgnore]
+        public virtual HelpCenterCategory? helpCenterCategory { get; set; }
     }
 }

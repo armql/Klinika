@@ -95,7 +95,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
           <Select
             htmlFor={field.identifier}
             labelName={field.name}
-            options={isLoading ? data : []}
+            options={field.options}
             {...register(field.identifier)}
             error={errors[field.identifier]?.message}
             hidden={field.isHidden}
