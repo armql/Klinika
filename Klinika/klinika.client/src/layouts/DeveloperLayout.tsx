@@ -1,16 +1,18 @@
-import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function DeveloperLayout() {
   return (
-    <Fragment>
+    <QueryClientProvider client={queryClient}>
       <Sidebar user="dev">
         <main className="relative overflow-hidden">
           <Outlet />
         </main>
       </Sidebar>
       {/* TODO: Footer */}
-    </Fragment>
+    </QueryClientProvider>
   );
 }

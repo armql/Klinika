@@ -1,122 +1,130 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
-import { FormField } from "../../features/handata/components/CreateForm";
 import {
-    useHandler,
-    EditForm,
-    Table,
-    CreateForm,
-    Filters,
-    DataList,
+  useHandler,
+  EditForm,
+  Table,
+  CreateForm,
+  Filters,
+  DataList,
 } from "../../features/handata/__handata";
+import { FormField } from "../../features/handata/utils/form-fields";
+import { useQuery } from "react-query";
 
 export type HelpCenter = {
-    id: number;
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-    creationData: string;
-    categoryId: number;
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  creationData: string;
+  categoryId: number;
 };
-const createFields: FormField[] = [
-    {
-        type: "text",
-        identifier: "name",
-        name: "Your Name",
-        placeholder: "Enter your name",
-    },
-    {
-        type: "text",
-        identifier: "email",
-        name: "Your Email",
-        placeholder: "Enter your email",
-    },
-    {
-        type: "text",
-        identifier: "subject",
-        name: "Your Subject",
-        placeholder: "Enter your subject",
-    },
-    {
-        type: "textarea",
-        identifier: "message",
-        name: "Your message",
-        placeholder: "Enter your message",
-    },
-    {
-        type: "number",
-        identifier: "categoryId",
-        name: "Category Id",
-    },
-];
 
 const editFields: FormField[] = [
-    {
-        type: "text",
-        identifier: "name",
-        name: "Your Name",
-        placeholder: "Enter your name",
-    },
-    {
-        type: "text",
-        identifier: "email",
-        name: "Your Email",
-        placeholder: "Enter your email",
-    },
-    {
-        type: "text",
-        identifier: "subject",
-        name: "Your Subject",
-        placeholder: "Enter your subject",
-    },
-    {
-        type: "textarea",
-        identifier: "message",
-        name: "Your message",
-        placeholder: "Enter your message",
-    },
-
+  {
+    type: "text",
+    identifier: "subject",
+    name: "Your Subject",
+    placeholder: "Enter your Subject",
+  },
+  {
+    type: "textarea",
+    identifier: "message",
+    name: "Your message",
+    placeholder: "Enter your message",
+  },
 ];
 
 export default function HelpCenterData() {
-    const { create_modal: create, edit_modal: edit } = useHandler();
+  const { create_modal: create, edit_modal: edit } = useHandler();
+  const helpcenter_api = new ApiService<HelpCenter>(
+    {
+      category: "/api/HelpCenterCategory/getAll",
+      getAll: "/api/HelpCenter/getAll",
+      get: "/api/HelpCenter/get",
+      create: "/api/HelpCenter/create",
+      update: "/api/HelpCenter/update",
+      delete: "/api/HelpCenter/delete",
+    },
+    axios_instance
+  );
+  const { data, isLoading } = useQuery("category", helpcenter_api.category);
 
-    const helpcenter_api = new ApiService<HelpCenter>(
-        {
-            getAll: "/api/HelpCenter/getAll",
-            get: "/api/HelpCenter/get",
-            create: "/api/HelpCenter/create",
-            update: "/api/HelpCenter/update",
-            delete: "/api/HelpCenter/delete",
-        },
-        axios_instance
-    );
+  const createFields: FormField[] = [
+    {
+      type: "email",
+      identifier: "email",
+      name: "Email",
+      placeholder: "Enter your email",
+    },
+    {
+      type: "text",
+      identifier: "name",
+      name: "Name",
+      placeholder: "Enter your name",
+    },
+    {
+      type: "text",
+      identifier: "subject",
+      name: "Subject",
+      placeholder: "Enter your Subject",
+    },
+    {
+      type: "textarea",
+      identifier: "message",
+      name: "Message",
+      placeholder: "Enter your message",
+    },
+    {
+      type: "select",
+      identifier: "categoryId",
+      name: "Category type",
+      options: isLoading
+        ? [
+            {
+              id: 1,
+              name: "Loading Options...",
+            },
+          ]
+        : data?.map((item) => ({
+            id: item.id,
+            name: item.name,
+          })),
+    },
+  ];
 
-    return (
-        <DataList>
-            <Filters name="Help Center List" />
-            <Table<HelpCenter>
-                headers={["Help Center #ID", "Name", "Email", "Subject", "Message", "CategoryId"]}
-                all={helpcenter_api.getAll}
-                delete={helpcenter_api.delete}
-                dataField={["id", "name", "email", "subject", "message", "categoryId"]}
-            />
-            {edit && (
-                <EditForm<HelpCenter>
-                    header="Help Center"
-                    get={helpcenter_api.get}
-                    update={helpcenter_api.update}
-                    fields={editFields}
-                />
-            )}
-            {create && (
-                <CreateForm<HelpCenter>
-                    header="Help Center"
-                    api={helpcenter_api.create}
-                    fields={createFields}
-                />
-            )}
-        </DataList>
-    );
+  return (
+    <DataList>
+      <Filters name="Help Center List" />
+      <Table<HelpCenter>
+        headers={[
+          "Help Center ID",
+          "Name",
+          "Email",
+          "Subject",
+          "Message",
+          "CategoryId",
+        ]}
+        all={helpcenter_api.getAll}
+        delete={helpcenter_api.delete}
+        dataField={["id", "name", "email", "subject", "message", "categoryId"]}
+      />
+      {edit && (
+        <EditForm<HelpCenter>
+          header="Help Center"
+          get={helpcenter_api.get}
+          update={helpcenter_api.update}
+          fields={editFields}
+        />
+      )}
+      {create && (
+        <CreateForm<HelpCenter>
+          header="Help Center"
+          api={helpcenter_api.create}
+          fields={createFields}
+        />
+      )}
+    </DataList>
+  );
 }

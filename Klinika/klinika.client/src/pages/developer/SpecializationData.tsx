@@ -1,6 +1,5 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
-import { FormField } from "../../features/handata/components/CreateForm";
 import {
   useHandler,
   EditForm,
@@ -9,6 +8,7 @@ import {
   Filters,
   DataList,
 } from "../../features/handata/__handata";
+import { FormField } from "../../features/handata/utils/form-fields";
 
 export type Specialization = {
   id: number;

@@ -10,7 +10,7 @@ type InputProps = {
   hidden: boolean | undefined;
 } & UseFormRegisterReturn;
 
-const Textarea = forwardRef<HTMLInputElement, InputProps>(function Textarea(
+const File = forwardRef<HTMLInputElement, InputProps>(function File(
   { htmlFor, labelName, placeholder, type, error, hidden, ...rest },
   ref
 ) {
@@ -23,11 +23,12 @@ const Textarea = forwardRef<HTMLInputElement, InputProps>(function Textarea(
         {labelName}*
       </label>
       <div className="relative">
-        <textarea
+        <input
+          type={type}
           placeholder={placeholder}
           autoComplete="off"
           ref={ref}
-          className={`border-2 min-h-11 max-h-32 rounded-md sm:text-base text-sm w-full py-2 px-4 font-light placeholder-zinc-500 focus:outline-primary  ${
+          className={`rounded-md sm:text-base text-sm w-full py-2 font-light placeholder-zinc-500 focus:outline-primary  ${
             error && "border-red-200"
           }`}
           {...rest}
@@ -40,4 +41,4 @@ const Textarea = forwardRef<HTMLInputElement, InputProps>(function Textarea(
   );
 });
 
-export default Textarea;
+export default File;

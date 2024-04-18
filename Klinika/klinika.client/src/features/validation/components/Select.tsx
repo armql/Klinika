@@ -2,10 +2,14 @@ import { CaretUpDown } from "@phosphor-icons/react";
 import { forwardRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
+type Options = {
+  id: number;
+  name: string;
+};
 type SelectProps = {
   htmlFor: string;
   labelName: string;
-  options: Array<string> | undefined;
+  options: Options[] | undefined;
   error: string | undefined;
   hidden: boolean | undefined;
 } & UseFormRegisterReturn;
@@ -34,9 +38,9 @@ const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
             Select an option
           </option>
           {options ? (
-            options.map((data: string) => (
-              <option key={data} value={data} className="capitalize">
-                {data}
+            options.map((data: Options) => (
+              <option key={data.id} value={data.id} className="capitalize">
+                {data.name}
               </option>
             ))
           ) : (
