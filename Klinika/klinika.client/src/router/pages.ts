@@ -9,9 +9,8 @@ const PatientDashboard = lazy(() => import("../pages/patient/Dashboard"));
 const PatientReports = lazy(() => import("../pages/patient/ReportsList"));
 const DeveloperDashboard = lazy(() => import("../pages/developer/Dashboard"));
 const DeveloperUserData = lazy(() => import("../pages/developer/UsersData"));
-const DeveloperSpecializationData = lazy(
-  () => import("../pages/developer/SpecializationData")
-);
+const DeveloperSpecializationData = lazy(() => import("../pages/developer/SpecializationData"));
+const DeveloperRoleData = lazy(() => import("../pages/developer/RoleData"));
 
 export {
   Home,
@@ -24,4 +23,5 @@ export {
   DeveloperDashboard,
   DeveloperUserData,
   DeveloperSpecializationData,
+  DeveloperRoleData,
 };

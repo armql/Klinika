@@ -1,6 +1,7 @@
 import {
   DeveloperDashboard,
   DeveloperSpecializationData,
+  DeveloperRoleData,
   DeveloperUserData,
   PatientDashboard,
   PatientReports,
@@ -42,11 +43,20 @@ const developer_sidebar_data = [
     id: 2,
     category: "Data Manage",
     links: [
-      { to: "user-data", text: "User List", component: DeveloperUserData },
+      { 
+        to: "user-data", 
+        text: "User List", 
+        component: DeveloperUserData 
+      },
       {
         to: "specialization-data",
         text: "Specialization List",
         component: DeveloperSpecializationData,
+      },
+      {
+        to: "role-data",
+        text: "Role List",
+        component: DeveloperRoleData,
       },
     ],
   },

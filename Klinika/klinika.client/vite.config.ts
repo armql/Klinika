@@ -53,6 +53,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      "^/logout": {
+        target,
+        secure: false,
+      },
       "^/pingauth": {
         target,
         secure: false,
@@ -89,7 +93,23 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/logout": {
+      "^/api/Role/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/Role/get": {
+        target,
+        secure: false,
+      },
+      "^/api/Role/create": {
+        target,
+        secure: false,
+      },
+      "^/api/Role/update": {
+        target,
+        secure: false,
+      },
+      "^/api/Role/delete": {
         target,
         secure: false,
       },

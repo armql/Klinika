@@ -179,7 +179,7 @@ export default function EditForm<T>({
             {isSubmitting ? (
               <Spinner size={24} className="animate-spin" />
             ) : (
-              "Create"
+              "Edit"
             )}
           </button>
         </form>

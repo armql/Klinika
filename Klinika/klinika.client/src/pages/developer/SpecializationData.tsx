@@ -16,32 +16,36 @@ export type Specialization = {
   createdBy: string;
   creationData: string;
 };
-const formFields: FormField[] = [
-  {
-    type: "text",
-    identifier: "name",
-    name: "Specialization Name",
-    placeholder: "Enter your specialization name",
-  },
-  {
-    type: "text",
-    identifier: "createdBy",
-    name: "Specialization Created by",
-    placeholder: "Enter your specialization created by",
-    isHidden: false,
-  },
-  {
-    type: "number",
-    identifier: "id",
-    name: "Specialization id",
-    isHidden: true,
-  },
-  {
-    type: "date",
-    identifier: "creationDate",
-    name: "Specialization date",
-    isHidden: true,
-  },
+const createFields: FormField[] = [
+    {
+        type: "text",
+        identifier: "name",
+        name: "Specialization Name",
+        placeholder: "Enter your specialization name",
+    },
+];
+
+const editFields: FormField[] = [
+    {
+        type: "number",
+        identifier: "id",
+        name: "Specialization id",
+        isHidden: true,
+    },
+    {
+        type: "text",
+        identifier: "name",
+        name: "Specialization Name",
+        placeholder: "Enter your specialization name",
+    },
+    {
+        type: "text",
+        identifier: "createdBy",
+        name: "Specialization Created by",
+        placeholder: "Enter your specialization created by",
+        isHidden: true,
+    },
+
 ];
 
 export default function SpecializationData() {
@@ -62,7 +66,7 @@ export default function SpecializationData() {
     <DataList>
       <Filters name="Specialization List" />
       <Table<Specialization>
-        headers={["Specialization id", "Name", "Created by", "Created in"]}
+        headers={["Specialization #ID", "Name", "Created by", "Created in"]}
         all={specialization_api.getAll}
         delete={specialization_api.delete}
         dataKey="specializations"
@@ -72,14 +76,14 @@ export default function SpecializationData() {
           header="Specialization"
           get={specialization_api.get}
           update={specialization_api.update}
-          fields={formFields}
+          fields={editFields}
         />
       )}
       {create && (
         <CreateForm<Specialization>
           header="Specialization"
           api={specialization_api.create}
-          fields={formFields}
+          fields={createFields}
         />
       )}
     </DataList>
