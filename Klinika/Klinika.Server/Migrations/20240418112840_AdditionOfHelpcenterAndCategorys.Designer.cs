@@ -4,6 +4,7 @@ using Klinika.Server.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Klinika.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418112840_AdditionOfHelpcenterAndCategorys")]
+    partial class AdditionOfHelpcenterAndCategorys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,9 +123,6 @@ namespace Klinika.Server.Migrations
                     b.Property<int>("categoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("creationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -172,7 +172,7 @@ namespace Klinika.Server.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("HelpCenterCategorys");
+                    b.ToTable("helpCenterCategorys");
                 });
 
             modelBuilder.Entity("Klinika.Server.Models.Specialization", b =>

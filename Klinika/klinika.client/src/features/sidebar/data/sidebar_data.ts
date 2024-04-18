@@ -3,6 +3,8 @@ import {
   DeveloperSpecializationData,
   DeveloperRoleData,
   DeveloperUserData,
+  DeveloperHelpCenterCategoryData,
+  DeveloperHelpCenterData,
   PatientDashboard,
   PatientReports,
 } from "../../../router/pages";
@@ -57,6 +59,16 @@ const developer_sidebar_data = [
         to: "role-data",
         text: "Role List",
         component: DeveloperRoleData,
+      },
+      {
+        to: "helpcenter-data",
+        text: "Help Center List",
+        component: DeveloperHelpCenterData,
+      },
+      {
+        to: "helpcentercategory-data",
+        text: "Help Center Category List",
+        component: DeveloperHelpCenterCategoryData,
       },
     ],
   },

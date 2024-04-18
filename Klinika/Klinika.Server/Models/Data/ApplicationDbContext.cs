@@ -17,6 +17,10 @@ namespace Klinika.Server.Models.Data
 
         public DbSet<Specialization> Specializations { get; set; }
 
+        public DbSet<HelpCenter> HelpCenters { get; set; }
+
+        public DbSet<HelpCenterCategory> HelpCenterCategorys { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -27,8 +31,14 @@ namespace Klinika.Server.Models.Data
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
             builder.Entity<Specialization>()
-                .HasKey(u => u.id);
-                // WHEN NEEDED TO BE DELETED ON CASCADE .OnDelete(DeleteBehavior.Cascade);
+                .HasKey(x => x.id);
+
+            builder.Entity<HelpCenterCategory>()
+                .HasKey(x => x.id);
+
+            builder.Entity<HelpCenter>()
+                .HasKey(x => x.id);
+
         }
         public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         {

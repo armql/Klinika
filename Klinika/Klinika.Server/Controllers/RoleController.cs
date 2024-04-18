@@ -4,9 +4,9 @@ using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Klinika.Server.Models.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Klinika.Server.Models.DTO.Developer;
 
 namespace Klinika.Server.Controllers
 {

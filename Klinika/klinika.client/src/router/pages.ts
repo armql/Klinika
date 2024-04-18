@@ -8,9 +8,12 @@ const Login = lazy(() => import("../pages/Login"));
 const PatientDashboard = lazy(() => import("../pages/patient/Dashboard"));
 const PatientReports = lazy(() => import("../pages/patient/ReportsList"));
 const DeveloperDashboard = lazy(() => import("../pages/developer/Dashboard"));
-const DeveloperUserData = lazy(() => import("../pages/developer/UsersData"));
+const DeveloperUserData = lazy(() => import("../pages/developer/UserData"));
 const DeveloperSpecializationData = lazy(() => import("../pages/developer/SpecializationData"));
 const DeveloperRoleData = lazy(() => import("../pages/developer/RoleData"));
+const DeveloperHelpCenterData = lazy(() => import("../pages/developer/HelpCenterData"));
+const DeveloperHelpCenterCategoryData = lazy(() => import("../pages/developer/HelpCenterCategoryData"));
+
 
 export {
   Home,
@@ -24,4 +27,6 @@ export {
   DeveloperUserData,
   DeveloperSpecializationData,
   DeveloperRoleData,
+  DeveloperHelpCenterData,
+  DeveloperHelpCenterCategoryData
 };

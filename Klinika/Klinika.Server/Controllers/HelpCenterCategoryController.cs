@@ -12,31 +12,31 @@ namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SpecializationController : ControllerBase
+    public class HelpCenterCategoryController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public SpecializationController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public HelpCenterCategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
         }
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
+        public async Task<ActionResult<IEnumerable<HelpCenterCategory>>> GetAll()
         {
-            if(_dbContext.Specializations == null)
+            if (_dbContext.HelpCenterCategorys == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.Specializations.ToListAsync();
+            return await _dbContext.HelpCenterCategorys.ToListAsync();
         }
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<ActionResult> Create([FromBody] SpecializationDto specializationDto)
+        public async Task<ActionResult> Create([FromBody] HelpCenterCategoryDto userRequest)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
@@ -45,73 +45,73 @@ namespace Klinika.Server.Controllers
                 return Unauthorized(new { message = "User is not authenticated" });
             }
 
-            var newSpecialization = new Specialization()
+            var newCategory = new HelpCenterCategory()
             {
-                name = specializationDto.name,
+                name = userRequest.name,
                 createdBy = currentUser.firstName,
                 creationDate = DateTime.Now,
             };
 
-            await _dbContext.Specializations.AddAsync(newSpecialization);
+            await _dbContext.HelpCenterCategorys.AddAsync(newCategory);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { message = newSpecialization.id + ", with the name:" + newSpecialization.name + " was created." });
+            return Ok(new { message = newCategory.id + ", with the name:" + newCategory.name + " was created." });
         }
 
         [HttpGet("get")]
-        public async Task<ActionResult<Specialization>> Get(int id)
+        public async Task<ActionResult<HelpCenterCategory>> Get(int id)
         {
-            if(_dbContext.Specializations == null)
+            if (_dbContext.HelpCenterCategorys == null)
             {
                 return NotFound();
             }
 
-            var specialization = await _dbContext.Specializations.FirstOrDefaultAsync(s => s.id == id);
+            var category = await _dbContext.HelpCenterCategorys.FirstOrDefaultAsync(s => s.id == id);
 
-            if(specialization == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return specialization;
+            return category;
         }
 
         [HttpPost("update")]
-        public async Task<ActionResult> Update(Specialization userRequest)
+        public async Task<ActionResult> Update(HelpCenterCategory userRequest)
         {
 
-            var specialization = await _dbContext.Specializations.FindAsync(userRequest.id);
+            var category = await _dbContext.HelpCenterCategorys.FindAsync(userRequest.id);
 
-            if (specialization == null)
+            if (category == null)
             {
                 return BadRequest();
             }
 
-            specialization.name = userRequest.name;
+            category.name = userRequest.name;
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { message = specialization.id + ",with the name " + specialization.name + " was changed to: " + userRequest.name });
+            return Ok(new { message = category.id + ",with the name " + category.name + " was changed to: " + userRequest.name });
         }
 
         [HttpDelete("delete")]
         public async Task<ActionResult> Delete(int id)
         {
-            if (_dbContext.Specializations == null)
+            if (_dbContext.HelpCenterCategorys == null)
             {
                 return NotFound();
             }
 
-            var specialization = await _dbContext.Specializations.FindAsync(id);
+            var category = await _dbContext.HelpCenterCategorys.FindAsync(id);
 
-            if(specialization == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Specializations.Remove(specialization);
+            _dbContext.HelpCenterCategorys.Remove(category);
             await _dbContext.SaveChangesAsync();
-            return Ok(new { message = specialization.name + " was removed" });
+            return Ok(new { message = category.name + " was removed" });
         }
     }
 }

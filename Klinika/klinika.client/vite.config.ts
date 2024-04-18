@@ -69,10 +69,6 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/api/Specialization": {
-        target,
-        secure: false,
-      },
       "^/api/Specialization/getAll": {
         target,
         secure: false,
@@ -113,6 +109,47 @@ export default defineConfig({
         target,
         secure: false,
       },
+      "^/api/HelpCenterCategory/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenterCategory/get": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenterCategory/create": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenterCategory/update": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenterCategory/delete": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenter/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenter/get": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenter/create": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenter/update": {
+        target,
+        secure: false,
+      },
+      "^/api/HelpCenter/delete": {
+        target,
+        secure: false,
+      },
+      
     },
     port: 5173,
     https: {
