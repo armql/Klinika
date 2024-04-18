@@ -4,7 +4,7 @@ import { FormField } from "../../handata/components/CreateForm";
 // FORMAL TEXT
 const textSchema = z
   .string()
-  .max(12, "Field should not exceed 12 characters")
+  .max(64, "Field should not exceed 64 characters")
   .refine((value) => value && value.length > 0, {
     message: "Field is required",
   })

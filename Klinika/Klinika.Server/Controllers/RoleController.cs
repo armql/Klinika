@@ -66,11 +66,11 @@ namespace Klinika.Server.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<ActionResult> Update(Role userRequest)
+        public async Task<ActionResult> Update(IdentityDtoCase userRequest)
         {
-            var roleId = userRequest.Id;
+            var roleId = userRequest.id;
 
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await _roleManager.FindByIdAsync(roleId.ToString());
 
             if (role == null)
             {

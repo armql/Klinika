@@ -28,25 +28,19 @@ const createFields: FormField[] = [
 const editFields: FormField[] = [
   {
     type: "text",
-    identifier: "Id",
+    identifier: "id",
     name: "Specialization id",
     isHidden: true,
   },
   {
     type: "text",
-    identifier: "Name",
+    identifier: "name",
     name: "Role Name",
     placeholder: "Enter your role name",
   },
   {
     type: "text",
-    identifier: "NormalizedName",
-    name: "Specialization id",
-    isHidden: true,
-  },
-  {
-    type: "text",
-    identifier: "ConcurrencyStam",
+    identifier: "normalizedName",
     name: "Specialization id",
     isHidden: true,
   },
