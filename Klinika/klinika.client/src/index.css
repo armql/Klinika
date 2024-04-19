@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-b from-[#f4fbef] via-green-100 to-white;
+  @apply bg-gradient-to-b from-[#f4fbef] via-green-50 to-white;
 }
 
 * {

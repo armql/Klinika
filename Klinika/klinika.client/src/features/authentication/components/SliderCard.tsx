@@ -8,7 +8,7 @@ export default function SliderCard() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  function handleMouseMove(event) {
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
     const { currentTarget, clientX, clientY } = event;
     const { left, top } = currentTarget.getBoundingClientRect();
 

@@ -5,7 +5,7 @@ type InputProps = {
   htmlFor: string;
   labelName: string;
   error: string | undefined;
-  hidden: boolean | undefined;
+  hidden?: boolean | undefined;
 } & UseFormRegisterReturn;
 
 const Checkbox = forwardRef<HTMLInputElement, InputProps>(function Checkbox(
@@ -22,10 +22,7 @@ const Checkbox = forwardRef<HTMLInputElement, InputProps>(function Checkbox(
         className={`border-2 rounded-sm sm:text-base text-sm font-lights`}
         {...rest}
       />
-      <label
-        htmlFor={htmlFor}
-        className="font-medium sm:text-base text-sm text-compact/70"
-      >
+      <label htmlFor={htmlFor} className="sm:text-base text-sm text-compact/70">
         {labelName}
       </label>
       <span>{error}</span>

@@ -8,8 +8,8 @@ type InputProps = {
   labelName: string;
   placeholder: string | undefined;
   type: string;
-  error: string | undefined;
-  hidden: boolean | undefined;
+  error?: string | undefined;
+  hidden?: boolean | undefined;
 } & UseFormRegisterReturn;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
@@ -18,7 +18,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   const { auto, effect } = useToggle();
   return (
-    <div className={`flex flex-col gap-1 relative ${hidden && "hidden"}`}>
+    <div
+      className={`flex w-full flex-col gap-1 relative ${hidden && "hidden"}`}
+    >
       <label
         htmlFor={htmlFor}
         className="font-medium sm:text-base text-sm text-compact"
@@ -38,7 +40,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         />
         <ExtrasInput type={type} effect={effect} auto={auto} />
       </div>
-      <span className="absolute sm:-bottom-5 truncate -bottom-4 px-2 sm:text-sm text-xs text-red-600">
+      <span className="absolute sm:-bottom-5 -bottom-4 px-2 truncate sm:text-sm text-xs text-red-600">
         {error}
       </span>
     </div>

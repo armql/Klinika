@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Spinner } from "@phosphor-icons/react";
+import { At, Password, Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
 import { useHandler } from "../features/handata/__handata";
 import {
@@ -19,12 +19,14 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, touchedFields },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_register),
   });
   const { setGlobalError } = useHandler();
+
+  console.log(errors.gender?.message);
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
       .post(
@@ -54,9 +56,9 @@ export default function Register() {
   };
 
   return (
-    <section className="w-full h-full flex py-12 gap-12 bg-white sm:px-12 px-4">
-      <div className="w-[100%] md:w-[50%] h-full flex justify-center items-center">
-        <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
+    <section className="w-full h-full flex py-24 gap-12 bg-white sm:px-12 px-4">
+      <div className="w-[100%] lg:w-[50%] h-full flex justify-center items-center">
+        <div className="sm:w-[540px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
             <h1 className="font-medium text-5xl">Register</h1>
             <span className="text-lg text-zinc-700">
@@ -108,21 +110,32 @@ export default function Register() {
               {...register("confirm_password")}
               error={errors.confirm_password?.message}
             />
-            <Input
-              htmlFor="age"
-              labelName="Age"
-              type="date"
-              placeholder="Enter your birth date"
-              {...register("age")}
-              error={errors.age?.message}
-            />
-            <Select
-              htmlFor="gender"
-              labelName="Gender"
-              {...register("gender")}
-              options={["Male", "Female"]}
-              error={errors.gender?.message}
-            />
+            <div className="flex flex-row gap-2">
+              <Input
+                htmlFor="age"
+                labelName="Age"
+                type="date"
+                placeholder="Enter your birth date"
+                {...register("age")}
+                error={errors.age?.message}
+              />
+              <Select
+                htmlFor="gender"
+                labelName="Gender"
+                {...register("gender")}
+                options={[
+                  {
+                    id: "male",
+                    name: "Male",
+                  },
+                  {
+                    id: "female",
+                    name: "Female",
+                  },
+                ]}
+                error={errors.gender?.message}
+              />
+            </div>
             <GlobalError />
             <button
               type="submit"
@@ -146,12 +159,51 @@ export default function Register() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] max-h-screen bg-gradient-to-b from-compact/80 to-primary/50 md:block hidden rounded-md">
-        <div className="w-full h-full flex justify-end p-4 flex-col items-start">
-          <h1 className="text-4xl font-manrope text-compact">
-            Lorem ipsum dorum
-          </h1>
-        </div>
+      <div className="w-[50%] max-h-screen lg:block hidden rounded-md p-12 relative z-10 bg-primary/50">
+        {/* <div className="flex flex-col gap-1 justify-center">
+          <div
+            className={`flex flex-row gap-2 items-center border-2 rounded-md p-2 bg-white ${
+              touchedFields.email && !errors.email?.message
+                ? "border-solid border-primary/40"
+                : "border-dashed"
+            }`}
+          >
+            <div className="rounded-md p-2 text-zinc-600">
+              <At size={48} weight="duotone" />
+            </div>
+            <div>
+              <h3 className="font-medium text-xl text-compact font-manrope">
+                Email
+              </h3>
+              <p className="font-manrope text-compact/60">
+                Email should be valid and unique.
+              </p>
+            </div>
+          </div>
+          <div className="ml-10 w-1.5 h-6 rounded-sm bg-zinc-200" />
+
+          <div
+            className={`flex flex-row gap-2 items-center border-2 rounded-md p-2 bg-white ${
+              touchedFields.password
+                ? "border-solid border-primary/40"
+                : "border-dashed"
+            }`}
+          >
+            <div className="rounded-md p-2 text-zinc-600">
+              <Password size={48} weight="duotone" />
+            </div>
+            <div>
+              <h3 className="font-medium text-xl text-compact font-manrope">
+                Password
+              </h3>
+              <p className="font-manrope text-compact/60">
+                Password should be at least 8 characters long, contain at least
+                1 uppercase letter, 1 lowercase letter, 1 number, and 1 special
+                character.
+              </p>
+            </div>
+          </div>
+        </div> */}
       </div>
     </section>
   );

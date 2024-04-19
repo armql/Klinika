@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 type Options = {
-  id: number;
+  id: number | string;
   name: string;
 };
 type SelectProps = {
@@ -11,7 +11,7 @@ type SelectProps = {
   labelName: string;
   options: Options[] | undefined;
   error: string | undefined;
-  hidden: boolean | undefined;
+  hidden?: boolean | undefined;
 } & UseFormRegisterReturn;
 
 const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
@@ -19,7 +19,9 @@ const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
   ref
 ) {
   return (
-    <div className={`flex flex-col gap-1 relative${hidden && "hidden"}`}>
+    <div
+      className={`flex w-full flex-col gap-1 relative ${hidden && "hidden"}`}
+    >
       <label
         htmlFor={htmlFor}
         className="font-medium sm:text-base text-sm text-compact"
@@ -52,7 +54,7 @@ const Select = forwardRef<HTMLInputElement, SelectProps>(function Input(
         </span>
       </div>
       <span className="absolute sm:-bottom-5 truncate -bottom-4 px-2 sm:text-sm text-xs text-red-600">
-        {error}
+        {error && error}
       </span>
     </div>
   );
