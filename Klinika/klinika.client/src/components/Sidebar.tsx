@@ -1,9 +1,9 @@
 import { ReactNode, Fragment, useEffect } from "react";
 import {
-  patient_sidebar_data as patient,
-  developer_sidebar_data as dev,
-} from "../features/sidebar/data/sidebar_data";
-import { CaretDown } from "@phosphor-icons/react";
+  patient_routes as patient,
+  developer_routes as dev,
+} from "../features/sidebar/__sidebar";
+import { CaretDown, Folder, FolderOpen } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import { categoryRender } from "../util/category-render";
 import { Header, Profile, Resizer } from "../features/sidebar/__sidebar";
@@ -27,6 +27,8 @@ export default function Sidebar({ user, children }: InnerProp) {
     setType,
     collapse,
     handleActiveLink,
+    folder,
+    handleFolder,
   } = useNavigation();
 
   useEffect(() => {
@@ -54,19 +56,25 @@ export default function Sidebar({ user, children }: InnerProp) {
     <div className="z-10 flex flex-row bg-white">
       <div
         className={`z-40 relative border-r-2 transition-all duration-300 overflow-hidden ${
-          sidebar ? `${isCollapsed ? "w-20" : "w-80"} max-h-fit` : "h-0 w-0"
+          sidebar
+            ? `${
+                isCollapsed
+                  ? "w-20 min-w-[5rem] max-w-[10rem]"
+                  : "w-[22rem] min-w-[19rem] max-w-[22rem]"
+              } max-h-fit`
+            : "h-0 w-0"
         }`}
       >
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center p-2">
           {sidebar && (
-            <div className="flex flex-col items-center justify-between w-full px-2 py-1.5">
+            <div className="flex flex-col items-center justify-between w-full py-1.5">
               <Profile effect={isCollapsed} />
               {/* <Recent
                 handler={() => handleRecent(item.to)}
                 effect={isCollapsed}
                 links={links}
               /> */}
-              <div className="flex flex-col justify-between w-full mt-4">
+              <div className="flex flex-col px-2 justify-between w-full mt-4 overflow-clip">
                 {data.map((link) => (
                   <Fragment key={link.id}>
                     <button
@@ -77,14 +85,14 @@ export default function Sidebar({ user, children }: InnerProp) {
                           isCollapsed && collapse();
                         }
                       }}
-                      className={`flex w-full select-none items-center justify-around px-2 py-2 text-sm text-black active:bg-gray-50 `}
+                      className={`flex w-full select-none items-center justify-between py-2 text-black active:bg-gray-50 `}
                     >
                       <div
-                        className={`flex items-center ${
+                        className={`flex items-center gap-1 transition duration-300 truncate ${
                           isCollapsed
                             ? "w-full justify-center hover:opacity-70"
                             : "w-40 justify-start"
-                        } gap-1 transition duration-300 ${
+                        } ${
                           active_category.includes(link.id)
                             ? "text-black"
                             : "text-neutral-600"
@@ -101,35 +109,57 @@ export default function Sidebar({ user, children }: InnerProp) {
                               : "text-gray-400"
                           }`}
                         >
-                          <CaretDown size={14} weight="bold" />
+                          <CaretDown size={18} weight="bold" />
                         </span>
                       )}
                     </button>
-                    {!isCollapsed &&
-                      active_category.includes(link.id) &&
-                      link.links.map((links) => (
-                        <div
-                          key={links.text}
-                          className="flex flex-col gap-2 py-1"
-                        >
-                          <div className="relative flex flex-col hover:text-sky-900">
-                            <NavLink
-                              key={links.to}
-                              to={links.to}
-                              onClick={() => handleActiveLink(links.text)}
-                              className={({ isActive }) =>
-                                `text-black ${
-                                  isActive
-                                    ? "translate-x-2 border-l-2 border-gray-400 bg-gray-100 text-gray-900"
-                                    : " text-gray-600 hover:text-gray-800"
-                                } rounded-sm pl-6 py-2 text-start text-[13px] font-normal transition duration-300`
-                              }
+                    <div className="ml-3 pl-4 border-l-2 border-zinc-200">
+                      {!isCollapsed &&
+                        active_category.includes(link.id) &&
+                        link.folders.map((folders) => (
+                          <Fragment key={folders.id}>
+                            <button
+                              title={folders.name}
+                              type="button"
+                              onClick={() => handleFolder(folders.id)}
+                              className={`flex flex-row gap-1.5 py-1.5 items-center w-full`}
                             >
-                              {!isCollapsed && links.text}
-                            </NavLink>
-                          </div>
-                        </div>
-                      ))}
+                              {folder.includes(folders.id) ? (
+                                <Folder size={22} weight="duotone" />
+                              ) : (
+                                <FolderOpen size={22} weight="duotone" />
+                              )}
+                              <span className="text-sm">{folders.name}</span>
+                            </button>
+                            <div className="flex flex-col items-center ml-2 border-l-2 border-zinc-400">
+                              {folder.includes(folders.id) ||
+                                folders.links.map((links) => (
+                                  <div
+                                    key={links.text}
+                                    className="flex flex-row py-0.5 pl-2 items-center w-56"
+                                  >
+                                    <NavLink
+                                      key={links.to}
+                                      to={links.to}
+                                      onClick={() =>
+                                        handleActiveLink(links.text)
+                                      }
+                                      className={({ isActive }) =>
+                                        `text-black ${
+                                          isActive
+                                            ? "bg-zinc-50 text-gray-900"
+                                            : " text-gray-600 hover:text-gray-800"
+                                        } truncate w-full px-2 text-start rounded-sm gap-1 py-0.5 text-sm font-normal transition duration-300`
+                                      }
+                                    >
+                                      {!isCollapsed && links.text}
+                                    </NavLink>
+                                  </div>
+                                ))}
+                            </div>
+                          </Fragment>
+                        ))}
+                    </div>
                   </Fragment>
                 ))}
               </div>

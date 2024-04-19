@@ -7,14 +7,21 @@ type Link = {
   component: LazyExoticComponent<FunctionComponent>;
 };
 
+type Folder = {
+  id: number;
+  name: string;
+  links: Link[];
+};
+
 export type Data = {
   id: number;
   category: string;
-  links: Link[];
+  folders: Folder[];
 };
 
 type State = {
   data: Data[];
+  folder: number[];
   type: string;
   active_link: string;
   isCollapsed: boolean;
@@ -28,6 +35,7 @@ type State = {
   handleNotification: () => void;
   handleCategory: (id: number) => void;
   handleActiveLink: (label: string) => void;
+  handleFolder: (id: number) => void;
 };
 
 export const useNavigation = create<State>((set) => ({
@@ -38,6 +46,22 @@ export const useNavigation = create<State>((set) => ({
   active_category: [1],
   notification: false,
   sidebar: false,
+  folder: [],
+  handleFolder: (id: number) =>
+    set((state) => {
+      const isActive = state.folder.includes(id);
+      if (isActive) {
+        return {
+          ...state,
+          folder: state.folder.filter((cat_id) => cat_id !== id),
+        };
+      } else {
+        return {
+          ...state,
+          folder: [...state.folder, id],
+        };
+      }
+    }),
   collapse: () => set((state) => ({ isCollapsed: !state.isCollapsed })),
   handleActiveLink: (label) =>
     set((state) => ({ ...state, active_link: label })),

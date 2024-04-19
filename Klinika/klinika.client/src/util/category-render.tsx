@@ -8,13 +8,13 @@ import {
 function categoryRender(category: string) {
   switch (category) {
     case "Portal":
-      return <HouseSimple size={24} weight="duotone" />;
+      return <HouseSimple size={28} weight="duotone" />;
     case "Data Manage":
-      return <Table size={24} weight="duotone" />;
+      return <Table size={28} weight="duotone" />;
     case "Community":
-      return <UsersThree size={24} weight="duotone" />;
+      return <UsersThree size={28} weight="duotone" />;
     default:
-      return <ArchiveBox size={24} weight="duotone" />;
+      return <ArchiveBox size={28} weight="duotone" />;
   }
 }
 

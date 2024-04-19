@@ -28,21 +28,21 @@ export default function Header() {
   const pathnames = pathname.split("/").filter((x) => x);
 
   return (
-    <div className="border-b-2 w-full px-2 py-3.5 flex items-center justify-between">
+    <div className="border-b-2 w-full px-4 py-6 flex items-center justify-between">
       <div className="flex flex-row gap-4">
         <Button
           title="Sidebar button"
           onClick={handleSidebar}
           className="text-black hover:text-black/50 transition-colors"
         >
-          <SidebarSimple size={24} weight={sidebar ? "fill" : "duotone"} />
+          <SidebarSimple size={28} weight={sidebar ? "fill" : "duotone"} />
         </Button>
         <Button
           title="Favorite button"
           // onClick={handleFavorite}
           className="text-black hover:text-black/50 transition-colors"
         >
-          <Star size={24} weight="duotone" />
+          <Star size={28} weight="duotone" />
         </Button>
 
         <div className="flex flex-row text-sm items-center gap-2">
@@ -67,7 +67,7 @@ export default function Header() {
         onClick={handleNotification}
         className="text-black hover:text-black/50 transition-colors"
       >
-        <Bell size={24} weight={notification ? "fill" : "duotone"} />
+        <Bell size={28} weight={notification ? "fill" : "duotone"} />
       </Button>
     </div>
   );

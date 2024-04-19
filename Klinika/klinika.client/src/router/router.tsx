@@ -20,9 +20,9 @@ import {
 import { Suspense } from "react";
 import ProtectedRoutes from "../util/ProtectedRoutes";
 import {
-  developer_sidebar_data,
-  patient_sidebar_data,
-} from "../features/sidebar/data/sidebar_data";
+  developer_routes,
+  patient_routes,
+} from "../features/sidebar/__sidebar";
 import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
@@ -106,17 +106,19 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: <PatientDashboard />,
       },
-      ...patient_sidebar_data
+      ...patient_routes
         .map((category) => {
-          return category.links.map((link) => {
-            const Component = link.component;
-            return {
-              path: link.to,
-              element: <Component />,
-            };
+          return category.folders.map((folder) => {
+            return folder.links.map((link) => {
+              const Component = link.component;
+              return {
+                path: link.to,
+                element: <Component />,
+              };
+            });
           });
         })
-        .flat(),
+        .flat(2),
     ],
   },
   {
@@ -151,17 +153,19 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: <DeveloperDashboard />,
       },
-      ...developer_sidebar_data
+      ...developer_routes
         .map((category) => {
-          return category.links.map((link) => {
-            const Component = link.component;
-            return {
-              path: link.to,
-              element: <Component />,
-            };
+          return category.folders.map((folder) => {
+            return folder.links.map((link) => {
+              const Component = link.component;
+              return {
+                path: link.to,
+                element: <Component />,
+              };
+            });
           });
         })
-        .flat(),
+        .flat(2),
     ],
   },
   {
