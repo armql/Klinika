@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Klinika.Server.Models.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -21,6 +22,17 @@ namespace Klinika.Server.Models.Data
 
         public DbSet<HelpCenterCategory> HelpCenterCategorys { get; set; }
 
+        public DbSet<Patient> Patients { get; set; }
+
+        public DbSet<PrimaryCareDoctor> PrimaryCareDoctors { get; set; }
+        public DbSet<SpecializedDoctor> SpecializedDoctors { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
+
+        public DbSet<ServiceDesk> ServiceDesks { get; set; }
+
+        public DbSet<Block> Blocks { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -37,6 +49,24 @@ namespace Klinika.Server.Models.Data
                 .HasKey(x => x.id);
 
             builder.Entity<HelpCenter>()
+                .HasKey(x => x.id);
+
+            builder.Entity<Patient>()
+                .HasKey(x => x.id);
+
+            builder.Entity<SpecializedDoctor>()
+                .HasKey(x => x.id);
+
+            builder.Entity<PrimaryCareDoctor>()
+                .HasKey(x => x.id);
+
+            builder.Entity<Administrator>()
+                .HasKey(x => x.id);
+
+            builder.Entity<ServiceDesk>()
+                .HasKey(x => x.id);
+
+            builder.Entity<Block>()
                 .HasKey(x => x.id);
 
         }

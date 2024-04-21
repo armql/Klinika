@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Klinika.Server.Models.User;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Klinika.Server.Models.Data
 {
@@ -20,5 +22,17 @@ namespace Klinika.Server.Models.Data
 
         [MaxLength(255)]
         public string? password { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<PrimaryCareDoctor>? PrimaryCareDoctors { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<SpecializedDoctor>? SpecializedDoctors { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Patient>? Patients { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Administrator>? Administrators { get; set; }
     }
 }

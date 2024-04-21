@@ -89,7 +89,7 @@ namespace Klinika.Server.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { message = help.id + ",with the name " + help.name + " was changed to: " + userRequest.name });
+            return Ok(new { message = help.id + ", with the name: " + help.name + " was changed to: " + userRequest.name });
         }
 
         [HttpDelete("delete")]

@@ -149,7 +149,70 @@ export default defineConfig({
         target,
         secure: false,
       },
-      
+      "^/api/Account/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/Account/get": {
+        target,
+        secure: false,
+      },
+      "^/api/Account/create": {
+        target,
+        secure: false,
+      },
+      "^/api/Account/update": {
+        target,
+        secure: false,
+      },
+      "^/api/Account/delete": {
+        target,
+        secure: false,
+      },
+      "^/api/Account/assignRole": {
+        target,
+        secure: false,
+      },
+      "^/api/ServiceDesk/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/ServiceDesk/get": {
+        target,
+        secure: false,
+      },
+      "^/api/ServiceDesk/create": {
+        target,
+        secure: false,
+      },
+      "^/api/ServiceDesk/update": {
+        target,
+        secure: false,
+      },
+      "^/api/ServiceDesk/delete": {
+        target,
+        secure: false,
+      },
+      "^/api/Block/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/Block/get": {
+        target,
+        secure: false,
+      },
+      "^/api/Block/create": {
+        target,
+        secure: false,
+      },
+      "^/api/Block/update": {
+        target,
+        secure: false,
+      },
+      "^/api/Block/delete": {
+        target,
+        secure: false,
+      },
     },
     port: 5173,
     https: {

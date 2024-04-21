@@ -28,6 +28,7 @@ namespace Klinika.Server
 
             builder.Services.AddTransient<IRoleStore<IdentityRole>, RoleStore<IdentityRole, ApplicationDbContext>>();
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
+            builder.Services.AddTransient<UserManager<ApplicationUser>>();
 
 
             // Add services to the container.

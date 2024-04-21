@@ -13,6 +13,8 @@ const DeveloperSpecializationData = lazy(() => import("../pages/developer/Specia
 const DeveloperRoleData = lazy(() => import("../pages/developer/RoleData"));
 const DeveloperHelpCenterData = lazy(() => import("../pages/developer/HelpCenterData"));
 const DeveloperHelpCenterCategoryData = lazy(() => import("../pages/developer/HelpCenterCategoryData"));
+const DeveloperServiceDeskData = lazy(() => import("../pages/developer/ServiceDeskData"));
+const DeveloperBlockData = lazy(() => import("../pages/developer/BlockData"));
 
 
 export {
@@ -28,5 +30,7 @@ export {
   DeveloperSpecializationData,
   DeveloperRoleData,
   DeveloperHelpCenterData,
-  DeveloperHelpCenterCategoryData
+  DeveloperHelpCenterCategoryData,
+  DeveloperServiceDeskData,
+  DeveloperBlockData
 };

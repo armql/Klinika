@@ -5,6 +5,8 @@ import {
   DeveloperUserData,
   DeveloperHelpCenterCategoryData,
   DeveloperHelpCenterData,
+  DeveloperServiceDeskData,
+  DeveloperBlockData,
 } from "../../../router/pages";
 import { Data } from "../../navigation/store/useNavigationStore";
 
@@ -58,6 +60,22 @@ export const developer_routes: Data[] = [
             to: "helpcentercategory-data",
             text: "Help Center Category List",
             component: DeveloperHelpCenterCategoryData,
+          },
+        ],
+      },
+      {
+        id: 7,
+        name: "Service Desk",
+        links: [
+          {
+            to: "servicedesk-data",
+            text: "Service Desk List",
+            component: DeveloperServiceDeskData,
+          },
+          {
+            to: "block-data",
+            text: "Block List",
+            component: DeveloperBlockData,
           },
         ],
       },

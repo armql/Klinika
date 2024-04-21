@@ -1,34 +1,21 @@
 ﻿using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
+using Klinika.Server.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um) : ControllerBase
+    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um, ApplicationDbContext dbContext) : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager = sm;
         private readonly UserManager<ApplicationUser> _userManager = um;
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public string HashPassword(string password)
-        {
-            var hasher = new PasswordHasher<object>();
-            string hashedPassword = hasher.HashPassword(null, password);
-            return hashedPassword;
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public bool VerifyPassword(string hashedPassword, string providedPassword)
-        {
-            var hasher = new PasswordHasher<object>();
-            var result = hasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
-            return result == PasswordVerificationResult.Success;
-        }
+        private readonly ApplicationDbContext _dbContext = dbContext;
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
@@ -56,6 +43,14 @@ namespace Klinika.Server.Controllers
                 {
                     return BadRequest(result);
                 }
+
+                Patient newPatient = new Patient()
+                {
+                    id = newUser.Id,
+                };
+
+                await _dbContext.Patients.AddAsync(newPatient);
+                await _dbContext.SaveChangesAsync();
 
                 message = "Registered Successfully.";
             }
@@ -90,7 +85,7 @@ namespace Klinika.Server.Controllers
                 return BadRequest("Something went wrong please try again." + ex.Message);
             }
 
-            return Ok(new { message = message});
+            return Ok(new { message = message });
         }
 
         [HttpGet("logout"), Authorize]
@@ -107,7 +102,7 @@ namespace Klinika.Server.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return Ok(new { message = message });   
+            return Ok(new { message = message });
         }
 
         [HttpGet("admin"), Authorize]
@@ -115,7 +110,23 @@ namespace Klinika.Server.Controllers
         {
             string[] partners = { "Test1", "Test2" };
 
-            return Ok(new {partners = partners});
+            return Ok(new { partners = partners });
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public string HashPassword(string password)
+        {
+            var hasher = new PasswordHasher<object>();
+            string hashedPassword = hasher.HashPassword(null, password);
+            return hashedPassword;
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public bool VerifyPassword(string hashedPassword, string providedPassword)
+        {
+            var hasher = new PasswordHasher<object>();
+            var result = hasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
+            return result == PasswordVerificationResult.Success;
         }
     }
 }

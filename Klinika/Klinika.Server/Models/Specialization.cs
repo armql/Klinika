@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Klinika.Server.Models.User;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Klinika.Server.Models
@@ -16,5 +17,10 @@ namespace Klinika.Server.Models
 
         public DateTime creationDate { get; set; }
 
+        public virtual ICollection<PrimaryCareDoctor>? PrimaryCareDoctors { get; set; }
+
+        public virtual ICollection<SpecializedDoctor>? SpecializedDoctors { get; set; }
+
+        public virtual ICollection<Block>? Blocks { get; set; }
     }
 }

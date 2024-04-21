@@ -4,6 +4,7 @@ using Klinika.Server.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Klinika.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240421183214_IntegrationOfClasses")]
+    partial class IntegrationOfClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +33,9 @@ namespace Klinika.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<int?>("Blockid")
+                        .HasColumnType("int");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -39,6 +45,8 @@ namespace Klinika.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("id");
+
+                    b.HasIndex("Blockid");
 
                     b.HasIndex("specializationId");
 
@@ -446,6 +454,10 @@ namespace Klinika.Server.Migrations
 
             modelBuilder.Entity("Klinika.Server.Models.Block", b =>
                 {
+                    b.HasOne("Klinika.Server.Models.Block", null)
+                        .WithMany("Blocks")
+                        .HasForeignKey("Blockid");
+
                     b.HasOne("Klinika.Server.Models.Specialization", "Specialization")
                         .WithMany("Blocks")
                         .HasForeignKey("specializationId")
@@ -469,7 +481,7 @@ namespace Klinika.Server.Migrations
             modelBuilder.Entity("Klinika.Server.Models.ServiceDesk", b =>
                 {
                     b.HasOne("Klinika.Server.Models.Block", "Block")
-                        .WithMany("ServiceDesks")
+                        .WithMany()
                         .HasForeignKey("blockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -598,7 +610,7 @@ namespace Klinika.Server.Migrations
 
             modelBuilder.Entity("Klinika.Server.Models.Block", b =>
                 {
-                    b.Navigation("ServiceDesks");
+                    b.Navigation("Blocks");
                 });
 
             modelBuilder.Entity("Klinika.Server.Models.Data.ApplicationUser", b =>

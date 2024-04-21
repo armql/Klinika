@@ -31,6 +31,6 @@ namespace Klinika.Server.Models
 
         [ForeignKey(nameof(categoryId))]
         [JsonIgnore]
-        public virtual HelpCenterCategory? helpCenterCategory { get; set; }
+        public virtual HelpCenterCategory? HelpCenterCategory { get; set; }
     }
 }
