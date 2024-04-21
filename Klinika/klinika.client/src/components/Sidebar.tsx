@@ -2,6 +2,7 @@ import { ReactNode, Fragment, useEffect } from "react";
 import {
   patient_routes as patient,
   developer_routes as dev,
+  Starred,
 } from "../features/sidebar/__sidebar";
 import { CaretDown, Folder, FolderOpen } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
@@ -23,20 +24,18 @@ export default function Sidebar({ user, children }: InnerProp) {
     active_category,
     setData,
     data,
-    type,
     setType,
     collapse,
     handleActiveLink,
     folder,
     handleFolder,
+    handleRecents,
+    active_link,
   } = useNavigation();
 
   useEffect(() => {
     setType(user);
-  }, [user]);
-
-  const filteredData = () => {
-    switch (type) {
+    switch (user) {
       case "dev":
         setData(dev);
         break;
@@ -46,12 +45,9 @@ export default function Sidebar({ user, children }: InnerProp) {
       default:
         break;
     }
-  };
+  }, [user]);
 
-  useEffect(() => {
-    filteredData();
-  }, [type]);
-
+  console.log(active_link);
   return (
     <div className="z-10 flex flex-row bg-white">
       <div
@@ -69,12 +65,8 @@ export default function Sidebar({ user, children }: InnerProp) {
           {sidebar && (
             <div className="flex flex-col items-center justify-between w-full py-1.5">
               <Profile effect={isCollapsed} />
-              {/* <Recent
-                handler={() => handleRecent(item.to)}
-                effect={isCollapsed}
-                links={links}
-              /> */}
-              <div className="flex flex-col px-2 justify-between w-full mt-4 overflow-clip">
+              <Starred />
+              <div className="flex flex-col px-2 justify-between w-full overflow-clip">
                 {data.map((link) => (
                   <Fragment key={link.id}>
                     <button
@@ -125,37 +117,44 @@ export default function Sidebar({ user, children }: InnerProp) {
                               className={`flex flex-row gap-1.5 py-1.5 items-center w-full`}
                             >
                               {folder.includes(folders.id) ? (
-                                <Folder size={22} weight="duotone" />
-                              ) : (
                                 <FolderOpen size={22} weight="duotone" />
+                              ) : (
+                                <Folder size={22} weight="duotone" />
                               )}
                               <span className="text-sm">{folders.name}</span>
                             </button>
                             <div className="flex flex-col items-center ml-2 border-l-2 border-zinc-400">
-                              {folder.includes(folders.id) ||
-                                folders.links.map((links) => (
-                                  <div
-                                    key={links.text}
-                                    className="flex flex-row py-0.5 pl-2 items-center w-56"
-                                  >
-                                    <NavLink
-                                      key={links.to}
-                                      to={links.to}
-                                      onClick={() =>
-                                        handleActiveLink(links.text)
-                                      }
-                                      className={({ isActive }) =>
-                                        `text-black ${
-                                          isActive
-                                            ? "bg-zinc-50 text-gray-900"
-                                            : " text-gray-600 hover:text-gray-800"
-                                        } truncate w-full px-2 text-start rounded-sm gap-1 py-0.5 text-sm font-normal transition duration-300`
-                                      }
+                              {folder.includes(folders.id) &&
+                                folders.links.map((links) => {
+                                  const mark = {
+                                    to: links.to,
+                                    text: links.text,
+                                  };
+                                  return (
+                                    <div
+                                      key={links.text}
+                                      className="flex flex-row py-0.5 pl-2 items-center w-56"
                                     >
-                                      {!isCollapsed && links.text}
-                                    </NavLink>
-                                  </div>
-                                ))}
+                                      <NavLink
+                                        key={links.to}
+                                        to={links.to}
+                                        onClick={() => {
+                                          handleActiveLink(mark);
+                                          handleRecents(mark);
+                                        }}
+                                        className={({ isActive }) =>
+                                          `text-black ${
+                                            isActive
+                                              ? "bg-zinc-50 text-gray-900"
+                                              : " text-gray-600 hover:text-gray-800"
+                                          } truncate w-full px-2 text-start rounded-sm gap-1 py-0.5 text-sm font-normal transition duration-300`
+                                        }
+                                      >
+                                        {!isCollapsed && links.text}
+                                      </NavLink>
+                                    </div>
+                                  );
+                                })}
                             </div>
                           </Fragment>
                         ))}

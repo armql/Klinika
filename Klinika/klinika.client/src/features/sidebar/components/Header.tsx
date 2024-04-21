@@ -20,9 +20,12 @@ export default function Header() {
   const {
     handleSidebar,
     handleNotification,
+    handleFavorites,
     sidebar,
     notification,
     active_link,
+    favorite_links,
+    recent_links,
   } = useNavigation();
   const { pathname } = useLocation();
   const pathnames = pathname.split("/").filter((x) => x);
@@ -39,10 +42,17 @@ export default function Header() {
         </Button>
         <Button
           title="Favorite button"
-          // onClick={handleFavorite}
+          onClick={() => handleFavorites(active_link)}
           className="text-black hover:text-black/50 transition-colors"
         >
-          <Star size={28} weight="duotone" />
+          {favorite_links.some(
+            (link) =>
+              link.to === active_link.to && link.text === active_link.text
+          ) ? (
+            <Star size={28} weight="fill" />
+          ) : (
+            <Star size={28} weight="duotone" />
+          )}
         </Button>
 
         <div className="flex flex-row text-sm items-center gap-2">
@@ -59,7 +69,7 @@ export default function Header() {
             </span>
           )}
           <span className="text-black/40">/</span>
-          <p className="capitalize">{active_link}</p>
+          <p className="capitalize">{active_link.text}</p>
         </div>
       </div>
       <Button

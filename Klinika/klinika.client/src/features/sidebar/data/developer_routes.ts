@@ -31,6 +31,7 @@ export const developer_routes: Data[] = [
         name: "User",
         links: [
           { to: "user-data", text: "User List", component: DeveloperUserData },
+          { to: "role-data", text: "Role List", component: DeveloperRoleData },
         ],
       },
       {
@@ -42,13 +43,6 @@ export const developer_routes: Data[] = [
             text: "Specialization List",
             component: DeveloperSpecializationData,
           },
-        ],
-      },
-      {
-        id: 4,
-        name: "Role",
-        links: [
-          { to: "role-data", text: "Role List", component: DeveloperRoleData },
         ],
       },
       {

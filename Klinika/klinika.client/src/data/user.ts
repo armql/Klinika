@@ -1,5 +1,5 @@
 export const user = {
   token: "hasToken",
-  role: "customer",
+  role: "developer",
   name: "Arlind",
 };
