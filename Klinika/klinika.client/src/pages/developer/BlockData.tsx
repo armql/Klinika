@@ -35,6 +35,31 @@ export default function BlockData() {
 
   const createFields: FormField[] = [
     {
+      type: "text",
+      identifier: "name",
+      name: "Block Name",
+      placeholder: "Enter your Block Name",
+    },
+    {
+      type: "select",
+      identifier: "specializationId",
+      name: "Specialization Type",
+      options: isLoading
+        ? [
+            {
+              id: 1,
+              name: "Loading Options...",
+            },
+          ]
+        : data?.map((item) => ({
+            id: item.id,
+            name: item.name,
+          })),
+    },
+  ];
+
+  const editFields: FormField[] = [
+    {
       type: "number",
       identifier: "id",
       name: "Block Id",
@@ -78,7 +103,7 @@ export default function BlockData() {
           header="Block"
           get={Block_api.get}
           update={Block_api.update}
-          fields={createFields}
+          fields={editFields}
         />
       )}
       {create && (

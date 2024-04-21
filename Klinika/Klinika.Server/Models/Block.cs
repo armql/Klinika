@@ -19,7 +19,7 @@ namespace Klinika.Server.Models
 
         [ForeignKey(nameof(specializationId))]
         [JsonIgnore]
-        public virtual Specialization Specialization { get; set; }
+        public virtual Specialization? Specialization { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<ServiceDesk>? ServiceDesks { get; set; }
