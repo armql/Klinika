@@ -17,15 +17,44 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
 
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<Block>>> GetAll()
+        //{
+        //    if (_dbContext.Blocks == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _dbContext.Blocks.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<Block>>> GetAll()
+        public ActionResult<IEnumerable<Block>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
             if (_dbContext.Blocks == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.Blocks.ToListAsync();
+            var query = _dbContext.Blocks.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.name.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var blocks = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = blocks,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
 
         [Authorize]

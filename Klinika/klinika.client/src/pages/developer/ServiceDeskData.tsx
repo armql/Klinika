@@ -65,7 +65,7 @@ export default function ServiceDeskData() {
               name: "Loading Options...",
             },
           ]
-        : data?.map((item) => ({
+        : data?.data.map((item) => ({
             id: item.id,
             name: item.name,
           })),

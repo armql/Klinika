@@ -24,15 +24,44 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<HelpCenterCategory>>> GetAll()
+        //{
+        //    if (_dbContext.HelpCenterCategorys == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _dbContext.HelpCenterCategorys.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<HelpCenterCategory>>> GetAll()
+        public ActionResult<IEnumerable<HelpCenterCategory>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
             if (_dbContext.HelpCenterCategorys == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.HelpCenterCategorys.ToListAsync();
+            var query = _dbContext.HelpCenterCategorys.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.name.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var categories = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = categories,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
 
         [Authorize]

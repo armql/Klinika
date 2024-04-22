@@ -30,9 +30,20 @@ export class ApiService<T> {
     }
   };
 
-  getAll = async (): Promise<T[]> => {
+  // getAll = async (): Promise<T[]> => {
+  //   const response: AxiosResponse<T[]> = await this.axiosInstance.get(
+  //     this.endpoints.getAll
+  //   );
+  //   return response.data;
+  // };
+
+  getAll = async (
+    page: number,
+    pageSize: number,
+    search: string
+  ): Promise<T[]> => {
     const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-      this.endpoints.getAll
+      `${this.endpoints.getAll}?pageNumber=${page}&pageSize=${pageSize}&search=${search}`
     );
     return response.data;
   };

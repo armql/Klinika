@@ -3,7 +3,7 @@ import { create } from "zustand";
 type Store = {
   dataLength: number;
   loading: boolean;
-  currentPage: number;
+  currentPage: number | 1;
   itemsPerPage: number;
   totalPages: number;
   startIndex: number;
@@ -19,7 +19,7 @@ export const usePagination = create<Store>((set) => ({
   dataLength: 0,
   loading: true,
   currentPage: 1,
-  itemsPerPage: 15,
+  itemsPerPage: 10,
   totalPages: 0,
   startIndex: 0,
   endIndex: 0,

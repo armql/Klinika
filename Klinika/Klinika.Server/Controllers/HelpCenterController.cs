@@ -22,15 +22,44 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
         }
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<HelpCenter>>> GetAll()
+        //{
+        //    if (_dbContext.HelpCenters == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _dbContext.HelpCenters.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<HelpCenter>>> GetAll()
+        public ActionResult<IEnumerable<HelpCenter>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
             if (_dbContext.HelpCenters == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.HelpCenters.ToListAsync();
+            var query = _dbContext.HelpCenters.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.subject.Contains(search) || s.name.Contains(search) || s.email.Contains(search) || s.message.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var helps = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = helps,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
 
         [HttpPost("create")]

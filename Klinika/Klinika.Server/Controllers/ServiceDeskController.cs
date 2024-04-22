@@ -15,16 +15,46 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
 
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<ServiceDesk>>> GetAll()
+        //{
+        //    if (_dbContext.ServiceDesks == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _dbContext.ServiceDesks.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<ServiceDesk>>> GetAll()
+        public ActionResult<IEnumerable<ServiceDesk>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
             if (_dbContext.ServiceDesks == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.ServiceDesks.ToListAsync();
+            var query = _dbContext.ServiceDesks.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.name.Contains(search) || s.operatingHours.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var services = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = services,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
+
 
         [Authorize]
         [HttpPost("create")]

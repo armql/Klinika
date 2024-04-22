@@ -24,15 +24,44 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
+        //{
+        //    if(_dbContext.Specializations == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _dbContext.Specializations.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
+        public ActionResult<IEnumerable<Specialization>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
-            if(_dbContext.Specializations == null)
+            if (_dbContext.Specializations == null)
             {
                 return NotFound();
             }
 
-            return await _dbContext.Specializations.ToListAsync();
+            var query = _dbContext.Specializations.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.name.Contains(search) || s.createdBy.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var specializations = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = specializations,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
 
         [Authorize]

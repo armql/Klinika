@@ -24,15 +24,44 @@ namespace Klinika.Server.Controllers
             _roleManager = roleManager;
         }
 
+        //[HttpGet("getAll")]
+        //public async Task<ActionResult<IEnumerable<IdentityRole>>> GetAll()
+        //{
+        //    if (_roleManager.Roles == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return await _roleManager.Roles.ToListAsync();
+        //}
+
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<IdentityRole>>> GetAll()
+        public ActionResult<IEnumerable<Role>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
-            if (_roleManager.Roles == null)
+            if (_dbContext.Roles == null)
             {
                 return NotFound();
             }
 
-            return await _roleManager.Roles.ToListAsync();
+            var query = _dbContext.Roles.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.Name.Contains(search) || s.NormalizedName.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var roles = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = roles,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
         }
 
         [HttpPost("create")]

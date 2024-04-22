@@ -49,7 +49,7 @@ export default function Login() {
   };
 
   return (
-    <section className="w-full h-full flex py-24 gap-12 bg-white sm:px-12 px-4">
+    <section className="w-full h-screen flex py-24 gap-12 bg-white sm:px-12 px-4">
       <div className="w-full md:w-[50%] h-full flex justify-center items-center">
         <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
@@ -113,7 +113,7 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] max-h-[500px] bg-primary/50 md:block hidden rounded-md overflow-hidden"></div>
+      <div className="w-[50%] max-h-fit bg-primary/50 md:block hidden rounded-md overflow-hidden"></div>
     </section>
   );
 }

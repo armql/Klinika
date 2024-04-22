@@ -54,9 +54,11 @@ const ageSchema = z
   });
 
 // PLAIN SELECT
-const selectSchema = z.string().refine((value) => value.length > 0, {
-  message: "Selecting is required",
-});
+const selectSchema = z
+  .union([z.string(), z.number()])
+  .refine((value) => value.toString().length > 0, {
+    message: "Selecting is required",
+  });
 
 const fileSchema = z
   .string()

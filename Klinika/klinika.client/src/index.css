@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-b from-[#f4fbef] via-green-50 to-white;
+  @apply bg-white;
 }
 
 * {
   @apply font-inter box-border m-0 p-0 select-none;
 }
 main {
-  @apply min-h-[100vh] relative;
+  @apply min-h-[100vh]  relative;
 }

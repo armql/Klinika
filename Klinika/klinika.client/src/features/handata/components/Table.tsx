@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 
 interface TableProps<T> {
   headers: string[];
-  all: () => Promise<T[]>;
+  all: (currentPage: number, pageSize: number, search: string) => Promise<T[]>;
   delete: (id: string) => Promise<void>;
   dataField: string[];
 }
@@ -22,8 +22,9 @@ export default function Table<T>({
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
   const { openEdit: edit, refetch_data: handler } = useHandler();
-  const { startIndex, endIndex, setDataLength } = usePagination();
+  const { setDataLength, currentPage, itemsPerPage } = usePagination();
   const {
+    search: searchValue,
     selectedItems,
     selectItem,
     deselectItem,
@@ -35,11 +36,16 @@ export default function Table<T>({
     data,
     isLoading: loading,
     refetch,
-  } = useQuery(["all", handler], all, {
-    onSuccess: (data) => {
-      setDataLength(data.length | 1);
-    },
-  });
+  } = useQuery(
+    ["all", handler, searchValue, currentPage],
+    () => all(currentPage, itemsPerPage, searchValue),
+    {
+      onSuccess: (data) => {
+        setDataLength(data.data.length | 1);
+        console.log(data);
+      },
+    }
+  );
 
   // Selecting all
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,8 +103,7 @@ export default function Table<T>({
       console.log(error);
     }
   };
-  const refined_data = data ? data.slice(startIndex, endIndex) : [];
-  const allItemsSelected = selectedItems.length === refined_data.length;
+  // const allItemsSelected = selectedItems.length === data.data.length;
 
   if (loading) {
     return <Skeleton column={HEADER_COLUMN} headers={headers} />;
@@ -119,7 +124,7 @@ export default function Table<T>({
             <input
               title="Select all items"
               type="checkbox"
-              checked={allItemsSelected}
+              // checked={allItemsSelected}
               onChange={handleSelectAll}
               className={`relative appearance-none bg-white w-full h-full checked:bg-black`}
             />
@@ -141,7 +146,7 @@ export default function Table<T>({
         <li className="truncate">Remove item</li>
       </ul>
       <div className="h-full overflow-x-auto bg-zinc-50">
-        {refined_data.map((item) => (
+        {data.data.map((item) => (
           <ul
             key={item.id}
             style={styles}

@@ -9,7 +9,6 @@ import {
   DataList,
 } from "../../features/handata/__handata";
 import { FormField } from "../../features/handata/utils/form-fields";
-import { useFormStore } from "../../features/handata/store/FormStore";
 
 export type Specialization = {
   id: number;
@@ -29,7 +28,6 @@ const formFields: FormField[] = [
 
 export default function SpecializationData() {
   const { create_modal: create, edit_modal: edit } = useHandler();
-  const { selectedItem } = useFormStore();
   const specialization_api = new ApiService<Specialization>(
     {
       getAll: "/api/Specialization/getAll",
