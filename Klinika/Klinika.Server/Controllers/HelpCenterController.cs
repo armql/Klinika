@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Klinika.Server.Models.DTO.Developer;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Klinika.Server.Controllers
 {
@@ -71,25 +72,54 @@ namespace Klinika.Server.Controllers
             return help;
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> Update(HelpCenter userRequest)
+        //[HttpPost("update")]
+        //public async Task<ActionResult> Update(HelpCenter userRequest)
+        //{
+
+        //    var help = await _dbContext.HelpCenters.FindAsync(userRequest.id);
+
+        //    if (help == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    help.name = userRequest.name;
+        //    help.email = userRequest.email;
+        //    help.subject = userRequest.subject;
+        //    help.message = userRequest.message;
+
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(new { message = help.id + ", with the name: " + help.name + " was changed to: " + userRequest.name });
+        //}
+
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<HelpCenter> patchDoc)
         {
-
-            var help = await _dbContext.HelpCenters.FindAsync(userRequest.id);
-
-            if (help == null)
+            if (patchDoc != null)
             {
-                return BadRequest();
+                var help = await _dbContext.HelpCenters.FindAsync(id);
+
+                if (help == null)
+                {
+                    return BadRequest();
+                }
+
+                patchDoc.ApplyTo(help, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "HelpCenter with the id: " + help.id + " was updated." });
             }
-
-            help.name = userRequest.name;
-            help.email = userRequest.email;
-            help.subject = userRequest.subject;
-            help.message = userRequest.message;
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(new { message = help.id + ", with the name: " + help.name + " was changed to: " + userRequest.name });
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete("delete")]

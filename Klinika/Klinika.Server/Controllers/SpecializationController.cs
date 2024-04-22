@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Klinika.Server.Models.DTO.Developer;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Klinika.Server.Controllers
 {
@@ -76,23 +77,52 @@ namespace Klinika.Server.Controllers
             return specialization;
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> Update(Specialization userRequest)
+        //[HttpPost("update")]
+        //public async Task<ActionResult> Update(Specialization userRequest)
+        //{
+        //    var specialization = await _dbContext.Specializations.FindAsync(userRequest.id);
+
+        //    if (specialization == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    specialization.name = userRequest.name;
+
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(new { message = specialization.id + ",with the name " + specialization.name + " was changed to: " + userRequest.name });
+        //}
+
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<Specialization> patchDoc)
         {
-
-            var specialization = await _dbContext.Specializations.FindAsync(userRequest.id);
-
-            if (specialization == null)
+            if (patchDoc != null)
             {
-                return BadRequest();
+                var specialization = await _dbContext.Specializations.FindAsync(id);
+
+                if (specialization == null)
+                {
+                    return BadRequest();
+                }
+
+                patchDoc.ApplyTo(specialization, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "Specialization with the id " + specialization.id + " was updated." });
             }
-
-            specialization.name = userRequest.name;
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(new { message = specialization.id + ",with the name " + specialization.name + " was changed to: " + userRequest.name });
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
+
 
         [HttpDelete("delete")]
         public async Task<ActionResult> Delete(int id)

@@ -1,4 +1,4 @@
-import { NotePencil, X, Check } from "@phosphor-icons/react";
+import { NotePencil, X, Check, ArrowsDownUp } from "@phosphor-icons/react";
 import Skeleton from "./skeleton/Table";
 import { useHandler, usePagination } from "../__handata";
 import { useFormStore } from "../store/FormStore";
@@ -114,7 +114,7 @@ export default function Table<T>({
       <ul className={`py-2 px-2 border-b-2 text-compact/40`} style={styles}>
         <li>
           <label
-            className={`flex justify-center items-center border border-zinc-200 hover:border-zinc-300 overflow-hidden w-5 h-5 rounded-md relative cursor-pointer`}
+            className={`flex truncate justify-center items-center border border-zinc-200 hover:border-zinc-300 overflow-hidden w-5 h-5 rounded-md relative cursor-pointer`}
           >
             <input
               title="Select all items"
@@ -129,10 +129,16 @@ export default function Table<T>({
           </label>
         </li>
         {headers.map((header) => (
-          <li key={header}>{header}</li>
+          <li
+            key={header}
+            className="flex truncate flex-row items-center group cursor-pointer"
+          >
+            {header}
+            <ArrowsDownUp size={20} className="group-hover:block hidden" />
+          </li>
         ))}
-        <li>Edit item</li>
-        <li>Remove item</li>
+        <li className="truncate">Edit item</li>
+        <li className="truncate">Remove item</li>
       </ul>
       <div className="h-full overflow-x-auto bg-zinc-50">
         {refined_data.map((item) => (
@@ -159,7 +165,7 @@ export default function Table<T>({
             </li>
             {dataField.map((key) => (
               <li title={item[key]} key={key} className="line-clamp-1">
-                {key === "creationDate"
+                {key === "creationDate" || key === "birthDate"
                   ? new Date(item[key]).toLocaleString("en-US", {
                       month: "short",
                       day: "2-digit",

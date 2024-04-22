@@ -2,6 +2,7 @@
 using Klinika.Server.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,25 +62,33 @@ namespace Klinika.Server.Controllers
             return serviceDesk;
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> Update(ServiceDesk userRequest)
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<ServiceDesk> patchDoc)
         {
-
-            var serviceDesk = await _dbContext.ServiceDesks.FindAsync(userRequest.id);
-
-            if (serviceDesk == null)
+            if (patchDoc != null)
             {
-                return BadRequest();
+                var serviceDesk = await _dbContext.ServiceDesks.FindAsync(id);
+
+                if (serviceDesk == null)
+                {
+                    return BadRequest();
+                }
+
+                patchDoc.ApplyTo(serviceDesk, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "ServiceDesk with the id: " + serviceDesk.id + " was updated." });
             }
-
-            serviceDesk.name = userRequest.name;
-            serviceDesk.email = userRequest.email;
-            serviceDesk.operatingHours = userRequest.operatingHours;
-            serviceDesk.blockId = userRequest.blockId;
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(new { message = serviceDesk.id + ", with the name: " + serviceDesk.name + " was changed to: " + userRequest.name });
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete("delete")]

@@ -10,10 +10,10 @@ const textSchema = z
   })
   .refine((value) => value && value[0] === value[0].toUpperCase(), {
     message: "Field should start with an uppercase letter",
-  })
-  .refine((value) => value && !value.includes(" "), {
-    message: "Field should not contain spaces",
   });
+// .refine((value) => value && !value.includes(" "), {
+//   message: "Field should not contain spaces",
+// });
 
 const textareaSchema = z
   .string()

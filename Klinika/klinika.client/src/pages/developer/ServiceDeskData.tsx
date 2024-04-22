@@ -35,13 +35,7 @@ export default function ServiceDeskData() {
   );
   const { data, isLoading } = useQuery("category", ServiceDesk_api.category);
 
-  const createFields: FormField[] = [
-    {
-      type: "number",
-      identifier: "id",
-      name: "ServiceDesk Id",
-      isHidden: true,
-    },
+  const formFields: FormField[] = [
     {
       type: "text",
       identifier: "name",
@@ -49,7 +43,7 @@ export default function ServiceDeskData() {
       placeholder: "Enter your Service Desk Name",
     },
     {
-      type: "text",
+      type: "email",
       identifier: "email",
       name: "Email",
       placeholder: "Enter your Service Desk Email",
@@ -82,7 +76,13 @@ export default function ServiceDeskData() {
     <DataList>
       <Filters name="ServiceDesk List" />
       <Table<ServiceDesk>
-        headers={["ServiceDesk ID", "Name", "Email", "Operating Hours", "Block Id"]}
+        headers={[
+          "ServiceDesk ID",
+          "Name",
+          "Email",
+          "Operating Hours",
+          "Block Id",
+        ]}
         all={ServiceDesk_api.getAll}
         delete={ServiceDesk_api.delete}
         dataField={["id", "name", "email", "operatingHours", "blockId"]}
@@ -92,14 +92,14 @@ export default function ServiceDeskData() {
           header="ServiceDesk"
           get={ServiceDesk_api.get}
           update={ServiceDesk_api.update}
-          fields={createFields}
+          fields={formFields}
         />
       )}
       {create && (
         <CreateForm<ServiceDesk>
           header="ServiceDesk"
           api={ServiceDesk_api.create}
-          fields={createFields}
+          fields={formFields}
         />
       )}
     </DataList>

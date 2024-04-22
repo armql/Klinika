@@ -52,9 +52,9 @@ export class ApiService<T> {
     return response.data;
   };
 
-  update = async (item: T): Promise<T> => {
-    const response: AxiosResponse<T> = await this.axiosInstance.post(
-      `${this.endpoints.update}`,
+  update = async (id: number | string, item: T): Promise<T> => {
+    const response: AxiosResponse<T> = await this.axiosInstance.patch(
+      `${this.endpoints.update}/${id}`,
       item
     );
     return response.data;

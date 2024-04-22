@@ -21,21 +21,6 @@ export type HelpCenter = {
   categoryId: number;
 };
 
-const editFields: FormField[] = [
-  {
-    type: "text",
-    identifier: "subject",
-    name: "Your Subject",
-    placeholder: "Enter your Subject",
-  },
-  {
-    type: "textarea",
-    identifier: "message",
-    name: "Your message",
-    placeholder: "Enter your message",
-  },
-];
-
 export default function HelpCenterData() {
   const { create_modal: create, edit_modal: edit } = useHandler();
   const helpcenter_api = new ApiService<HelpCenter>(
@@ -51,7 +36,7 @@ export default function HelpCenterData() {
   );
   const { data, isLoading } = useQuery("category", helpcenter_api.category);
 
-  const createFields: FormField[] = [
+  const formFields: FormField[] = [
     {
       type: "email",
       identifier: "email",
@@ -115,14 +100,14 @@ export default function HelpCenterData() {
           header="Help Center"
           get={helpcenter_api.get}
           update={helpcenter_api.update}
-          fields={editFields}
+          fields={formFields}
         />
       )}
       {create && (
         <CreateForm<HelpCenter>
           header="Help Center"
           api={helpcenter_api.create}
-          fields={createFields}
+          fields={formFields}
         />
       )}
     </DataList>

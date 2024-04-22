@@ -3,6 +3,7 @@ using Klinika.Server.Models.Data;
 using Klinika.Server.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -92,47 +93,81 @@ namespace Klinika.Server.Controllers
             return Ok(new { message = message, result = result });
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> UpdateUser(ApplicationUser userRequest)
+        //[HttpPost("update")]
+        //public async Task<ActionResult> UpdateUser(ApplicationUser userRequest)
+        //{
+        //    string message = "";
+        //    IdentityResult result = new();
+
+        //    var user = await _userManager.FindByIdAsync(userRequest.Id);
+
+        //    if(user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    try
+        //    {
+        //        var hashedPassword = HashPassword(user.password);
+
+        //        ApplicationUser newUser = new ApplicationUser()
+        //        {
+        //            firstName = user.firstName,
+        //            lastName = user.lastName,
+        //            birthDate = user.birthDate,
+        //            gender = user.gender.ToLower(),
+        //            Email = user.Email.ToLower(),
+        //        };
+
+        //        result = await _userManager.UpdateAsync(newUser);
+
+        //        if (!result.Succeeded)
+        //        {
+        //            return BadRequest(result);
+        //        }
+
+        //        message = "Updated Successfully.";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest("Something went wrong please try again." + ex.Message);
+        //    }
+
+        //    return Ok(new { message = message, result = result });
+        //}
+
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<ApplicationUser> patchDoc)
         {
-            string message = "";
-            IdentityResult result = new();
-
-            var user = await _userManager.FindByIdAsync(userRequest.Id);
-
-            if(user == null)
+            if (patchDoc != null)
             {
-                return NotFound();
-            }
+                var user = await _userManager.FindByIdAsync(id);
 
-            try
-            {
-                var hashedPassword = HashPassword(user.password);
-
-                ApplicationUser newUser = new ApplicationUser()
+                if (user == null)
                 {
-                    firstName = user.firstName,
-                    lastName = user.lastName,
-                    birthDate = user.birthDate,
-                    gender = user.gender.ToLower(),
-                    Email = user.Email.ToLower(),
-                };
+                    return NotFound();
+                }
 
-                result = await _userManager.UpdateAsync(newUser);
+                patchDoc.ApplyTo(user, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var result = await _userManager.UpdateAsync(user);
 
                 if (!result.Succeeded)
                 {
                     return BadRequest(result);
                 }
 
-                message = "Updated Successfully.";
+                return Ok(new { message = "User with the id: " + user.Id + " was updated." });
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest("Something went wrong please try again." + ex.Message);
+                return BadRequest(ModelState);
             }
-
-            return Ok(new { message = message, result = result });
         }
 
         [HttpDelete("delete")]

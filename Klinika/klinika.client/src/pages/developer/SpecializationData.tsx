@@ -9,6 +9,7 @@ import {
   DataList,
 } from "../../features/handata/__handata";
 import { FormField } from "../../features/handata/utils/form-fields";
+import { useFormStore } from "../../features/handata/store/FormStore";
 
 export type Specialization = {
   id: number;
@@ -16,46 +17,25 @@ export type Specialization = {
   createdBy: string;
   creationData: string;
 };
-const createFields: FormField[] = [
-  {
-    type: "text",
-    identifier: "name",
-    name: "Specialization Name",
-    placeholder: "Enter your specialization name",
-  },
-];
 
-const editFields: FormField[] = [
-  {
-    type: "number",
-    identifier: "id",
-    name: "Specialization id",
-    isHidden: true,
-  },
+const formFields: FormField[] = [
   {
     type: "text",
     identifier: "name",
     name: "Specialization Name",
     placeholder: "Enter your specialization name",
-  },
-  {
-    type: "text",
-    identifier: "createdBy",
-    name: "Specialization Created by",
-    placeholder: "Enter your specialization created by",
-    isHidden: true,
   },
 ];
 
 export default function SpecializationData() {
   const { create_modal: create, edit_modal: edit } = useHandler();
-
+  const { selectedItem } = useFormStore();
   const specialization_api = new ApiService<Specialization>(
     {
       getAll: "/api/Specialization/getAll",
       get: "/api/Specialization/get",
       create: "/api/Specialization/create",
-      update: "/api/Specialization/update",
+      update: `/api/Specialization/update`,
       delete: "/api/Specialization/delete",
     },
     axios_instance
@@ -75,14 +55,14 @@ export default function SpecializationData() {
           header="Specialization"
           get={specialization_api.get}
           update={specialization_api.update}
-          fields={editFields}
+          fields={formFields}
         />
       )}
       {create && (
         <CreateForm<Specialization>
           header="Specialization"
           api={specialization_api.create}
-          fields={createFields}
+          fields={formFields}
         />
       )}
     </DataList>

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Klinika.Server.Models.DTO.Developer;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Klinika.Server.Controllers
 {
@@ -65,28 +66,64 @@ namespace Klinika.Server.Controllers
             return role;
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> Update(IdentityDtoCase userRequest)
+        //[HttpPost("update")]
+        //public async Task<ActionResult> Update(IdentityDtoCase userRequest)
+        //{
+        //    var roleId = userRequest.id;
+
+        //    var role = await _roleManager.FindByIdAsync(roleId.ToString());
+
+        //    if (role == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    role.Name = userRequest.Name;
+        //    var result = await _roleManager.UpdateAsync(role);
+
+        //    if(!result.Succeeded)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    return Ok(new { message = "Role with name " + userRequest.Name + " has been updated." });
+        //}
+
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] JsonPatchDocument<IdentityRole> patchDoc)
         {
-            var roleId = userRequest.id;
-
-            var role = await _roleManager.FindByIdAsync(roleId.ToString());
-
-            if (role == null)
+            if (patchDoc != null)
             {
-                return BadRequest();
+                var role = await _roleManager.FindByIdAsync(id);
+
+                if (role == null)
+                {
+                    return BadRequest();
+                }
+
+                patchDoc.ApplyTo(role, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var result = await _roleManager.UpdateAsync(role);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(new { message = "Role with name " + role.Name + " has been updated." });
             }
-
-            role.Name = userRequest.Name;
-            var result = await _roleManager.UpdateAsync(role);
-
-            if(!result.Succeeded)
+            else
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            return Ok(new { message = "Role with name " + userRequest.Name + " has been updated." });
         }
+
+
 
         [HttpDelete("delete")]
         public async Task<ActionResult> Delete(string Id)

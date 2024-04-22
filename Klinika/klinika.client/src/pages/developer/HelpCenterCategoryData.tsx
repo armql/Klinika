@@ -16,34 +16,12 @@ export type HelpCenterCategory = {
   createdBy: string;
   creationData: string;
 };
-const createFields: FormField[] = [
+const formField: FormField[] = [
   {
     type: "text",
     identifier: "name",
     name: "Category Name",
     placeholder: "Enter your category name",
-  },
-];
-
-const editFields: FormField[] = [
-  {
-    type: "number",
-    identifier: "id",
-    name: "Category id",
-    isHidden: true,
-  },
-  {
-    type: "text",
-    identifier: "name",
-    name: "Category Name",
-    placeholder: "Enter your category name",
-  },
-  {
-    type: "text",
-    identifier: "createdBy",
-    name: "Category Created by",
-    placeholder: "Enter your category created by",
-    isHidden: true,
   },
 ];
 
@@ -74,14 +52,15 @@ export default function HelpCenterCategoryData() {
           header="Category"
           get={helpcentercategory_api.get}
           update={helpcentercategory_api.update}
-          fields={editFields}
+          fields={formField}
         />
       )}
+
       {create && (
         <CreateForm<HelpCenterCategory>
           header="Category"
           api={helpcentercategory_api.create}
-          fields={createFields}
+          fields={formField}
         />
       )}
     </DataList>

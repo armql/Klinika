@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Klinika.Server.Models.DTO.Developer;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Klinika.Server.Controllers
 {
@@ -76,22 +77,51 @@ namespace Klinika.Server.Controllers
             return category;
         }
 
-        [HttpPost("update")]
-        public async Task<ActionResult> Update(HelpCenterCategory userRequest)
+        //[HttpPost("update")]
+        //public async Task<ActionResult> Update(HelpCenterCategory userRequest)
+        //{
+
+        //    var category = await _dbContext.HelpCenterCategorys.FindAsync(userRequest.id);
+
+        //    if (category == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    category.name = userRequest.name;
+
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(new { message = category.id + ",with the name " + category.name + " was changed to: " + userRequest.name });
+        //}
+
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<HelpCenterCategory> patchDoc)
         {
-
-            var category = await _dbContext.HelpCenterCategorys.FindAsync(userRequest.id);
-
-            if (category == null)
+            if (patchDoc != null)
             {
-                return BadRequest();
+                var category = await _dbContext.HelpCenterCategorys.FindAsync(id);
+
+                if (category == null)
+                {
+                    return BadRequest();
+                }
+
+                patchDoc.ApplyTo(category, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "HelpCenterCategory with the id: " + category.id + " was updated." });
             }
-
-            category.name = userRequest.name;
-
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(new { message = category.id + ",with the name " + category.name + " was changed to: " + userRequest.name });
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete("delete")]

@@ -30,6 +30,7 @@ namespace Klinika.Server
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
             builder.Services.AddTransient<UserManager<ApplicationUser>>();
 
+            builder.Services.AddControllers().AddNewtonsoftJson();
 
             // Add services to the container.
 

@@ -55,7 +55,19 @@ export default function EditForm<T>({
           const response = await get(id);
           if (response) {
             fields.forEach((field) => {
-              setValue(field.identifier, response[field.identifier]);
+              if (field.type === "date") {
+                const dateValue = response[field.identifier];
+                if (dateValue) {
+                  const date = new Date(dateValue);
+                  const formattedDate = `${date.getFullYear()}-${(
+                    "0" +
+                    (date.getMonth() + 1)
+                  ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
+                  setValue(field.identifier, formattedDate);
+                }
+              } else {
+                setValue(field.identifier, response[field.identifier]);
+              }
             });
           } else {
             setGlobalError("Failed getting the id with needed data");
@@ -73,7 +85,13 @@ export default function EditForm<T>({
 
   const onSubmit = async (data: RefinedInputs) => {
     try {
-      const response = await update(data);
+      const patchDoc = fields.map((field) => ({
+        op: "replace",
+        path: `/${field.identifier}`,
+        value: data[field.identifier],
+      }));
+
+      const response = await update(selectedItem, patchDoc);
       if (response) {
         Swal.fire({
           icon: "success",
@@ -121,6 +139,19 @@ export default function EditForm<T>({
           />
         );
         break;
+      case "date":
+        inputElement = (
+          <Input
+            type={field.type}
+            htmlFor={field.identifier}
+            labelName={field.name}
+            placeholder={field.placeholder}
+            {...register(field.identifier)}
+            error={errors[field.identifier]?.message}
+            hidden={field.isHidden}
+          />
+        );
+        break;
       case "textarea":
         inputElement = (
           <Textarea
@@ -162,8 +193,8 @@ export default function EditForm<T>({
   }
 
   return (
-    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black ">
-      <div className="flex overflow-y-auto flex-col gap-12 relative justify-center sm:px-40 px-4 items-center w-[700px] h-[600px] rounded-md bg-white">
+    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center bg-opacity-20 justify-center bg-black">
+      <div className="flex overflow-y-auto flex-col gap-12 py-12 relative justify-center sm:px-40 px-4 items-center w-[700px] max-h-[900px] rounded-md bg-white">
         <h1 className="font-medium text-3xl">Edit {header}</h1>
         <button
           title="Close edit modal"

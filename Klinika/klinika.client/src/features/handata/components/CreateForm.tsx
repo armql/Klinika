@@ -17,7 +17,6 @@ import {
 import { useHandler } from "../__handata";
 import Textarea from "../../validation/components/Textarea";
 import { FormField } from "../utils/form-fields";
-import { useQuery } from "react-query";
 
 type FormProps<T> = {
   header: string;
