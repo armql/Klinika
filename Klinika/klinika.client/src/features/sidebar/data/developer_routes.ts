@@ -8,7 +8,7 @@ import {
   DeveloperServiceDeskData,
   DeveloperBlockData,
 } from "../../../router/pages";
-import { Data } from "../../navigation/store/useNavigationStore";
+import { Data } from "../../navigation/store/zNavigation";
 
 export const developer_routes: Data[] = [
   {

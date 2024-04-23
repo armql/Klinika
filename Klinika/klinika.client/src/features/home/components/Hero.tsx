@@ -9,7 +9,7 @@ export default function Hero() {
             Prioritize your well-being
           </span>
           <Link
-            to="/register"
+            to="../register"
             className="text-compact hover:text-compact/70 sm:text-base text-xs bg-primary/50 hover:bg-primary/70 rounded-full px-6 py-1"
           >
             Register now

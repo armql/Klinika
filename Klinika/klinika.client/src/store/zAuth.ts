@@ -16,7 +16,7 @@ type StoreProps = {
   setData: (data: UserData) => void;
 };
 
-export const useAuthStore = create(
+export const zAuth = create(
   persist<StoreProps>(
     (set) => ({
       data: {
@@ -36,5 +36,3 @@ export const useAuthStore = create(
     }
   )
 );
-
-export default useAuthStore;

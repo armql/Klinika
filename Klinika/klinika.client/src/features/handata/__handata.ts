@@ -2,17 +2,17 @@ import Filters from "./components/Filters";
 import EditForm from "./components/EditForm";
 import CreateForm from "./components/CreateForm";
 import Table from "./components/Table";
-import { usePagination } from "./store/PaginationStore";
-import { useHandler } from "./store/useHandlerStore";
 import DataList from "./components/DataList";
-import { useFormStore } from "./store/FormStore";
+import { zPagination } from "./store/zPagination";
+import { zHandler } from "./store/zHandler";
+import { zForm } from "./store/zForm";
 export {
   DataList,
   Table,
   EditForm,
   CreateForm,
   Filters,
-  useFormStore,
-  usePagination,
-  useHandler,
+  zForm,
+  zPagination,
+  zHandler,
 };

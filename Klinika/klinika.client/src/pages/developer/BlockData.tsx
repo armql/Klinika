@@ -1,7 +1,7 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
 import {
-  useHandler,
+  zHandler,
   EditForm,
   Table,
   CreateForm,
@@ -18,7 +18,7 @@ export type Block = {
 };
 
 export default function BlockData() {
-  const { create_modal: create, edit_modal: edit } = useHandler();
+  const { create_modal: create, edit_modal: edit } = zHandler();
 
   const Block_api = new ApiService<Block>(
     {

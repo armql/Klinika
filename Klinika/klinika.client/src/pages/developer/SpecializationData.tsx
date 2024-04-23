@@ -1,7 +1,7 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
 import {
-  useHandler,
+  zHandler,
   EditForm,
   Table,
   CreateForm,
@@ -27,7 +27,7 @@ const formFields: FormField[] = [
 ];
 
 export default function SpecializationData() {
-  const { create_modal: create, edit_modal: edit } = useHandler();
+  const { create_modal: create, edit_modal: edit } = zHandler();
   const specialization_api = new ApiService<Specialization>(
     {
       getAll: "/api/Specialization/getAll",

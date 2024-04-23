@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
-import { useHandler } from "../features/handata/__handata";
+import { zHandler } from "../features/handata/__handata";
 import {
   GlobalError,
   Input,
@@ -14,20 +14,21 @@ import {
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 type FormFields = z.infer<typeof schema_login>;
-import useAuthStore, { UserData } from "../store/AuthStore";
+import { zAuth, UserData } from "../store/zAuth";
 import { routes } from "../util/roles-routes";
 import Swal from "sweetalert2";
+import bg from "../assets/login-illustrations.svg";
 export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_login),
   });
-  const { setGlobalError } = useHandler();
-  const { setData, data } = useAuthStore();
+  const { setGlobalError } = zHandler();
+  const { setData } = zAuth();
   const { pathname } = useLocation();
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -74,8 +75,8 @@ export default function Login() {
   };
 
   return (
-    <section className="w-full h-screen flex py-24 gap-12 bg-white sm:px-12 px-4">
-      <div className="w-full md:w-[50%] h-full flex justify-center items-center">
+    <section className="w-full h-screen flex bg-white">
+      <div className="w-full md:w-[50%] h-full flex justify-center items-center py-24 sm:px-12 px-4">
         <div className="sm:w-[400px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
             <h1 className="font-medium text-5xl">Login</h1>
@@ -105,7 +106,7 @@ export default function Login() {
                 {...register("password")}
                 error={errors.password?.message}
               />
-              <span className="text-sm hover:text-red-500 cursor-pointer text-red-600 underline absolute right-0 top-0">
+              <span className="text-sm hover:text-blue-500 cursor-pointer text-blue-600 underline absolute right-0 top-0">
                 Forgot Password?
               </span>
             </div>
@@ -120,7 +121,7 @@ export default function Login() {
               type="submit"
               className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
-              {isSubmitting ? (
+              {isSubmitting || isSubmitSuccessful ? (
                 <Spinner size={24} className="animate-spin" />
               ) : (
                 "Login"
@@ -129,7 +130,7 @@ export default function Login() {
             <span className="font-medium">
               Don&rsquo;t have an account yet?{" "}
               <Link
-                to="/register"
+                to="../register"
                 className="text-primary/80 hover:underline hover:text-primary focus:cursor-wait"
               >
                 Register now
@@ -138,7 +139,13 @@ export default function Login() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] max-h-fit bg-primary/50 md:block hidden rounded-md overflow-hidden"></div>
+      <div className="w-[50%] max-h-fit lg:block hidden overflow-hidden">
+        <img
+          src={bg}
+          alt="illustrations for login background"
+          className="w-full h-full"
+        />
+      </div>
     </section>
   );
 }

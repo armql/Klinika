@@ -24,7 +24,7 @@ namespace Klinika.Server.Controllers
 
 
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<HelpCenter>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
+        public ActionResult<IEnumerable<HelpCenter>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.HelpCenters == null)
             {

@@ -1,8 +1,8 @@
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { usePagination } from "../__handata";
+import { zPagination } from "../__handata";
 
 export default function Pagination() {
-  const { currentPage, setCurrentPage, totalPages, max, min } = usePagination();
+  const { currentPage, setCurrentPage, totalPages, max, min } = zPagination();
   return (
     <div className="flex gap-2 items-center justify-end py-2">
       <button

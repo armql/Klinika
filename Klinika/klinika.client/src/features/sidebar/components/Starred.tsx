@@ -1,6 +1,6 @@
 import { Sparkle, X } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { useNavigation } from "../../navigation/__navigation";
+import { zNavigation } from "../../navigation/__navigation";
 import useToggle from "../../../hooks/useToggle";
 type Link = {
   to: string;
@@ -15,7 +15,7 @@ export default function Starred() {
     handleActiveLink,
     handleFavorites,
     filterRecents,
-  } = useNavigation();
+  } = zNavigation();
   const { effect, close, open } = useToggle();
   const data = effect ? favorite_links : recent_links;
 

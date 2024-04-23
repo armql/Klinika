@@ -12,7 +12,7 @@ type State = {
   setGlobalError: (error: string) => void;
 };
 
-export const useHandler = create<State>((set) => ({
+export const zHandler = create<State>((set) => ({
   global_error: "",
   create_modal: false,
   edit_modal: false,

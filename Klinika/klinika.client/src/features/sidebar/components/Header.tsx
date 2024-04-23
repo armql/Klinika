@@ -1,5 +1,5 @@
 import { Bell, SidebarSimple, Star } from "@phosphor-icons/react";
-import { useNavigation } from "../../navigation/__navigation";
+import { zNavigation } from "../../navigation/__navigation";
 import { Link, useLocation } from "react-router-dom";
 import { ReactNode } from "react";
 
@@ -26,7 +26,7 @@ export default function Header() {
     active_link,
     favorite_links,
     recent_links,
-  } = useNavigation();
+  } = zNavigation();
   const { pathname } = useLocation();
   const pathnames = pathname.split("/").filter((x) => x);
 

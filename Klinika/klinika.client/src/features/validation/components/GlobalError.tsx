@@ -1,8 +1,8 @@
 import { X } from "@phosphor-icons/react";
-import { useHandler } from "../../handata/__handata";
+import { zHandler } from "../../handata/__handata";
 
 export default function GlobalError() {
-  const { global_error, setGlobalError } = useHandler();
+  const { global_error, setGlobalError } = zHandler();
   if (global_error) {
     return (
       <div className="absolute top-4 right-4 z-20 shadow-sm bg-red-50 sm:w-[400px] sm:h-[100px] rounded-md w-[340px] h-[120px]">

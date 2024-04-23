@@ -3,28 +3,29 @@ import { schema_register } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { At, Password, Spinner } from "@phosphor-icons/react";
+import { Link, useNavigate } from "react-router-dom";
+import { Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
-import { useHandler } from "../features/handata/__handata";
+import { zHandler } from "../features/handata/__handata";
 import {
   GlobalError,
   Input,
   Select,
 } from "../features/validation/__validation";
-
+import bg from "../assets/register-illustration.svg";
 type FormFields = z.infer<typeof schema_register>;
 
 export default function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_register),
   });
-  const { setGlobalError } = useHandler();
+  const { setGlobalError } = zHandler();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
@@ -45,8 +46,8 @@ export default function Register() {
           },
         }
       )
-      .then((response) => {
-        return response.data;
+      .then(() => {
+        navigate("../login");
       })
       .catch((error) => {
         const errorMessage = getErrorMessage(error);
@@ -55,8 +56,8 @@ export default function Register() {
   };
 
   return (
-    <section className="w-full h-full flex py-24 gap-12 bg-white sm:px-12 px-4">
-      <div className="w-[100%] lg:w-[50%] h-full flex justify-center items-center">
+    <section className="w-full h-screen flex bg-white">
+      <div className="w-[100%] lg:w-[50%] sm:px-12 px-4 py-24 h-full flex justify-center items-center">
         <div className="sm:w-[540px] w-full px-4 flex flex-col gap-8 ">
           <div className="w-full sm:text-start text-center gap-4 flex flex-col">
             <h1 className="font-medium text-5xl">Register</h1>
@@ -140,7 +141,7 @@ export default function Register() {
               type="submit"
               className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
-              {isSubmitting ? (
+              {isSubmitting || isSubmitSuccessful ? (
                 <Spinner size={24} className="animate-spin" />
               ) : (
                 "Register"
@@ -149,7 +150,7 @@ export default function Register() {
             <span className="font-medium">
               Already have an account?{" "}
               <Link
-                to="/login"
+                to="../login"
                 className="text-primary/80 hover:underline hover:text-primary focus:cursor-wait"
               >
                 Login now
@@ -158,51 +159,12 @@ export default function Register() {
           </form>
         </div>
       </div>
-      <div className="w-[50%] max-h-screen lg:block hidden rounded-md p-12 relative z-10 bg-primary/50">
-        {/* <div className="flex flex-col gap-1 justify-center">
-          <div
-            className={`flex flex-row gap-2 items-center border-2 rounded-md p-2 bg-white ${
-              touchedFields.email && !errors.email?.message
-                ? "border-solid border-primary/40"
-                : "border-dashed"
-            }`}
-          >
-            <div className="rounded-md p-2 text-zinc-600">
-              <At size={48} weight="duotone" />
-            </div>
-            <div>
-              <h3 className="font-medium text-xl text-compact font-manrope">
-                Email
-              </h3>
-              <p className="font-manrope text-compact/60">
-                Email should be valid and unique.
-              </p>
-            </div>
-          </div>
-          <div className="ml-10 w-1.5 h-6 rounded-sm bg-zinc-200" />
-
-          <div
-            className={`flex flex-row gap-2 items-center border-2 rounded-md p-2 bg-white ${
-              touchedFields.password
-                ? "border-solid border-primary/40"
-                : "border-dashed"
-            }`}
-          >
-            <div className="rounded-md p-2 text-zinc-600">
-              <Password size={48} weight="duotone" />
-            </div>
-            <div>
-              <h3 className="font-medium text-xl text-compact font-manrope">
-                Password
-              </h3>
-              <p className="font-manrope text-compact/60">
-                Password should be at least 8 characters long, contain at least
-                1 uppercase letter, 1 lowercase letter, 1 number, and 1 special
-                character.
-              </p>
-            </div>
-          </div>
-        </div> */}
+      <div className="w-[50%] max-h-fit lg:block hidden overflow-hidden">
+        <img
+          src={bg}
+          alt="illustrations for login background"
+          className="w-full h-full"
+        />
       </div>
     </section>
   );

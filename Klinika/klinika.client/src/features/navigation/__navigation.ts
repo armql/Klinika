@@ -1,5 +1,5 @@
 import NavLinks from "./components/NavLinks";
 import Logo from "./components/Logo";
-import { useNavigation } from "./store/useNavigationStore";
+import { zNavigation } from "./store/zNavigation";
 import { footer_data } from "./data/FooterData";
-export { NavLinks, Logo, useNavigation, footer_data };
+export { NavLinks, Logo, zNavigation, footer_data };

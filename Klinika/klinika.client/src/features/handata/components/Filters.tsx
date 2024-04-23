@@ -4,22 +4,28 @@ import {
   MagnifyingGlass,
   Plus,
 } from "@phosphor-icons/react";
-import { useFormStore, useHandler } from "../__handata";
+import { zForm, zHandler } from "../__handata";
+import { useEffect } from "react";
 
 type FiltersProps = {
   name: string;
 };
 
 export default function Filters({ name }: FiltersProps) {
-  const { handleCreatedBy, handleSearch, handleSortOrder, sortOrder } =
-    useFormStore();
+  const { handleCreatedBy, handleSearch, handleSortOrder, sortOrder } = zForm();
 
   const onSubmit = (e) => {
     e.preventDefault();
     handleSearch(e.target.search.value);
   };
 
-  const { openCreate: create } = useHandler();
+  useEffect(() => {
+    return () => {
+      handleSearch("");
+    };
+  }, []);
+
+  const { openCreate: create } = zHandler();
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-medium text-xl text-compact">{name}</h1>

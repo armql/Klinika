@@ -14,7 +14,7 @@ import {
   Select,
   File,
 } from "../../validation/__validation";
-import { useHandler } from "../__handata";
+import { zHandler } from "../__handata";
 import Textarea from "../../validation/components/Textarea";
 import { FormField } from "../utils/form-fields";
 
@@ -36,7 +36,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const { closeCreate: close, setGlobalError } = useHandler();
+  const { closeCreate: close, setGlobalError } = zHandler();
 
   const onSubmit = async (data: RefinedInputs) => {
     const fileInput = watch(data.file);

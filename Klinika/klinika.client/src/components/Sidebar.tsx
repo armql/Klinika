@@ -8,7 +8,7 @@ import { CaretDown, Folder, FolderOpen } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
 import { categoryRender } from "../util/category-render";
 import { Header, Profile, Resizer } from "../features/sidebar/__sidebar";
-import { useNavigation } from "../features/navigation/__navigation";
+import { zNavigation } from "../features/navigation/__navigation";
 
 interface InnerProp {
   user: string;
@@ -31,7 +31,7 @@ export default function Sidebar({ user, children }: InnerProp) {
     handleFolder,
     handleRecents,
     active_link,
-  } = useNavigation();
+  } = zNavigation();
 
   useEffect(() => {
     setType(user);

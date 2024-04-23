@@ -1,8 +1,8 @@
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { useNavigation } from "../../navigation/__navigation";
+import { zNavigation } from "../../navigation/__navigation";
 
 export default function Resizer() {
-  const { collapse, isCollapsed } = useNavigation();
+  const { collapse, isCollapsed } = zNavigation();
   return (
     <button
       title="Resize sidebar"

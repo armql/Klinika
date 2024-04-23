@@ -1,7 +1,7 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
 import {
-  useHandler,
+  zHandler,
   EditForm,
   Table,
   CreateForm,
@@ -20,7 +20,7 @@ export type ServiceDesk = {
 };
 
 export default function ServiceDeskData() {
-  const { create_modal: create, edit_modal: edit } = useHandler();
+  const { create_modal: create, edit_modal: edit } = zHandler();
 
   const ServiceDesk_api = new ApiService<ServiceDesk>(
     {

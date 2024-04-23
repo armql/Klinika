@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { usePagination } from "./PaginationStore";
+import { zPagination } from "./zPagination";
 
 type FormStore = {
   selectedItems: string[];
@@ -17,7 +17,7 @@ type FormStore = {
   handleCreatedBy: (createdBy: string) => void;
 };
 
-export const useFormStore = create<FormStore>((set) => ({
+export const zForm = create<FormStore>((set) => ({
   sortOrder: "asc",
   createdBy: "",
   search: "",
@@ -44,7 +44,7 @@ export const useFormStore = create<FormStore>((set) => ({
     }));
   },
   selectAll: () => {
-    const { startIndex, endIndex, dataLength } = usePagination.getState();
+    const { startIndex, endIndex, dataLength } = zPagination.getState();
     const allIds = Array.from(
       { length: Math.min(endIndex, dataLength) - startIndex },
       (_, i) => String(startIndex + i + 1)

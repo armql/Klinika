@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { ReactNode, Suspense } from "react";
 import { BlankLoader } from "../router/global";
-import useAuthStore from "../store/AuthStore";
+import useAuthStore from "../store/zAuth";
 import { routes } from "./roles-routes";
 
 interface InnerProp {

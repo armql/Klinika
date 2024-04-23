@@ -55,7 +55,7 @@ type PersistedState = Pick<
   "active_category" | "folder" | "recent_links" | "favorite_links"
 >;
 
-export const useNavigation = create(
+export const zNavigation = create(
   persist<State>(
     (set) => ({
       data: [],

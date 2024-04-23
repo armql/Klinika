@@ -25,7 +25,7 @@ namespace Klinika.Server.Controllers
         }
 
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<Specialization>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
+        public ActionResult<IEnumerable<Specialization>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Specializations == null)
             {

@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { ReactNode, Suspense } from "react";
 import { BlankLoader } from "../router/global";
-import useAuthStore from "../store/AuthStore";
+import { zAuth } from "../store/zAuth";
 import { routes } from "./roles-routes";
 
 interface InnerProp {
@@ -10,7 +10,7 @@ interface InnerProp {
 }
 
 export default function ProtectedRoutes({ children, suspense }: InnerProp) {
-  const { data } = useAuthStore();
+  const { data } = zAuth();
   const { pathname } = useLocation();
 
   const identifiedrole = data.role;

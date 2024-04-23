@@ -15,11 +15,11 @@ type Store = {
   setCurrentPage: (currentPage: number) => void;
 };
 
-export const usePagination = create<Store>((set) => ({
+export const zPagination = create<Store>((set) => ({
   dataLength: 0,
   loading: true,
   currentPage: 1,
-  itemsPerPage: 10,
+  itemsPerPage: 15,
   totalPages: 0,
   startIndex: 0,
   endIndex: 0,

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t-2 border-compact py-16 md:px-24 px-12 w-screen">
+    <footer className="bg-dark_compact py-16 md:px-24 px-12 w-screen">
       <div className="flex lg:flex-row flex-col gap-6 justify-between">
         <div className="flex flex-col gap-0.5">
           <span className="text-4xl font-medium">Klinika</span>

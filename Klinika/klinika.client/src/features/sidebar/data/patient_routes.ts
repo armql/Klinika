@@ -1,5 +1,5 @@
 import { PatientDashboard, PatientReports } from "../../../router/pages";
-import { Data } from "../../navigation/store/useNavigationStore";
+import { Data } from "../../navigation/store/zNavigation";
 
 export const patient_routes: Data[] = [
   {

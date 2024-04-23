@@ -12,11 +12,10 @@ import {
   createGlobalSchema,
   GlobalError,
   Input,
+  Textarea,
   Select,
 } from "../../validation/__validation";
-import { useFormStore } from "../store/FormStore";
-import { useHandler } from "../__handata";
-import Textarea from "../../validation/components/Textarea";
+import { zHandler, zForm } from "../__handata";
 import { FormField } from "../utils/form-fields";
 
 type FormProps<T> = {
@@ -43,9 +42,9 @@ export default function EditForm<T>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const { closeEdit: close, setGlobalError } = useHandler();
+  const { closeEdit: close, setGlobalError } = zHandler();
   const [loadingData, setLoadingData] = useState(true);
-  const { selectedItem } = useFormStore();
+  const { selectedItem } = zForm();
 
   useEffect(() => {
     const getData = async (id: number | null) => {
