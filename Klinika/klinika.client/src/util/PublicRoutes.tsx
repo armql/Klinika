@@ -9,13 +9,16 @@ interface InnerProp {
   suspense: boolean | false;
 }
 
-export default function ProtectedRoutes({ children, suspense }: InnerProp) {
+export default function PublicRoutes({ children, suspense }: InnerProp) {
   const { data } = useAuthStore();
   const { pathname } = useLocation();
 
   const identifiedrole = data.role;
-  if (!pathname.includes(routes[identifiedrole])) {
-    return <Navigate to={routes[identifiedrole]} />;
+  const finalized_routing = routes[identifiedrole];
+  console.log(finalized_routing);
+
+  if (!pathname.includes(finalized_routing)) {
+    return <Navigate to={finalized_routing} />;
   }
 
   if (suspense) {

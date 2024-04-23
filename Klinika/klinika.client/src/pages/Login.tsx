@@ -2,8 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { schema_login } from "../features/authentication/__auth";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { Spinner } from "@phosphor-icons/react";
 import getErrorMessage from "../util/http-handler";
 import { useHandler } from "../features/handata/__handata";
@@ -12,35 +11,61 @@ import {
   Input,
   Checkbox,
 } from "../features/validation/__validation";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 type FormFields = z.infer<typeof schema_login>;
-
+import useAuthStore, { UserData } from "../store/AuthStore";
+import { routes } from "../util/roles-routes";
+import Swal from "sweetalert2";
 export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid, touchedFields },
+    formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_login),
   });
   const { setGlobalError } = useHandler();
+  const { setData, data } = useAuthStore();
+  const { pathname } = useLocation();
+
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
-      .post(
-        "/api/Auth/login",
-        {
-          Email: data.email,
-          password: data.password,
-        },
-        {
-          headers: {
-            "content-type": "Application/json",
-            Accept: "application/json",
-          },
-        }
-      )
+      .post("/api/Auth/login", {
+        Email: data.email,
+        password: data.password,
+      })
       .then((response) => {
-        return response.data;
+        const decoded = jwtDecode(response.data);
+        const userData = {
+          email:
+            decoded[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+            ],
+          id: decoded[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ],
+          jwtid: decoded["JWTID"],
+          role: decoded[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ],
+          exp: decoded["exp"],
+          iss: decoded["iss"],
+          aud: decoded["aud"],
+        };
+        setData(userData as UserData);
+
+        const role = userData.role;
+        const finalized_routing = routes[role];
+
+        if (role === "DEVELOPER") {
+          Swal.fire("Hello Developer!");
+        }
+
+        if (!pathname.includes(finalized_routing)) {
+          return <Navigate to={finalized_routing} />;
+        }
       })
       .catch((error) => {
         const errorMessage = getErrorMessage(error);

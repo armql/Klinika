@@ -47,7 +47,6 @@ export default function Sidebar({ user, children }: InnerProp) {
     }
   }, [user]);
 
-  console.log(active_link);
   return (
     <div className="z-10 flex flex-row bg-white">
       <div

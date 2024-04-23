@@ -26,7 +26,6 @@ export default function Register() {
   });
   const { setGlobalError } = useHandler();
 
-  console.log(errors.gender?.message);
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
       .post(

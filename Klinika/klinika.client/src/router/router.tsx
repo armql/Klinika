@@ -17,7 +17,6 @@ import {
   PatientDashboard,
   DeveloperDashboard,
 } from "./pages";
-import { Suspense } from "react";
 import ProtectedRoutes from "../util/ProtectedRoutes";
 import {
   developer_routes,
@@ -27,48 +26,32 @@ import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/guest",
     element: (
-      <Suspense fallback={<BlankLoader />}>
+      <ProtectedRoutes suspense={true}>
         <GuestLayout />
-      </Suspense>
+      </ProtectedRoutes>
     ),
     children: [
       {
-        path: "/",
+        path: "/guest",
         element: <Navigate to="home" />,
       },
       {
         path: "home",
-        element: (
-          <Suspense>
-            <Home />
-          </Suspense>
-        ),
+        element: <Home />,
       },
       {
         path: "help-center",
-        element: (
-          <Suspense>
-            <HelpCenter />
-          </Suspense>
-        ),
+        element: <HelpCenter />,
       },
       {
         path: "about",
-        element: (
-          <Suspense>
-            <About />
-          </Suspense>
-        ),
+        element: <About />,
       },
       {
         path: "login",
-        element: (
-          <Suspense>
-            <Login />
-          </Suspense>
-        ),
+        element: <Login />,
       },
       {
         path: "register",
