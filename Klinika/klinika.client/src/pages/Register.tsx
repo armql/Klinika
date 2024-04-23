@@ -29,7 +29,7 @@ export default function Register() {
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
       .post(
-        "api/Auth/register",
+        "/api/Auth/register",
         {
           firstName: data.first_name,
           lastName: data.last_name,

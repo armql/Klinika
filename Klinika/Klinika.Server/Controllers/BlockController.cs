@@ -16,18 +16,6 @@ namespace Klinika.Server.Controllers
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<Block>>> GetAll()
-        //{
-        //    if (_dbContext.Blocks == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _dbContext.Blocks.ToListAsync();
-        //}
-
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<Block>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
@@ -90,25 +78,6 @@ namespace Klinika.Server.Controllers
 
             return block;
         }
-
-        //[HttpPost("update")]
-        //public async Task<ActionResult> Update(Block userRequest)
-        //{
-
-        //    var block = await _dbContext.Blocks.FindAsync(userRequest.id);
-
-        //    if (block == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    block.name = userRequest.name;
-        //    block.specializationId = userRequest.specializationId;
-
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new { message = block.id + ", with the name: " + block.name + " was changed to: " + userRequest.name });
-        //}
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<Block> patchDoc)

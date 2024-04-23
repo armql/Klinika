@@ -15,12 +15,14 @@ namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um, ApplicationDbContext dbContext, IConfiguration configuration) : ControllerBase
+    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um, ApplicationDbContext dbContext, IConfiguration configuration, RoleController roleController, RoleManager<IdentityRole> rm) : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager = sm;
         private readonly UserManager<ApplicationUser> _userManager = um;
+        private readonly RoleManager<IdentityRole> _roleManager = rm;
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly IConfiguration _configuration = configuration;
+        private readonly RoleController _roleController = roleController;
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
@@ -45,6 +47,13 @@ namespace Klinika.Server.Controllers
                 };
                 result = await _userManager.CreateAsync(newUser);
 
+
+                var roleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.PATIENT);
+                if (!roleExists)
+                {
+                    await _roleController.SeedRoles();
+                }
+
                 if (!result.Succeeded)
                 {
                     return BadRequest(result);
@@ -55,7 +64,7 @@ namespace Klinika.Server.Controllers
                     id = newUser.Id,
                 };
 
-                //Add a default user role to all users
+                
                 await _userManager.AddToRoleAsync(newUser, ApplicationStaticUserRoles.PATIENT);
 
                 //Add to table of patients

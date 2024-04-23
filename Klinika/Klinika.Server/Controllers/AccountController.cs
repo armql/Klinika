@@ -11,23 +11,13 @@ namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext) : ControllerBase
+    public class AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext, RoleController roleController) : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly ApplicationDbContext _dbContext = dbContext;
+        private readonly RoleController _roleController = roleController;
 
-
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll()
-        //{
-        //    if (_userManager.Users == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _userManager.Users.ToListAsync();
-        //}
 
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<ApplicationUser>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
@@ -122,48 +112,6 @@ namespace Klinika.Server.Controllers
             return Ok(new { message = message, result = result });
         }
 
-        //[HttpPost("update")]
-        //public async Task<ActionResult> UpdateUser(ApplicationUser userRequest)
-        //{
-        //    string message = "";
-        //    IdentityResult result = new();
-
-        //    var user = await _userManager.FindByIdAsync(userRequest.Id);
-
-        //    if(user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    try
-        //    {
-        //        var hashedPassword = HashPassword(user.password);
-
-        //        ApplicationUser newUser = new ApplicationUser()
-        //        {
-        //            firstName = user.firstName,
-        //            lastName = user.lastName,
-        //            birthDate = user.birthDate,
-        //            gender = user.gender.ToLower(),
-        //            Email = user.Email.ToLower(),
-        //        };
-
-        //        result = await _userManager.UpdateAsync(newUser);
-
-        //        if (!result.Succeeded)
-        //        {
-        //            return BadRequest(result);
-        //        }
-
-        //        message = "Updated Successfully.";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest("Something went wrong please try again." + ex.Message);
-        //    }
-
-        //    return Ok(new { message = message, result = result });
-        //}
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<ApplicationUser> patchDoc)
@@ -238,10 +186,21 @@ namespace Klinika.Server.Controllers
             }
 
             var roleExists = await _roleManager.RoleExistsAsync(roleName);
-
             if (!roleExists)
             {
-                await _roleManager.CreateAsync(new IdentityRole(roleName));
+                await _roleController.SeedRoles();
+            }
+
+            roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists)
+            {
+                return BadRequest("Role does not exist and seeding failed.");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, userRoles);
             }
 
             await _userManager.AddToRoleAsync(user, roleName);

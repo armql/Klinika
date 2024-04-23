@@ -14,18 +14,6 @@ namespace Klinika.Server.Controllers
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<ServiceDesk>>> GetAll()
-        //{
-        //    if (_dbContext.ServiceDesks == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _dbContext.ServiceDesks.ToListAsync();
-        //}
-
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<ServiceDesk>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {

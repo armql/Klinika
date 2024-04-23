@@ -22,16 +22,6 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
         }
 
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<HelpCenter>>> GetAll()
-        //{
-        //    if (_dbContext.HelpCenters == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _dbContext.HelpCenters.ToListAsync();
-        //}
 
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<HelpCenter>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)

@@ -24,17 +24,6 @@ namespace Klinika.Server.Controllers
             _roleManager = roleManager;
         }
 
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<IdentityRole>>> GetAll()
-        //{
-        //    if (_roleManager.Roles == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _roleManager.Roles.ToListAsync();
-        //}
-
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<Role>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
@@ -95,29 +84,6 @@ namespace Klinika.Server.Controllers
             return role;
         }
 
-        //[HttpPost("update")]
-        //public async Task<ActionResult> Update(IdentityDtoCase userRequest)
-        //{
-        //    var roleId = userRequest.id;
-
-        //    var role = await _roleManager.FindByIdAsync(roleId.ToString());
-
-        //    if (role == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    role.Name = userRequest.Name;
-        //    var result = await _roleManager.UpdateAsync(role);
-
-        //    if(!result.Succeeded)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    return Ok(new { message = "Role with name " + userRequest.Name + " has been updated." });
-        //}
-
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] JsonPatchDocument<IdentityRole> patchDoc)
         {
@@ -155,22 +121,31 @@ namespace Klinika.Server.Controllers
         [HttpPost("seed-roles")]
         public async Task<IActionResult> SeedRoles()
         {
-            bool isDevRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.DEVELOPER);
-            bool isAdminRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.ADMINISTRATOR);
-            bool isPatientRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.PATIENT);
-            bool isPrimaryRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.PRIMARYDOC);
-            bool isSpecRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.SPECDOC);
+            string[] roleNames = {
+                ApplicationStaticUserRoles.DEVELOPER,
+                ApplicationStaticUserRoles.ADMINISTRATOR,
+                ApplicationStaticUserRoles.PATIENT,
+                ApplicationStaticUserRoles.PRIMARYDOC,
+                ApplicationStaticUserRoles.SPECDOC
+            };
 
-            if (isDevRoleExists && isAdminRoleExists && isPatientRoleExists && isPrimaryRoleExists && isSpecRoleExists)
+            bool allRolesExist = true;
+
+            foreach (string roleName in roleNames)
+            {
+                bool roleExists = await _roleManager.RoleExistsAsync(roleName);
+
+                if (!roleExists)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
+                    allRolesExist = false;
+                }
+            }
+
+            if (allRolesExist)
             {
                 return Ok("Role seeding is already done successfully!");
             }
-
-            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.DEVELOPER));
-            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.ADMINISTRATOR));
-            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.PATIENT));
-            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.PRIMARYDOC));
-            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.SPECDOC));
 
             return Ok("Role seeding done successfully!");
         }

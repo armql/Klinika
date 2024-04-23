@@ -24,17 +24,6 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<HelpCenterCategory>>> GetAll()
-        //{
-        //    if (_dbContext.HelpCenterCategorys == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _dbContext.HelpCenterCategorys.ToListAsync();
-        //}
-
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<HelpCenterCategory>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
@@ -105,24 +94,6 @@ namespace Klinika.Server.Controllers
 
             return category;
         }
-
-        //[HttpPost("update")]
-        //public async Task<ActionResult> Update(HelpCenterCategory userRequest)
-        //{
-
-        //    var category = await _dbContext.HelpCenterCategorys.FindAsync(userRequest.id);
-
-        //    if (category == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    category.name = userRequest.name;
-
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new { message = category.id + ",with the name " + category.name + " was changed to: " + userRequest.name });
-        //}
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<HelpCenterCategory> patchDoc)

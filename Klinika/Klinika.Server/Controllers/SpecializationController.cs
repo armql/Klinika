@@ -24,17 +24,6 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
-        //[HttpGet("getAll")]
-        //public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
-        //{
-        //    if(_dbContext.Specializations == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await _dbContext.Specializations.ToListAsync();
-        //}
-
         [HttpGet("getAll")]
         public ActionResult<IEnumerable<Specialization>> GetAll(string search = "", int pageNumber = 1, int pageSize = 10)
         {
@@ -105,23 +94,6 @@ namespace Klinika.Server.Controllers
 
             return specialization;
         }
-
-        //[HttpPost("update")]
-        //public async Task<ActionResult> Update(Specialization userRequest)
-        //{
-        //    var specialization = await _dbContext.Specializations.FindAsync(userRequest.id);
-
-        //    if (specialization == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    specialization.name = userRequest.name;
-
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new { message = specialization.id + ",with the name " + specialization.name + " was changed to: " + userRequest.name });
-        //}
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<Specialization> patchDoc)

@@ -12,6 +12,12 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <Compile Remove="Models\Composite\**" />
+    <Content Remove="Models\Composite\**" />
+    <EmbeddedResource Remove="Models\Composite\**" />
+    <None Remove="Models\Composite\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.*-*">
     </PackageReference>
@@ -37,10 +43,6 @@
     <ProjectReference Include="..\klinika.client\klinika.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Composite\" />
   </ItemGroup>
 
 </Project>

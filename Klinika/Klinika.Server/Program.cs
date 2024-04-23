@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Klinika.Server.Controllers;
 
 namespace Klinika.Server
 {
@@ -60,6 +61,7 @@ namespace Klinika.Server
             builder.Services.AddTransient<IRoleStore<IdentityRole>, RoleStore<IdentityRole, ApplicationDbContext>>();
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
             builder.Services.AddTransient<UserManager<ApplicationUser>>();
+            builder.Services.AddScoped<RoleController>();
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 
