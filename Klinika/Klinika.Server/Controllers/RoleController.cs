@@ -152,7 +152,28 @@ namespace Klinika.Server.Controllers
             }
         }
 
+        [HttpPost("seed-roles")]
+        public async Task<IActionResult> SeedRoles()
+        {
+            bool isDevRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.DEVELOPER);
+            bool isAdminRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.ADMINISTRATOR);
+            bool isPatientRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.PATIENT);
+            bool isPrimaryRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.PRIMARYDOC);
+            bool isSpecRoleExists = await _roleManager.RoleExistsAsync(ApplicationStaticUserRoles.SPECDOC);
 
+            if (isDevRoleExists && isAdminRoleExists && isPatientRoleExists && isPrimaryRoleExists && isSpecRoleExists)
+            {
+                return Ok("Role seeding is already done successfully!");
+            }
+
+            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.DEVELOPER));
+            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.ADMINISTRATOR));
+            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.PATIENT));
+            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.PRIMARYDOC));
+            await _roleManager.CreateAsync(new IdentityRole(ApplicationStaticUserRoles.SPECDOC));
+
+            return Ok("Role seeding done successfully!");
+        }
 
         [HttpDelete("delete")]
         public async Task<ActionResult> Delete(string Id)

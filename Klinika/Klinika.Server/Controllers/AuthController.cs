@@ -6,16 +6,21 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um, ApplicationDbContext dbContext) : ControllerBase
+    public class AuthController(SignInManager<ApplicationUser> sm, UserManager<ApplicationUser> um, ApplicationDbContext dbContext, IConfiguration configuration) : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager = sm;
         private readonly UserManager<ApplicationUser> _userManager = um;
         private readonly ApplicationDbContext _dbContext = dbContext;
+        private readonly IConfiguration _configuration = configuration;
 
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
@@ -35,7 +40,8 @@ namespace Klinika.Server.Controllers
                     gender = user.gender,
                     Email = user.Email,
                     UserName = user.Email,
-                    PasswordHash = hashedPassword
+                    PasswordHash = hashedPassword,
+                    SecurityStamp = Guid.NewGuid().ToString(),
                 };
                 result = await _userManager.CreateAsync(newUser);
 
@@ -49,6 +55,10 @@ namespace Klinika.Server.Controllers
                     id = newUser.Id,
                 };
 
+                //Add a default user role to all users
+                await _userManager.AddToRoleAsync(newUser, ApplicationStaticUserRoles.PATIENT);
+
+                //Add to table of patients
                 await _dbContext.Patients.AddAsync(newPatient);
                 await _dbContext.SaveChangesAsync();
 
@@ -78,7 +88,24 @@ namespace Klinika.Server.Controllers
                     return Unauthorized("Check your login credentials and try again.");
                 }
 
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim("JWTID", Guid.NewGuid().ToString()),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var token = GenerateNewJsonWebToken(authClaims);
+
                 message = "Login Successful.";
+                return Ok(token);
             }
             catch (Exception ex)
             {
@@ -87,6 +114,7 @@ namespace Klinika.Server.Controllers
 
             return Ok(new { message = message });
         }
+
 
         [HttpGet("logout"), Authorize]
         public async Task<ActionResult> LogoutUser()
@@ -127,6 +155,24 @@ namespace Klinika.Server.Controllers
             var hasher = new PasswordHasher<object>();
             var result = hasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
             return result == PasswordVerificationResult.Success;
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private string GenerateNewJsonWebToken(List<Claim> claims)
+        {
+            var authSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            var tokenObject = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(1),
+                    claims: claims,
+                    signingCredentials: new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256)
+                );
+
+            string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
+
+            return token;
         }
     }
 }
