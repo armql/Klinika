@@ -30,7 +30,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     watch,
   } = useForm<RefinedInputs>({
     mode: "onChange",
@@ -39,8 +39,6 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
   const { closeCreate: close, setGlobalError } = zHandler();
 
   const onSubmit = async (data: RefinedInputs) => {
-    const fileInput = watch(data.file);
-    console.log(fileInput);
     try {
       const response = await api(data);
       if (response) {
@@ -151,7 +149,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
             type="submit"
             className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
           >
-            {isSubmitting ? (
+            {isSubmitting || isSubmitSuccessful ? (
               <Spinner size={24} className="animate-spin" />
             ) : (
               "Create"

@@ -1,6 +1,21 @@
 import { ArrowLeft } from "@phosphor-icons/react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useConditionalEffect } from "../features/handata/hooks/useConditionalEffect";
 
 export default function NotFound() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  useConditionalEffect(
+    () => {
+      return () => {
+        navigate("/guest");
+        window.location.reload();
+      };
+    },
+    pathname === "/" || pathname === "",
+    []
+  );
+
   return (
     <div className="h-screen w-screen">
       <div className="relative h-full w-full">
@@ -16,12 +31,14 @@ export default function NotFound() {
           <div className="flex gap-4 z-10 items-center">
             <button
               type="button"
+              onClick={() => window.history.back()}
               className="flex border-2 bg-white hover:bg-zinc-50 border-primary/500 px-6 py-3 rounded-md gap-2 text-lg items-center font-medium"
             >
               <ArrowLeft size={22} /> Go back
             </button>
             <button
               type="button"
+              onClick={() => navigate("/guest")}
               className="bg-primary/50 h-full text-green-950 px-4 py-3 rounded-md text-lg font-medium"
             >
               Take me home

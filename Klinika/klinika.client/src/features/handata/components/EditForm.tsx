@@ -37,7 +37,7 @@ export default function EditForm<T>({
     register,
     setValue,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<RefinedInputs>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
@@ -212,7 +212,7 @@ export default function EditForm<T>({
             type="submit"
             className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
           >
-            {isSubmitting ? (
+            {isSubmitting || isSubmitSuccessful ? (
               <Spinner size={24} className="animate-spin" />
             ) : (
               "Edit"

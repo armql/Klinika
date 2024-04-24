@@ -1,7 +1,7 @@
 import axios_instance from "../../api/axios";
 import { ApiService } from "../../services/ApiServices";
 import {
-  useHandler,
+  zHandler,
   EditForm,
   Table,
   CreateForm,
@@ -26,7 +26,7 @@ const formField: FormField[] = [
 ];
 
 export default function HelpCenterCategoryData() {
-  const { create_modal: create, edit_modal: edit } = useHandler();
+  const { create_modal: create, edit_modal: edit } = zHandler();
   const helpcentercategory_api = new ApiService<HelpCenterCategory>(
     {
       getAll: "/api/HelpCenterCategory/getAll",

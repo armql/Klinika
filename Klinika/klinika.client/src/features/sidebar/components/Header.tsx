@@ -25,7 +25,6 @@ export default function Header() {
     notification,
     active_link,
     favorite_links,
-    recent_links,
   } = zNavigation();
   const { pathname } = useLocation();
   const pathnames = pathname.split("/").filter((x) => x);

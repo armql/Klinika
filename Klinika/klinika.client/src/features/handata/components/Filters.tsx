@@ -5,25 +5,29 @@ import {
   Plus,
 } from "@phosphor-icons/react";
 import { zForm, zHandler } from "../__handata";
-import { useEffect } from "react";
+import { useConditionalEffect } from "../hooks/useConditionalEffect";
+import { FormEvent } from "react";
 
 type FiltersProps = {
   name: string;
 };
 
 export default function Filters({ name }: FiltersProps) {
-  const { handleCreatedBy, handleSearch, handleSortOrder, sortOrder } = zForm();
+  const { handleCreatedBy, handleSearch, handleSortOrder, sortOrder, search } =
+    zForm();
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSearch(e.target.search.value);
+    handleSearch((e.target as HTMLFormElement).search.value);
   };
 
-  useEffect(() => {
-    return () => {
-      handleSearch("");
-    };
-  }, []);
+  useConditionalEffect(
+    () => {
+      return () => handleSearch("");
+    },
+    search.length > 0,
+    []
+  );
 
   const { openCreate: create } = zHandler();
   return (
@@ -40,7 +44,7 @@ export default function Filters({ name }: FiltersProps) {
             <Plus size={22} />
           </button>
           <button
-            title="Funnel item"
+            title="Funnel items"
             type="button"
             onClick={() => handleCreatedBy("admin")}
             className="hover:opacity-60"
@@ -48,7 +52,7 @@ export default function Filters({ name }: FiltersProps) {
             <FunnelSimple size={22} />
           </button>
           <button
-            title="Re-order item"
+            title="Re-order items"
             type="button"
             onClick={() => handleSortOrder(sortOrder ? "desc" : "asc")}
             className="hover:opacity-60"

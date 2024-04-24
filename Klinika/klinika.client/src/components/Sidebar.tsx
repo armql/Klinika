@@ -30,7 +30,6 @@ export default function Sidebar({ user, children }: InnerProp) {
     folder,
     handleFolder,
     handleRecents,
-    active_link,
   } = zNavigation();
 
   useEffect(() => {

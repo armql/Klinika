@@ -1,10 +1,17 @@
 import { NotePencil, X, Check, ArrowsDownUp } from "@phosphor-icons/react";
 import Skeleton from "./skeleton/Table";
 import { zHandler, zPagination, zForm } from "../__handata";
-import { ChangeEvent, CSSProperties, Fragment, useState } from "react";
+import {
+  ChangeEvent,
+  CSSProperties,
+  Fragment,
+  useEffect,
+  useState,
+} from "react";
 import Swal from "sweetalert2";
 import Pagination from "./Pagination";
 import { useQuery } from "react-query";
+import { useConditionalEffect } from "../hooks/useConditionalEffect";
 
 interface ResponseData<T> {
   data: T[];
@@ -24,7 +31,8 @@ export default function Table<T>({
 }: TableProps<T>) {
   const HEADER_COLUMN = headers.length + 3;
   const { openEdit: edit, refetch_data: handler } = zHandler();
-  const { setDataLength, currentPage, itemsPerPage } = zPagination();
+  const { setDataLength, currentPage, itemsPerPage, dataLength } =
+    zPagination();
   const [loading, setLoading] = useState<boolean>(true);
   const {
     search: searchValue,
@@ -40,7 +48,7 @@ export default function Table<T>({
     () => all(currentPage, itemsPerPage, searchValue),
     {
       onSuccess: (data: ResponseData<T>) => {
-        setDataLength(data.data.length | 1);
+        setDataLength(data.data.length);
       },
       onSettled: () => {
         setLoading(false);
@@ -50,12 +58,21 @@ export default function Table<T>({
 
   // Selecting all
   const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      selectAll();
+    if (event.target.checked && data) {
+      const allIds = data.data.map((item) => String(item.id));
+      selectAll(allIds);
     } else {
       deselectAll();
     }
   };
+
+  useConditionalEffect(
+    () => {
+      return () => deselectAll();
+    },
+    selectedItems.length > 0,
+    []
+  );
 
   // For "select 1 item"
   const handleSelectItem = (
@@ -77,6 +94,7 @@ export default function Table<T>({
     }
     return false;
   };
+
   const deleteItem = async (id: string) => {
     try {
       Swal.fire({

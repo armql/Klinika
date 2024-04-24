@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { zPagination } from "./zPagination";
 
 type FormStore = {
   selectedItems: string[];
@@ -9,7 +8,7 @@ type FormStore = {
   selectedItem: string | null;
   selectItem: (id: string | number) => void;
   deselectItem: (id: string | number) => void;
-  selectAll: () => void;
+  selectAll: (ids: string[]) => void;
   deselectAll: () => void;
   setSelectedItem: (id: string) => void;
   handleSearch: (search: string) => void;
@@ -32,7 +31,7 @@ export const zForm = create<FormStore>((set) => ({
       if (!state.selectedItems.includes(stringId)) {
         return { selectedItems: [...state.selectedItems, stringId] };
       }
-      return state; // Return the current state if the item is already selected
+      return state;
     });
   },
   deselectItem: (id) => {
@@ -43,13 +42,8 @@ export const zForm = create<FormStore>((set) => ({
       ),
     }));
   },
-  selectAll: () => {
-    const { startIndex, endIndex, dataLength } = zPagination.getState();
-    const allIds = Array.from(
-      { length: Math.min(endIndex, dataLength) - startIndex },
-      (_, i) => String(startIndex + i + 1)
-    );
-    set({ selectedItems: allIds });
+  selectAll: (ids: string[]) => {
+    set({ selectedItems: ids });
   },
   deselectAll: () => {
     set({ selectedItems: [] });
