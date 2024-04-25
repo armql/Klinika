@@ -13,6 +13,7 @@ type Store = {
   setDataLength: (dataLength: number) => void;
   setLoading: (loading: boolean) => void;
   setCurrentPage: (currentPage: number) => void;
+  setTotalPages: (totalPages: number) => void;
 };
 
 export const zPagination = create<Store>((set) => ({
@@ -28,12 +29,12 @@ export const zPagination = create<Store>((set) => ({
   setDataLength: (dataLength) => {
     set({ dataLength });
     set((state) => ({
-      totalPages: Math.ceil(dataLength / state.itemsPerPage),
       startIndex: (state.currentPage - 1) * state.itemsPerPage,
       endIndex: state.startIndex + state.itemsPerPage,
       max: state.totalPages === state.currentPage,
     }));
   },
+  setTotalPages: (totalPages) => set({ totalPages }),
   setLoading: (loading) => set({ loading }),
   setCurrentPage: (currentPage) => {
     set({ currentPage });

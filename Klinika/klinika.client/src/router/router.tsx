@@ -7,7 +7,6 @@ import {
   GuestLayout,
   DeveloperLayout,
   NotFound,
-  BlankLoader,
 } from "./global";
 import {
   Home,

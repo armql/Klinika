@@ -31,7 +31,6 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-    watch,
   } = useForm<RefinedInputs>({
     mode: "onChange",
     resolver: zodResolver(global_schema),

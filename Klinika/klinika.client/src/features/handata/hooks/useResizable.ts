@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, MouseEvent, RefObject } from "react";
+import { useState, useRef, useEffect, MouseEvent } from "react";
 
 interface ResizableProps {
   initialWidth: number;

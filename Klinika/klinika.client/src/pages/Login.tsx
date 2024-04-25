@@ -22,7 +22,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting, isSubmitSuccessful, isSubmitted },
   } = useForm<FormFields>({
     mode: "onChange",
     resolver: zodResolver(schema_login),
