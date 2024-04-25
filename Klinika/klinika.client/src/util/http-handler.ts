@@ -23,7 +23,7 @@ type AxiosError = {
     xsrfHeaderName: string;
     maxContentLength: number;
     maxBodyLength: number;
-    env: {};
+    env: unknown;
     headers: {
       Accept: string;
     };

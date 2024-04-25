@@ -51,7 +51,7 @@ export default function TechProof() {
               <img
                 src={src}
                 alt="logo"
-                className="min-w-[6vw] min-h-[6vh] z-20"
+                className="md:min-w-[8vw] min-w-[12vw] min-h-[12vh] md:min-h-[8vh] z-20"
               />
             </li>
           ))}

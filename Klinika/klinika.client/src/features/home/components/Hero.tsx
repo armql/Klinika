@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import hero_illustration from "../assets/hero-illustration.svg";
 export default function Hero() {
   return (
-    <section className="xl:px-48 lg:px-24 md:px-12 sm:px-6 px-2 w-screen flex justify-evenly sm:gap-0 gap-12 items-center flex-col sm:h-screen h-[600px]">
+    <section className="xl:px-48 lg:px-24 md:px-12 sm:px-6 px-2 w-screen flex justify-evenly sm:gap-0 gap-12 items-center flex-col sm:h-screen min-h-[800px]">
       <div className="flex flex-col items-center justify-center gap-8">
         <div className="w-fit sm:h-10 h-fit border-2 gap-2 flex justify-between items-center rounded-full border-primary/50 bg-white pl-4 pr-0.5 sm:py-0 py-0.5 overflow-clip hover:border-primary/60 transition-colors">
           <span className="text-primary sm:text-base text-xs truncate">
