@@ -10,7 +10,7 @@ import mongo from "../assets/mongo.svg";
 export default function TechProof() {
   return (
     <section className="py-24">
-      <h1 className="text-4xl font-semibold text-center text-compact mb-8">
+      <h1 className="text-4xl font-medium text-center text-compact mb-8">
         Technologies & Libraries We've Worked With
       </h1>
       <style>

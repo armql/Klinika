@@ -18,7 +18,7 @@ export default function Features() {
         <span className="text-primary font-medium text-center text-xl">
           Features
         </span>
-        <h1 className="text-4xl font-semibold">
+        <h1 className="text-4xl font-medium">
           All that you will need to manage your healthcare needs.
         </h1>
         <p className="font-light text-lg">
