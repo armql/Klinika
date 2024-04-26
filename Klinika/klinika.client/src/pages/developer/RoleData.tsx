@@ -16,7 +16,7 @@ export type IdentityRole = {
   NormalizedName: string;
   ConcurrencyStamp: string;
 };
-const createFields: FormField[] = [
+const formField: FormField[] = [
   {
     type: "text",
     identifier: "Name",
@@ -25,37 +25,16 @@ const createFields: FormField[] = [
   },
 ];
 
-const editFields: FormField[] = [
-  {
-    type: "text",
-    identifier: "id",
-    name: "Specialization id",
-    isHidden: true,
-  },
-  {
-    type: "text",
-    identifier: "name",
-    name: "Role Name",
-    placeholder: "Enter your role name",
-  },
-  {
-    type: "text",
-    identifier: "normalizedName",
-    name: "Specialization id",
-    isHidden: true,
-  },
-];
-
 export default function RoleData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
 
   const role_api = new ApiService<IdentityRole>(
     {
-      getAll: "/api/Role/getAll",
-      get: "/api/Role/get",
-      create: "/api/Role/create",
-      update: "/api/Role/update",
-      delete: "/api/Role/delete",
+      getAll: "Role/getAll",
+      get: "Role/get",
+      create: "Role/create",
+      update: "Role/update",
+      delete: "Role/delete",
     },
     axios_instance
   );
@@ -74,14 +53,14 @@ export default function RoleData() {
           header="Identity Role"
           get={role_api.get}
           update={role_api.update}
-          fields={editFields}
+          fields={formField}
         />
       )}
       {create && (
         <CreateForm<IdentityRole>
           header="Identity Role"
           api={role_api.create}
-          fields={createFields}
+          fields={formField}
         />
       )}
     </DataList>

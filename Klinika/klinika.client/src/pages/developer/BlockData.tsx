@@ -22,12 +22,12 @@ export default function BlockData() {
 
   const Block_api = new ApiService<Block>(
     {
-      category: "/api/Specialization/getAll",
-      getAll: "/api/Block/getAll",
-      get: "/api/Block/get",
-      create: "/api/Block/create",
-      update: "/api/Block/update",
-      delete: "/api/Block/delete",
+      category: "Specialization/getAll",
+      getAll: "Block/getAll",
+      get: "Block/get",
+      create: "Block/create",
+      update: "Block/update",
+      delete: "Block/delete",
     },
     axios_instance
   );

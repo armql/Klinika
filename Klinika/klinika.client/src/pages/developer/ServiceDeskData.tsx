@@ -24,12 +24,12 @@ export default function ServiceDeskData() {
 
   const ServiceDesk_api = new ApiService<ServiceDesk>(
     {
-      category: "/api/Block/getAll",
-      getAll: "/api/ServiceDesk/getAll",
-      get: "/api/ServiceDesk/get",
-      create: "/api/ServiceDesk/create",
-      update: "/api/ServiceDesk/update",
-      delete: "/api/ServiceDesk/delete",
+      category: "Block/getAll",
+      getAll: "ServiceDesk/getAll",
+      get: "ServiceDesk/get",
+      create: "ServiceDesk/create",
+      update: "ServiceDesk/update",
+      delete: "ServiceDesk/delete",
     },
     axios_instance
   );

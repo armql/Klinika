@@ -30,11 +30,11 @@ export default function SpecializationData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
   const specialization_api = new ApiService<Specialization>(
     {
-      getAll: "/api/Specialization/getAll",
-      get: "/api/Specialization/get",
-      create: "/api/Specialization/create",
-      update: `/api/Specialization/update`,
-      delete: "/api/Specialization/delete",
+      getAll: "Specialization/getAll",
+      get: "Specialization/get",
+      create: "Specialization/create",
+      update: `Specialization/update`,
+      delete: "Specialization/delete",
     },
     axios_instance
   );

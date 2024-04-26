@@ -72,11 +72,11 @@ export default function UserData() {
 
   const role_api = new ApiService<ApplicationUser>(
     {
-      getAll: "/api/Account/getAll",
-      get: "/api/Account/get",
-      create: "/api/Account/create",
-      update: "/api/Account/update",
-      delete: "/api/Account/delete",
+      getAll: "Account/getAll",
+      get: "Account/get",
+      create: "Account/create",
+      update: "Account/update",
+      delete: "Account/delete",
     },
     axios_instance
   );

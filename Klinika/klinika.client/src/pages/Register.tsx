@@ -24,7 +24,7 @@ export default function Register() {
     mode: "onChange",
     resolver: zodResolver(schema_register),
   });
-  const { setGlobalError } = zHandler();
+  const { setGlobalError, global_error } = zHandler();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -142,7 +142,11 @@ export default function Register() {
               className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
             >
               {isSubmitting || isSubmitSuccessful ? (
-                <Spinner size={24} className="animate-spin" />
+                global_error ? (
+                  "Register"
+                ) : (
+                  <Spinner size={24} className="animate-spin" />
+                )
               ) : (
                 "Register"
               )}

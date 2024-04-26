@@ -22,7 +22,7 @@ type FormProps<T> = {
   header: string;
   fields: FormField[];
   get: (id: string) => Promise<T>;
-  update: (item: T) => Promise<T>;
+  update: (id: number, item: T) => Promise<T>;
 };
 
 export default function EditForm<T>({
@@ -42,7 +42,7 @@ export default function EditForm<T>({
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const { closeEdit: close, setGlobalError } = zHandler();
+  const { closeEdit: close, setGlobalError, global_error } = zHandler();
   const [loadingData, setLoadingData] = useState(true);
   const { selectedItem } = zForm();
 
@@ -213,7 +213,11 @@ export default function EditForm<T>({
             className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
           >
             {isSubmitting || isSubmitSuccessful ? (
-              <Spinner size={24} className="animate-spin" />
+              global_error ? (
+                "Edit"
+              ) : (
+                <Spinner size={24} className="animate-spin" />
+              )
             ) : (
               "Edit"
             )}

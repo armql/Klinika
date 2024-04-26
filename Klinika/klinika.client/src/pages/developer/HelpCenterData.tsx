@@ -25,12 +25,12 @@ export default function HelpCenterData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
   const helpcenter_api = new ApiService<HelpCenter>(
     {
-      category: "/api/HelpCenterCategory/getAll",
-      getAll: "/api/HelpCenter/getAll",
-      get: "/api/HelpCenter/get",
-      create: "/api/HelpCenter/create",
-      update: "/api/HelpCenter/update",
-      delete: "/api/HelpCenter/delete",
+      category: "HelpCenterCategory/getAll",
+      getAll: "HelpCenter/getAll",
+      get: "HelpCenter/get",
+      create: "HelpCenter/create",
+      update: "HelpCenter/update",
+      delete: "HelpCenter/delete",
     },
     axios_instance
   );

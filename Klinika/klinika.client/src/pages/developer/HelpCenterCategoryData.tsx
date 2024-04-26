@@ -29,11 +29,11 @@ export default function HelpCenterCategoryData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
   const helpcentercategory_api = new ApiService<HelpCenterCategory>(
     {
-      getAll: "/api/HelpCenterCategory/getAll",
-      get: "/api/HelpCenterCategory/get",
-      create: "/api/HelpCenterCategory/create",
-      update: "/api/HelpCenterCategory/update",
-      delete: "/api/HelpCenterCategory/delete",
+      getAll: "HelpCenterCategory/getAll",
+      get: "HelpCenterCategory/get",
+      create: "HelpCenterCategory/create",
+      update: "HelpCenterCategory/update",
+      delete: "HelpCenterCategory/delete",
     },
     axios_instance
   );

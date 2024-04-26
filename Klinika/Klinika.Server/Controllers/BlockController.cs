@@ -45,7 +45,7 @@ namespace Klinika.Server.Controllers
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("create")]
         public async Task<ActionResult> Create(Block userRequest)
         {

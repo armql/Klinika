@@ -53,21 +53,21 @@ namespace Klinika.Server.Controllers
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] HelpCenterCategoryDto userRequest)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            if (currentUser == null)
-            {
-                return Unauthorized(new { message = "User is not authenticated" });
-            }
+            //if (currentUser == null)
+            //{
+            //    return Unauthorized(new { message = "User is not authenticated" });
+            //}
 
             var newCategory = new HelpCenterCategory()
             {
                 name = userRequest.name,
-                createdBy = currentUser.firstName,
+                createdBy = "Arlind",
                 creationDate = DateTime.Now,
             };
 

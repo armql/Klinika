@@ -81,30 +81,86 @@ namespace Klinika.Server.Controllers
             return Ok(new { message = message, result = result });
         }
 
+        //[HttpPost("login")]
+        //public async Task<ActionResult> LoginUser(Login login)
+        //{
+        //    string message = "";
+
+        //    try
+        //    {
+        //        ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
+
+        //        var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.RememberMe, false);
+
+        //        if (!result.Succeeded)
+        //        {
+        //            return Unauthorized("Check your login credentials and try again.");
+        //        }
+
+        //        var userRoles = await _userManager.GetRolesAsync(user);
+
+        //        var authClaims = new List<Claim>
+        //        {
+        //            new Claim(ClaimTypes.Email, user.Email),
+        //            new Claim(ClaimTypes.NameIdentifier, user.Id),
+        //            new Claim("JWTID", Guid.NewGuid().ToString()),
+        //        };
+
+        //        foreach (var userRole in userRoles)
+        //        {
+        //            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+        //        }
+
+        //        var token = GenerateNewJsonWebToken(authClaims);
+
+        //        message = "Login Successful.";
+        //        return Ok(token);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest("Something went wrong please try again." + ex.Message);
+        //    }
+
+        //    return Ok(new { message = message });
+        //}
+
         [HttpPost("login")]
         public async Task<ActionResult> LoginUser(Login login)
         {
-            string message = "";
-
             try
             {
                 ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
 
+                if (user == null)
+                {
+                    return BadRequest(new { error = "The email address you entered does not correspond to any account. Please check and try again." });
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.RememberMe, false);
+
+                if (result.IsLockedOut)
+                {
+                    return Unauthorized(new { error = "Your account is locked. Please contact support for assistance." });
+                }
+
+                if (result.IsNotAllowed)
+                {
+                    return Unauthorized(new { error = "You are not allowed to sign in. Please contact support if you believe this is an error." });
+                }
 
                 if (!result.Succeeded)
                 {
-                    return Unauthorized("Check your login credentials and try again.");
+                    return Unauthorized(new { error = "The password you entered is incorrect. Please check and try again." });
                 }
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim("JWTID", Guid.NewGuid().ToString()),
-                };
+        {
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim("JWTID", Guid.NewGuid().ToString()),
+        };
 
                 foreach (var userRole in userRoles)
                 {
@@ -113,16 +169,16 @@ namespace Klinika.Server.Controllers
 
                 var token = GenerateNewJsonWebToken(authClaims);
 
-                message = "Login Successful.";
                 return Ok(token);
             }
             catch (Exception ex)
             {
-                return BadRequest("Something went wrong please try again." + ex.Message);
+                // Log the detailed error message for debugging
+                Console.WriteLine(ex);
+                return BadRequest(new { error = "An unexpected error occurred. Please try again later." });
             }
-
-            return Ok(new { message = message });
         }
+
 
 
         [HttpGet("logout"), Authorize]

@@ -35,7 +35,7 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
     mode: "onChange",
     resolver: zodResolver(global_schema),
   });
-  const { closeCreate: close, setGlobalError } = zHandler();
+  const { closeCreate: close, setGlobalError, global_error } = zHandler();
 
   const onSubmit = async (data: RefinedInputs) => {
     try {
@@ -149,7 +149,11 @@ export default function CreateForm<T>({ header, fields, api }: FormProps<T>) {
             className="mt-4 py-2.5 flex justify-center items-center font-manrope hover:bg-primary/70 text-compact bg-primary/50 rounded-md active:cursor-wait"
           >
             {isSubmitting || isSubmitSuccessful ? (
-              <Spinner size={24} className="animate-spin" />
+              global_error ? (
+                "Create"
+              ) : (
+                <Spinner size={24} className="animate-spin" />
+              )
             ) : (
               "Create"
             )}
