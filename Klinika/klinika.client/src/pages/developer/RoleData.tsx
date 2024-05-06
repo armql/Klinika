@@ -30,7 +30,7 @@ export default function RoleData() {
 
   const role_api = new ApiService<IdentityRole>(
     {
-      getAll: "Role/getAll",
+      paginate: "Role/paginate",
       get: "Role/get",
       create: "Role/create",
       update: "Role/update",
@@ -44,7 +44,7 @@ export default function RoleData() {
       <Filters name="Role List" />
       <Table<IdentityRole>
         headers={["Role ID", "Role Name"]}
-        all={role_api.getAll}
+        all={role_api.paginate}
         delete={role_api.delete}
         dataField={["id", "name"]}
       />

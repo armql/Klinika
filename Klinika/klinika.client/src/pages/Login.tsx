@@ -19,6 +19,7 @@ import { routes } from "../util/roles-routes";
 import Swal from "sweetalert2";
 import bg from "../assets/login-illustrations.svg";
 import { useState } from "react";
+
 export default function Login() {
   const {
     register,
@@ -29,7 +30,6 @@ export default function Login() {
       isSubmitSuccessful,
       isSubmitted,
       isLoading,
-      isDirty,
     },
   } = useForm<FormFields>({
     mode: "onChange",

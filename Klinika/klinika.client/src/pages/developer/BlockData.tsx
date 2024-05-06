@@ -8,7 +8,7 @@ import {
   Filters,
   DataList,
 } from "../../features/handata/__handata";
-import { FormField } from "../../features/handata/utils/form-fields";
+import {FormField} from "../../features/handata/utils/form-fields";
 import { useQuery } from "react-query";
 
 export type Block = {
@@ -23,7 +23,7 @@ export default function BlockData() {
   const Block_api = new ApiService<Block>(
     {
       category: "Specialization/getAll",
-      getAll: "Block/getAll",
+      paginate: "Block/paginate",
       get: "Block/get",
       create: "Block/create",
       update: "Block/update",
@@ -31,7 +31,7 @@ export default function BlockData() {
     },
     axios_instance
   );
-  const { data, isLoading } = useQuery("category", Block_api.category);
+  const { data, isLoading } = useQuery("getAll", Block_api.category);
 
   const formFields: FormField[] = [
     {
@@ -51,7 +51,7 @@ export default function BlockData() {
               name: "Loading Options...",
             },
           ]
-        : data?.data.map((item) => ({
+        : data?.map((item) => ({
             id: item.id,
             name: item.name,
           })),
@@ -63,7 +63,7 @@ export default function BlockData() {
       <Filters name="Block List" />
       <Table<Block>
         headers={["Block ID", "Name", "Specialization Id"]}
-        all={Block_api.getAll}
+        all={Block_api.paginate}
         delete={Block_api.delete}
         dataField={["id", "name", "specializationId"]}
       />

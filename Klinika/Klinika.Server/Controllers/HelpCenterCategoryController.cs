@@ -23,9 +23,21 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
             _userManager = userManager;
         }
-
+        
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<HelpCenterCategory>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        public async Task<ActionResult<IEnumerable<HelpCenterCategory>>> GetAll()
+        {
+            var helpCenterCategories = await _dbContext.HelpCenterCategorys.ToListAsync();
+            if (helpCenterCategories == null)
+            {
+                return NotFound();
+            }
+
+            return helpCenterCategories;
+        }
+        
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<HelpCenterCategory>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.HelpCenterCategorys == null)
             {

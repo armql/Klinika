@@ -25,7 +25,19 @@ namespace Klinika.Server.Controllers
         }
 
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<Specialization>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
+        {
+            var specializations = await _dbContext.Specializations.ToListAsync();
+            if (specializations == null)
+            {
+                return NotFound();
+            }
+
+            return specializations;
+        }
+        
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<Specialization>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Specializations == null)
             {
@@ -53,21 +65,21 @@ namespace Klinika.Server.Controllers
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] SpecializationDto specializationDto)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            //var currentUser = await _userManager.GetUserAsync(User);
 
-            if (currentUser == null)
-            {
-                return Unauthorized(new { message = "User is not authenticated" });
-            }
+            //if (currentUser == null)
+            //{
+            //    return Unauthorized(new { message = "User is not authenticated" });
+            //}
 
             var newSpecialization = new Specialization()
             {
                 name = specializationDto.name,
-                createdBy = currentUser.firstName,
+                createdBy = "Arlind",
                 creationDate = DateTime.Now,
             };
 

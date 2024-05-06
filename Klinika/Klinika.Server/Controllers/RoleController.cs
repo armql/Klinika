@@ -23,9 +23,23 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
             _roleManager = roleManager;
         }
-
+        
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<Role>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        public async Task<ActionResult<IEnumerable<Role>>> GetAll()
+        {
+            var roles = await _dbContext.Roles.ToListAsync();
+
+            if (roles == null || !roles.Any())
+            {
+                return NotFound("No roles found.");
+            }
+
+            var customRoles = roles.Select(r => new Role { id = Guid.Parse(r.Id), Name = r.Name }).ToList();
+            return Ok(customRoles);
+        }
+
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<Role>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Roles == null)
             {

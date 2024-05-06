@@ -72,7 +72,7 @@ export default function UserData() {
 
   const role_api = new ApiService<ApplicationUser>(
     {
-      getAll: "Account/getAll",
+      paginate: "Account/paginate",
       get: "Account/get",
       create: "Account/create",
       update: "Account/update",
@@ -93,7 +93,7 @@ export default function UserData() {
           "Birth Date",
           "Email",
         ]}
-        all={role_api.getAll}
+        all={role_api.paginate}
         delete={role_api.delete}
         dataField={[
           "id",

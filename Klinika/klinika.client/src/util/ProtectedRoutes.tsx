@@ -8,10 +8,9 @@ interface InnerProp {
   children: ReactNode;
   suspense: boolean | false;
 }
-
 export default function ProtectedRoutes({ children, suspense }: InnerProp) {
-  const { data } = zAuth();
   const { pathname } = useLocation();
+  const { data } = zAuth();
 
   const identifiedrole = data.role;
   if (!pathname.includes(routes[identifiedrole])) {

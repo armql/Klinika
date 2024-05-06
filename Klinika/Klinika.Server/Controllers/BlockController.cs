@@ -17,7 +17,19 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
 
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<Block>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        public async Task<ActionResult<IEnumerable<Block>>> GetAll()
+        {
+            var blocks = await _dbContext.Blocks.ToListAsync();
+            if (blocks == null)
+            {
+                return NotFound();
+            }
+
+            return blocks;
+        }
+
+        [HttpGet("paginate")]
+        public async Task<ActionResult<IEnumerable<Block>>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Blocks == null)
             {
@@ -31,9 +43,9 @@ namespace Klinika.Server.Controllers
                 query = query.Where(s => s.name.Contains(search));
             }
 
-            var count = query.Count();
+            var count = await query.CountAsync();
 
-            var blocks = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+            var blocks = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return Ok(new
             {

@@ -15,7 +15,19 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
 
         [HttpGet("getAll")]
-        public ActionResult<IEnumerable<ServiceDesk>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        public async Task<ActionResult<IEnumerable<ServiceDesk>>> GetAll()
+        {
+            var serviceDesks = await _dbContext.ServiceDesks.ToListAsync();
+            if (serviceDesks == null)
+            {
+                return NotFound();
+            }
+
+            return serviceDesks;
+        }
+        
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<ServiceDesk>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.ServiceDesks == null)
             {

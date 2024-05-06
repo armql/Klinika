@@ -26,7 +26,7 @@ export default function HelpCenterData() {
   const helpcenter_api = new ApiService<HelpCenter>(
     {
       category: "HelpCenterCategory/getAll",
-      getAll: "HelpCenter/getAll",
+      paginate: "HelpCenter/paginate",
       get: "HelpCenter/get",
       create: "HelpCenter/create",
       update: "HelpCenter/update",
@@ -72,7 +72,7 @@ export default function HelpCenterData() {
               name: "Loading Options...",
             },
           ]
-        : data?.data.map((item) => ({
+        : data?.map((item) => ({
             id: item.id,
             name: item.name,
           })),
@@ -91,7 +91,7 @@ export default function HelpCenterData() {
           "Message",
           "CategoryId",
         ]}
-        all={helpcenter_api.getAll}
+        all={helpcenter_api.paginate}
         delete={helpcenter_api.delete}
         dataField={["id", "name", "email", "subject", "message", "categoryId"]}
       />

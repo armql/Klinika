@@ -39,7 +39,7 @@ export default function Table<T>({
     setSelectedItem,
   } = zForm();
   const { data, isLoading, refetch } = useQuery(
-    ["all", handler, searchValue, currentPage],
+    ["paginate", handler, searchValue, currentPage],
     () => all(currentPage, itemsPerPage, searchValue),
     {
       onSuccess: (data: ResponseData<T>) => {
@@ -49,6 +49,7 @@ export default function Table<T>({
       onSettled: () => {
         setLoading(false);
       },
+
     }
   );
 

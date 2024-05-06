@@ -19,8 +19,8 @@ namespace Klinika.Server.Controllers
         private readonly RoleController _roleController = roleController;
 
 
-        [HttpGet("getAll")]
-        public ActionResult<IEnumerable<ApplicationUser>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<ApplicationUser>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Users == null)
             {

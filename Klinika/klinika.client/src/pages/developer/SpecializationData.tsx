@@ -30,7 +30,7 @@ export default function SpecializationData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
   const specialization_api = new ApiService<Specialization>(
     {
-      getAll: "Specialization/getAll",
+      paginate: "Specialization/paginate",
       get: "Specialization/get",
       create: "Specialization/create",
       update: `Specialization/update`,
@@ -44,7 +44,7 @@ export default function SpecializationData() {
       <Filters name="Specialization List" />
       <Table<Specialization>
         headers={["Specialization ID", "Name", "Created by", "Created in"]}
-        all={specialization_api.getAll}
+        all={specialization_api.paginate}
         delete={specialization_api.delete}
         dataField={["id", "name", "createdBy", "creationDate"]}
       />

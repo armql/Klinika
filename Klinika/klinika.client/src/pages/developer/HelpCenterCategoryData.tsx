@@ -29,7 +29,7 @@ export default function HelpCenterCategoryData() {
   const { create_modal: create, edit_modal: edit } = zHandler();
   const helpcentercategory_api = new ApiService<HelpCenterCategory>(
     {
-      getAll: "HelpCenterCategory/getAll",
+      paginate: "HelpCenterCategory/paginate",
       get: "HelpCenterCategory/get",
       create: "HelpCenterCategory/create",
       update: "HelpCenterCategory/update",
@@ -43,7 +43,7 @@ export default function HelpCenterCategoryData() {
       <Filters name="Category List" />
       <Table<HelpCenterCategory>
         headers={["Category ID", "Name", "Created by", "Created in"]}
-        all={helpcentercategory_api.getAll}
+        all={helpcentercategory_api.paginate}
         delete={helpcentercategory_api.delete}
         dataField={["id", "name", "createdBy", "creationDate"]}
       />

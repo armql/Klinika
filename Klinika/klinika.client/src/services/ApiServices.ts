@@ -3,7 +3,7 @@ import { AxiosInstance, AxiosResponse } from "axios";
 // Define a type for your API endpoints
 type ApiEndpoints = {
   category?: string;
-  getAll: string;
+  paginate: string;
   get: string;
   create: string;
   update: string;
@@ -29,21 +29,13 @@ export class ApiService<T> {
       throw new Error("Category endpoint is undefined");
     }
   };
-
-  // getAll = async (): Promise<T[]> => {
-  //   const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-  //     this.endpoints.getAll
-  //   );
-  //   return response.data;
-  // };
-
-  getAll = async (
+  paginate = async (
     page: number,
     pageSize: number,
     search: string
   ): Promise<T[]> => {
     const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-      `${this.endpoints.getAll}?pageNumber=${page}&pageSize=${pageSize}&search=${search}`
+      `${this.endpoints.paginate}?pageNumber=${page}&pageSize=${pageSize}&search=${search}`
     );
     return response.data;
   };

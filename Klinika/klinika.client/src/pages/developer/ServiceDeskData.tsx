@@ -25,7 +25,7 @@ export default function ServiceDeskData() {
   const ServiceDesk_api = new ApiService<ServiceDesk>(
     {
       category: "Block/getAll",
-      getAll: "ServiceDesk/getAll",
+      paginate: "ServiceDesk/paginate",
       get: "ServiceDesk/get",
       create: "ServiceDesk/create",
       update: "ServiceDesk/update",
@@ -65,7 +65,7 @@ export default function ServiceDeskData() {
               name: "Loading Options...",
             },
           ]
-        : data?.data.map((item) => ({
+        : data?.map((item) => ({
             id: item.id,
             name: item.name,
           })),
@@ -83,7 +83,7 @@ export default function ServiceDeskData() {
           "Operating Hours",
           "Block Id",
         ]}
-        all={ServiceDesk_api.getAll}
+        all={ServiceDesk_api.paginate}
         delete={ServiceDesk_api.delete}
         dataField={["id", "name", "email", "operatingHours", "blockId"]}
       />

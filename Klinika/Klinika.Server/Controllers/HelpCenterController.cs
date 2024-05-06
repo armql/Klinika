@@ -23,8 +23,8 @@ namespace Klinika.Server.Controllers
         }
 
 
-        [HttpGet("getAll")]
-        public ActionResult<IEnumerable<HelpCenter>> GetAll(string search = "", int pageNumber = 1, int pageSize = 15)
+        [HttpGet("paginate")]
+        public ActionResult<IEnumerable<HelpCenter>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.HelpCenters == null)
             {
@@ -36,9 +36,7 @@ namespace Klinika.Server.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(s => s.subject.Contains(search) || s.name.Contains(search) || s.email.Contains(search) || s.message.Contains(search));
-            }
-
-            var count = query.Count();
+            }            var count = query.Count();
 
             var helps = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
 
@@ -90,27 +88,6 @@ namespace Klinika.Server.Controllers
 
             return help;
         }
-
-        //[HttpPost("update")]
-        //public async Task<ActionResult> Update(HelpCenter userRequest)
-        //{
-
-        //    var help = await _dbContext.HelpCenters.FindAsync(userRequest.id);
-
-        //    if (help == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    help.name = userRequest.name;
-        //    help.email = userRequest.email;
-        //    help.subject = userRequest.subject;
-        //    help.message = userRequest.message;
-
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new { message = help.id + ", with the name: " + help.name + " was changed to: " + userRequest.name });
-        //}
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<HelpCenter> patchDoc)

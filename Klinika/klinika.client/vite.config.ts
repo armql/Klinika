@@ -73,6 +73,10 @@ export default defineConfig({
         target,
         secure: false,
       },
+      "^/api/Specialization/paginate": {
+        target,
+        secure: false,
+      },
       "^/api/Specialization/get": {
         target,
         secure: false,
@@ -90,6 +94,10 @@ export default defineConfig({
         secure: false,
       },
       "^/api/Role/getAll": {
+        target,
+        secure: false,
+      },
+      "^/api/Role/paginate": {
         target,
         secure: false,
       },
@@ -113,6 +121,10 @@ export default defineConfig({
         target,
         secure: false,
       },
+      "^/api/HelpCenterCategory/paginate": {
+        target,
+        secure: false,
+      },
       "^/api/HelpCenterCategory/get": {
         target,
         secure: false,
@@ -129,7 +141,7 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/api/HelpCenter/getAll": {
+      "^/api/HelpCenter/paginate": {
         target,
         secure: false,
       },
@@ -149,7 +161,7 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/api/Account/getAll": {
+      "^/api/Account/paginate": {
         target,
         secure: false,
       },
@@ -173,7 +185,7 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/api/ServiceDesk/getAll": {
+      "^/api/ServiceDesk/paginate": {
         target,
         secure: false,
       },
@@ -193,7 +205,7 @@ export default defineConfig({
         target,
         secure: false,
       },
-      "^/api/Block/getAll": {
+      "^/api/Block/paginate": {
         target,
         secure: false,
       },
