@@ -3,12 +3,30 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white;
+    @apply bg-white;
 }
 
 * {
-  @apply font-inter box-border m-0 p-0 select-none;
+    @apply font-inter box-border m-0 p-0 select-none;
 }
+
 main {
-  @apply min-h-[100vh]  relative;
+    @apply min-h-[100vh]  relative;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-lively {
+    background-size: 200% 200%;
+    animation: gradient 20s ease infinite;
 }
