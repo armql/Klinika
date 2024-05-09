@@ -156,5 +156,37 @@ namespace Klinika.Server.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok(new { message = specialization.name + " was removed" });
         }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var intIds = new List<int>();
+
+            foreach (var id in ids)
+            {
+                if (int.TryParse(id, out var intId))
+                {
+                    intIds.Add(intId);
+                }
+                else
+                {
+                    return BadRequest(new { message = $"ID '{id}' is not a valid integer." });
+                }
+            }
+
+            var specializationsToDelete = await _dbContext.Specializations.Where(s => intIds.Contains(s.id)).ToListAsync();
+
+            if (specializationsToDelete == null || specializationsToDelete.Count == 0)
+            {
+                return NotFound(new { message = "No specializations found with the provided IDs." });
+            }
+
+            _dbContext.Specializations.RemoveRange(specializationsToDelete);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "Specializations were successfully deleted." });
+        }
+
+
     }
 }

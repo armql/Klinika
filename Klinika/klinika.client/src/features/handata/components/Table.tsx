@@ -7,6 +7,14 @@ import Pagination from "./Pagination";
 import {useQuery} from "react-query";
 import {useConditionalEffect} from "../hooks/useConditionalEffect";
 
+interface Item {
+    id: string | number;
+    creationDate: string;
+    birthDate: string;
+
+    [key: string]: string | number;
+}
+
 interface ResponseData {
     data: Item[];
     totalPages: number;
@@ -19,14 +27,6 @@ interface TableProps {
     dataField: string[];
 }
 
-interface Item {
-    id: string | number;
-    creationDate: string;
-    birthDate: string;
-
-    [key: string]: string | number;
-}
-
 export default function Table({
                                   headers,
                                   all,
@@ -35,7 +35,7 @@ export default function Table({
                               }: TableProps) {
     const HEADER_COLUMN = headers.length + 3;
     const {openEdit: edit, refetch_data: handler} = zHandler();
-    const {setDataLength, currentPage, itemsPerPage, setTotalPages} =
+    const {setTotalPages, currentPage, itemsPerPage, totalPages} =
         zPagination();
     const [loading, setLoading] = useState<boolean>(true);
     const {
@@ -52,8 +52,8 @@ export default function Table({
         () => all(currentPage, itemsPerPage, searchValue),
         {
             onSuccess: (data: ResponseData) => {
-                setDataLength(data.data.length);
-                setTotalPages(Math.ceil(data.totalPages));
+                setTotalPages(data.totalPages);
+                console.log(data.totalPages)
             },
             onSettled: () => {
                 setLoading(false);

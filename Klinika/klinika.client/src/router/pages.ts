@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import {lazy} from "react";
 
 const Home = lazy(() => import("../pages/Home"));
 const HelpCenter = lazy(() => import("../pages/HelpCenter"));
@@ -15,22 +15,23 @@ const DeveloperHelpCenterData = lazy(() => import("../pages/developer/HelpCenter
 const DeveloperHelpCenterCategoryData = lazy(() => import("../pages/developer/HelpCenterCategoryData"));
 const DeveloperServiceDeskData = lazy(() => import("../pages/developer/ServiceDeskData"));
 const DeveloperBlockData = lazy(() => import("../pages/developer/BlockData"));
-
+const DeveloperSettings = lazy(() => import("../pages/developer/Settings"));
 
 export {
-  Home,
-  HelpCenter,
-  About,
-  Register,
-  Login,
-  PatientDashboard,
-  PatientReports,
-  DeveloperDashboard,
-  DeveloperUserData,
-  DeveloperSpecializationData,
-  DeveloperRoleData,
-  DeveloperHelpCenterData,
-  DeveloperHelpCenterCategoryData,
-  DeveloperServiceDeskData,
-  DeveloperBlockData
+    Home,
+    HelpCenter,
+    About,
+    Register,
+    Login,
+    PatientDashboard,
+    PatientReports,
+    DeveloperDashboard,
+    DeveloperUserData,
+    DeveloperSpecializationData,
+    DeveloperRoleData,
+    DeveloperHelpCenterData,
+    DeveloperHelpCenterCategoryData,
+    DeveloperServiceDeskData,
+    DeveloperBlockData,
+    DeveloperSettings
 };

@@ -1,14 +1,14 @@
 import {Fragment, ReactNode, useEffect} from "react";
 import {
-  developer_routes as dev,
-  Header,
-  patient_routes as patient,
-  Profile,
-  Resizer,
-  Starred,
+    developer_routes as dev,
+    Header,
+    patient_routes as patient,
+    Profile,
+    Resizer,
+    Starred,
 } from "../features/sidebar/__sidebar";
-import {CaretDown, Folder, FolderOpen} from "@phosphor-icons/react";
-import {NavLink} from "react-router-dom";
+import {CaretDown, Faders, Folder, FolderOpen} from "@phosphor-icons/react";
+import {Link, NavLink} from "react-router-dom";
 import {categoryRender} from "../util/category-render";
 import {zNavigation} from "../features/navigation/__navigation";
 
@@ -33,6 +33,7 @@ export default function Sidebar({user, children}: InnerProp) {
         handleFolder,
         handleRecents,
     } = zNavigation();
+
 
     useEffect(() => {
         setType(user);
@@ -166,6 +167,23 @@ export default function Sidebar({user, children}: InnerProp) {
                             </div>
                         </div>
                     )}
+
+                </div>
+                <div className="bottom-0 absolute left-0 right-0">
+                    <div
+                        className={`h-14 overflow-hidden relative group border-dashed flex gap-2 delay-700 items-center ${isCollapsed ? "justify-center" : "justify-start"}`}>
+                        <Link to="settings" title={isCollapsed ? "Change your preferences" : ""}
+                              className="bg-white p-2 z-10 h-full">
+                            <Faders size={32} weight="regular"/>
+                        </Link>
+                        <div
+                            className={`absolute flex w-full h-full justify-start pl-12 items-center left-0 right-0 bottom-0 top-0 -translate-x-60 group-hover:-translate-x-0 transition-all duration-700 ${isCollapsed ? "hidden" : "block"}`}>
+                            <span className="text-sm text-gray-500 tracking-wide">
+
+                            Change your preferences
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
