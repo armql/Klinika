@@ -1,6 +1,6 @@
 import {ArrowsDownUp, FunnelSimple, Plus,} from "@phosphor-icons/react";
 import {zForm, zHandler} from "../__handata";
-import BulkDelete from "./core/BulkDelete.tsx";
+import Bulk from "./core/Bulk.tsx";
 import Search from "./core/Search.tsx";
 
 type FiltersProps = {
@@ -44,7 +44,7 @@ export default function Filters({name, bulkDelete}: FiltersProps) {
                         <ArrowsDownUp size={22}/>
                     </button>
                     {selectedItems.length > 0 && (
-                        <BulkDelete __delete={bulkDelete}/>
+                        <Bulk __delete={bulkDelete}/>
                     )}
                 </div>
                 <Search/>

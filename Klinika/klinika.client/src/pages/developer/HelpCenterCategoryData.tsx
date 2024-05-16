@@ -1,68 +1,61 @@
 import axios_instance from "../../api/axios";
-import { ApiService } from "../../services/ApiServices";
-import {
-  zHandler,
-  EditForm,
-  Table,
-  CreateForm,
-  Filters,
-  DataList,
-} from "../../features/handata/__handata";
-import { FormField } from "../../features/handata/utils/form-fields";
+import {ApiService} from "../../services/ApiServices";
+import {BaseItem, CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
+import {FormField} from "../../features/handata/utils/form-fields";
 
-export type HelpCenterCategory = {
-  id: number;
-  name: string;
-  createdBy: string;
-  creationData: string;
+export type HelpCenterCategory = BaseItem & {
+    id: number;
+    name: string;
+    createdBy: string;
+    creationData: string;
 };
 const formField: FormField[] = [
-  {
-    type: "text",
-    identifier: "name",
-    name: "Category Name",
-    placeholder: "Enter your category name",
-  },
+    {
+        type: "text",
+        identifier: "name",
+        name: "Category Name",
+        placeholder: "Enter your category name",
+    },
 ];
 
 export default function HelpCenterCategoryData() {
-  const { create_modal: create, edit_modal: edit } = zHandler();
-  const helpcentercategory_api = new ApiService<HelpCenterCategory>(
-    {
-      paginate: "HelpCenterCategory/paginate",
-      get: "HelpCenterCategory/get",
-      create: "HelpCenterCategory/create",
-      update: "HelpCenterCategory/update",
-      delete: "HelpCenterCategory/delete",
-    },
-    axios_instance
-  );
+    const {create_modal: create, edit_modal: edit} = zHandler();
+    const helpcentercategory_api = new ApiService<HelpCenterCategory>(
+        {
+            paginate: "HelpCenterCategory/paginate",
+            get: "HelpCenterCategory/get",
+            create: "HelpCenterCategory/create",
+            update: "HelpCenterCategory/update",
+            delete: "HelpCenterCategory/delete",
+        },
+        axios_instance
+    );
 
-  return (
-    <DataList>
-      <Filters name="Category List" />
-      <Table<HelpCenterCategory>
-        headers={["Category ID", "Name", "Created by", "Created in"]}
-        all={helpcentercategory_api.paginate}
-        delete={helpcentercategory_api.delete}
-        dataField={["id", "name", "createdBy", "creationDate"]}
-      />
-      {edit && (
-        <EditForm<HelpCenterCategory>
-          header="Category"
-          get={helpcentercategory_api.get}
-          update={helpcentercategory_api.update}
-          fields={formField}
-        />
-      )}
+    return (
+        <DataList>
+            <Filters name="Category List"/>
+            <Table<HelpCenterCategory>
+                headers={["Category ID", "Name", "Created by", "Created in"]}
+                all={helpcentercategory_api.paginate}
+                delete={helpcentercategory_api.delete}
+                dataField={["id", "name", "createdBy", "creationDate"]}
+            />
+            {edit && (
+                <EditForm<HelpCenterCategory>
+                    header="Category"
+                    get={helpcentercategory_api.get}
+                    update={helpcentercategory_api.update}
+                    fields={formField}
+                />
+            )}
 
-      {create && (
-        <CreateForm<HelpCenterCategory>
-          header="Category"
-          api={helpcentercategory_api.create}
-          fields={formField}
-        />
-      )}
-    </DataList>
-  );
+            {create && (
+                <CreateForm<HelpCenterCategory>
+                    header="Category"
+                    api={helpcentercategory_api.create}
+                    fields={formField}
+                />
+            )}
+        </DataList>
+    );
 }

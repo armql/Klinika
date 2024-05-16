@@ -6,36 +6,36 @@ import Swal from "sweetalert2";
 import Pagination from "./Pagination";
 import {useQuery} from "react-query";
 import {useConditionalEffect} from "../hooks/useConditionalEffect";
+import PDFPreview from "./PDFConverter.tsx";
 
-interface Item {
+export interface BaseItem {
     id: string | number;
     creationDate: string;
-    birthDate: string;
 
     [key: string]: string | number;
 }
 
-interface ResponseData {
-    data: Item[];
+interface ResponseData<T extends BaseItem> {
+    data: T[];
     totalPages: number;
 }
 
-interface TableProps {
+interface TableProps<T extends BaseItem> {
     headers: string[];
-    all: (currentPage: number, pageSize: number, search: string) => Promise<Item[]>;
+    all: (currentPage: number, pageSize: number, search: string) => Promise<T[]>;
     delete: (id: string | number) => Promise<void>;
     dataField: string[];
 }
 
-export default function Table({
-                                  headers,
-                                  all,
-                                  delete: getDeleted,
-                                  dataField,
-                              }: TableProps) {
+export default function Table<T extends BaseItem>({
+                                                      headers,
+                                                      all,
+                                                      delete: getDeleted,
+                                                      dataField,
+                                                  }: TableProps<T>) {
     const HEADER_COLUMN = headers.length + 3;
     const {openEdit: edit, refetch_data: handler} = zHandler();
-    const {setTotalPages, currentPage, itemsPerPage, totalPages} =
+    const {setTotalPages, currentPage, itemsPerPage} =
         zPagination();
     const [loading, setLoading] = useState<boolean>(true);
     const {
@@ -46,14 +46,19 @@ export default function Table({
         selectAll,
         deselectAll,
         setSelectedItem,
+        setAllSelectedItemData,
+        convPDF,
+        setConvPDF,
+        setHeaders,
+        selectedItemData,
+        setOneSelectedItemData,
     } = zForm();
     const {data, isLoading, refetch} = useQuery(
         ["paginate", handler, searchValue, currentPage],
         () => all(currentPage, itemsPerPage, searchValue),
         {
-            onSuccess: (data: ResponseData) => {
+            onSuccess: (data: ResponseData<T>) => {
                 setTotalPages(data.totalPages);
-                console.log(data.totalPages)
             },
             onSettled: () => {
                 setLoading(false);
@@ -61,7 +66,6 @@ export default function Table({
 
         }
     );
-
 
     useConditionalEffect(
         () => {
@@ -73,10 +77,22 @@ export default function Table({
 
     const handleSelectAll = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked && data) {
-            const allIds = data.data.map((item: { id: number | string }) => String(item.id));
+            const allIds = data?.data.map((item: { id: number | string }) => String(item.id));
+            const selectedData = data?.data.map((item: BaseItem) => {
+                const selectedObject: { [key: string]: string } = {};
+                dataField.forEach((key: string | number) => {
+                    const value = item[key];
+                    selectedObject[key as string] = typeof value === 'string' ? value : String(value);
+                });
+                return selectedObject;
+            });
+            setAllSelectedItemData(selectedData);
+            setHeaders(headers);
             selectAll(allIds);
         } else {
             deselectAll();
+            setAllSelectedItemData([]);
+            setConvPDF(false);
         }
     };
 
@@ -85,12 +101,22 @@ export default function Table({
         event: ChangeEvent<HTMLInputElement>
     ) => {
         const stringId = String(id);
+        const selectedItem = data?.data.find((item) => item.id === id) as BaseItem;
+        const selectedObject: { [key: string]: string } = {};
+        dataField.forEach((key: string | number) => {
+            const value = selectedItem[key];
+            selectedObject[key as string] = typeof value === 'string' ? value : String(value);
+        });
         if (event.target.checked) {
             selectItem(stringId);
+
+            setOneSelectedItemData(selectedObject);
         } else {
             deselectItem(stringId);
+            setOneSelectedItemData(selectedObject);
         }
     };
+
 
     const handleItem = (id: number | string) => {
         const stringId = String(id);
@@ -135,6 +161,7 @@ export default function Table({
         return <Skeleton style={styles} headers={headers}/>;
     }
 
+    console.log(selectedItemData);
     return (
         <Fragment>
             <div className="overflow-y-auto">
@@ -172,7 +199,7 @@ export default function Table({
                         <li className="truncate">Remove item</li>
                     </ul>
                     <div className="h-full bg-zinc-50">
-                        {data?.data.map((item: Item) => (
+                        {data?.data.map((item: BaseItem) => (
                             <ul
                                 key={item.id}
                                 style={styles}
@@ -242,6 +269,19 @@ export default function Table({
                 </div>
             </div>
             <Pagination/>
+            {convPDF &&
+                <div className="absolute bg-opacity-20 top-0 right-0 left-0 bottom-0 bg-black">
+                    <div className="p-24 relative">
+                        <button type="button"
+                                onClick={() => setConvPDF(false)}
+                                className="absolute right-2 top-2 hover:bg-black hover:bg-opacity-10 bg-white p-2 rounded-full">
+                            <X size={24}/>
+                        </button>
+                        <div className="border-2 border-zinc-500">
+                            <PDFPreview/>
+                        </div>
+                    </div>
+                </div>}
         </Fragment>
     );
 }

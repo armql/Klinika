@@ -31,12 +31,12 @@ export class ApiService<T> {
         }
     };
     paginate = async (
-        page: number,
+        currentPage: number,
         pageSize: number,
         search: string
     ): Promise<T[]> => {
         const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-            `${this.endpoints.paginate}?pageNumber=${page}&pageSize=${pageSize}&search=${search}`
+            `${this.endpoints.paginate}?pageNumber=${currentPage}&pageSize=${pageSize}&search=${search}`
         );
         return response.data;
     };
@@ -64,7 +64,7 @@ export class ApiService<T> {
         return response.data;
     };
 
-    delete = async (id: string): Promise<void> => {
+    delete = async (id: string | number): Promise<void> => {
         await this.axiosInstance.delete(`${this.endpoints.delete}?id=${id}`);
     };
     bulk_delete = async (id: string[]): Promise<void> => {

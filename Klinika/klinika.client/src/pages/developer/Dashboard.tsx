@@ -37,6 +37,7 @@ export default function Dashboard() {
                         </Reorder.Item>))}
                 </Reorder.Group>
             </div>
+
         </section>
     );
 }

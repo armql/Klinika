@@ -2,14 +2,12 @@ import axios_instance from "../../api/axios";
 import {ApiService} from "../../services/ApiServices";
 import {CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
 import {FormField} from "../../features/handata/utils/form-fields";
+import {BaseItem} from "../../features/handata/__handata.ts";
 
-export type Specialization = {
-    id: number;
+export type Specialization = BaseItem & {
     name: string;
     createdBy: string;
-    creationData: string;
 };
-
 const formFields: FormField[] = [
     {
         type: "text",
@@ -35,8 +33,11 @@ export default function SpecializationData() {
 
     return (
         <DataList>
-            <Filters name="Specialization List" bulkDelete={specialization_api.bulk_delete}/>
-            <Table<Specialization>
+            <Filters
+                name="Specialization List"
+                bulkDelete={specialization_api.bulk_delete}
+            />
+            <Table
                 headers={["Specialization ID", "Name", "Created by", "Created in"]}
                 all={specialization_api.paginate}
                 delete={specialization_api.delete}

@@ -3,7 +3,6 @@ import {zPagination} from "../__handata";
 
 export default function Pagination() {
     const {currentPage, setCurrentPage, totalPages, max, min} = zPagination();
-    console.log("CurrentPage:" + currentPage, "max:" + max, "min:" + min, "totalPages:" + totalPages)
     return (
         <div className="flex gap-2 items-center justify-end py-2">
             <button
