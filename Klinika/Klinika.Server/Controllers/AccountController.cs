@@ -18,7 +18,13 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly RoleController _roleController = roleController;
 
-
+        [HttpGet("count")]
+        public async Task<ActionResult<int>> CountUsers()
+        {
+            var count = await _userManager.Users.CountAsync();
+            return Ok(count);
+        }
+        
         [HttpGet("paginate")]
         public ActionResult<IEnumerable<ApplicationUser>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {

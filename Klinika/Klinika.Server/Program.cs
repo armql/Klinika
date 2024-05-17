@@ -8,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Klinika.Server.Configurations;
 using Klinika.Server.Controllers;
+using Klinika.Server.Services;
+using MongoDB.Driver;
 
 namespace Klinika.Server
 {
@@ -35,7 +38,9 @@ namespace Klinika.Server
             {
                 options.SignIn.RequireConfirmedAccount = false;
             });
-
+            
+            builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
+            builder.Services.AddSingleton<MongoServices>();
             // Add Auth and JwtBearer
             builder.Services
                 .AddAuthentication(options =>
@@ -62,6 +67,7 @@ namespace Klinika.Server
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
             builder.Services.AddTransient<UserManager<ApplicationUser>>();
             builder.Services.AddScoped<RoleController>();
+            builder.Services.AddScoped<MongoServices>();
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 

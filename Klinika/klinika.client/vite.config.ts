@@ -119,7 +119,8 @@ export default defineConfig({
                 'api/Account/create',
                 'api/Account/update',
                 'api/Account/delete',
-                'api/Account/assignRole'
+                'api/Account/assignRole',
+                'api/Account/count'
             ], target),
 
             // ServiceDesk
@@ -138,6 +139,12 @@ export default defineConfig({
                 'api/Block/create',
                 'api/Block/update',
                 'api/Block/delete'
+            ], target),
+
+            // Metrics
+            ...createProxyRoutes([
+                'api/Metrics/all',
+                'api/Metrics/create',
             ], target),
         },
         port: 5173,

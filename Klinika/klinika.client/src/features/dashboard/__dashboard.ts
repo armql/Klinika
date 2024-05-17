@@ -1,4 +1,5 @@
-import TextStats from "./components/TextStats";
 import zProfiler from "./hooks/zProfiler.ts";
+import HandleMetrics from "./data/Metrics.ts";
+import {zMetrics} from "./store/zMetrics.ts";
 
-export {TextStats, zProfiler};
+export {zProfiler, HandleMetrics, zMetrics};
