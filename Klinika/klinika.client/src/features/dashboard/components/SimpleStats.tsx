@@ -66,7 +66,7 @@ function SimpleStats({type, newValue}: StatsProps) {
 
     useEffect(() => {
         setNewValue(type, newValue);
-    }, [newValue]);
+    }, [newValue]); // eslint-disable-line -- Intentional suppress
 
     const currentStat = stats[type];
     return (

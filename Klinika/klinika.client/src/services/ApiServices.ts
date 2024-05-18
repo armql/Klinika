@@ -11,6 +11,9 @@ type ApiEndpoints = {
     bulk_delete?: string;
 };
 
+type PatchProps = { op: string; path: string; value: number | string | boolean; }[];
+
+
 export class ApiService<T> {
     endpoints: ApiEndpoints;
     axiosInstance: AxiosInstance;
@@ -41,7 +44,7 @@ export class ApiService<T> {
         return response.data;
     };
 
-    get = async (id: string): Promise<T> => {
+    get = async (id: number | string): Promise<T> => {
         const response: AxiosResponse<T> = await this.axiosInstance.get(
             `${this.endpoints.get}/?id=${id}`
         );
@@ -56,7 +59,7 @@ export class ApiService<T> {
         return response.data;
     };
 
-    update = async (id: number | string, item: T): Promise<T> => {
+    update = async (id: number | string, item: PatchProps): Promise<T> => {
         const response: AxiosResponse<T> = await this.axiosInstance.patch(
             `${this.endpoints.update}/${id}`,
             item
@@ -64,7 +67,7 @@ export class ApiService<T> {
         return response.data;
     };
 
-    delete = async (id: string | number): Promise<void> => {
+    delete = async (id: number | string): Promise<void> => {
         await this.axiosInstance.delete(`${this.endpoints.delete}?id=${id}`);
     };
     bulk_delete = async (id: string[]): Promise<void> => {

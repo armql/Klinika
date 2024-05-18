@@ -24,7 +24,7 @@ function Search() {
                 onSubmit={onSubmit}
                 className="flex justify-center items-center gap-0.5"
             >
-                <button title="search" type="submit">
+                <button title="Search" type="submit">
                     <MagnifyingGlass size={22} className="text-zinc-300"/>
                 </button>
                 <input

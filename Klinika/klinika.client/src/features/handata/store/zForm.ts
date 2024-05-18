@@ -13,7 +13,7 @@ type FormStore = {
     search: string;
     convPDF: boolean;
     headers: string[];
-    selectedItem: string | number | null;
+    selectedItem: number | string | null;
     selectItem: (id: string | number) => void;
     deselectItem: (id: string | number) => void;
     selectAll: (ids: string[]) => void;

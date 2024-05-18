@@ -1,5 +1,6 @@
 import {Circle, Document, Font, Page, Path, PDFViewer, StyleSheet, Svg, Text, View} from '@react-pdf/renderer';
 import {zForm} from "../__handata.ts";
+import {BulkItems} from "../store/zForm.ts";
 
 Font.register({
     family: 'Inter',
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
 const date = new Date().toLocaleDateString();
 
 type PDFProps = {
-    selectedItemData: any[];
+    selectedItemData: BulkItems[];
     headers: string[];
 }
 
@@ -155,7 +156,7 @@ const MyDocument = ({selectedItemData, headers}: PDFProps) => {
                             <Text key={index} style={styles.cell}>{header}</Text>
                         ))}
                     </View>
-                    {selectedItemData.map((item, index) => (
+                    {selectedItemData.map((item, index: number) => (
                         <View key={index} style={styles.tableRow}>
                             {Object.values(item).map((value, i) => (
                                 <Text key={i} style={styles.cell}>{value}</Text>
@@ -182,7 +183,6 @@ const MyDocument = ({selectedItemData, headers}: PDFProps) => {
 
 const PDFPreview = () => {
     const {selectedItemData, headers} = zForm();
-    console.log(selectedItemData);
     return (
         <PDFViewer style={{width: '100%', height: '90vh'}}>
             <MyDocument selectedItemData={selectedItemData} headers={headers}/>

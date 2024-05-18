@@ -23,7 +23,7 @@ interface ResponseData<T extends BaseItem> {
 interface TableProps<T extends BaseItem> {
     headers: string[];
     all: (currentPage: number, pageSize: number, search: string) => Promise<T[]>;
-    delete: (id: string | number) => Promise<void>;
+    delete: (id: number | string) => Promise<void>;
     dataField: string[];
 }
 
@@ -123,7 +123,7 @@ export default function Table<T extends BaseItem>({
         return selectedItems.includes(stringId);
     };
 
-    const deleteItem = async (id: string | number) => {
+    const deleteItem = async (id: number | string) => {
         try {
             Swal.fire({
                 title: "Are you sure?",
@@ -147,7 +147,7 @@ export default function Table<T extends BaseItem>({
                 }
             });
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
@@ -161,7 +161,6 @@ export default function Table<T extends BaseItem>({
         return <Skeleton style={styles} headers={headers}/>;
     }
 
-    console.log(selectedItemData);
     return (
         <Fragment>
             <div className="overflow-y-auto">
