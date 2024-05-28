@@ -22,6 +22,10 @@ namespace Klinika.Server.Models.Data
 
         [MaxLength(255)]
         public string? password { get; set; }
+        
+        public string? refreshToken { get; set; }
+        
+        public DateTime? refreshTokenExpiryTime { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<PrimaryCareDoctor>? PrimaryCareDoctors { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
+using Klinika.Server.Models.DTO.Developer;
 using Klinika.Server.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,12 +12,11 @@ namespace Klinika.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext, RoleController roleController) : ControllerBase
+    public class AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext) : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly ApplicationDbContext _dbContext = dbContext;
-        private readonly RoleController _roleController = roleController;
 
         [HttpGet("count")]
         public async Task<ActionResult<int>> CountUsers()
@@ -117,7 +117,7 @@ namespace Klinika.Server.Controllers
 
             return Ok(new { message = message, result = result });
         }
-
+        
 
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] JsonPatchDocument<ApplicationUser> patchDoc)
@@ -178,39 +178,6 @@ namespace Klinika.Server.Controllers
             }
 
             return Ok(new { message = message, result = result });
-        }
-
-
-        [HttpPost("assignRole")]
-        public async Task<ActionResult> AssignRole(string id, string roleName)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            var roleExists = await _roleManager.RoleExistsAsync(roleName);
-            if (!roleExists)
-            {
-                await _roleController.SeedRoles();
-            }
-
-            roleExists = await _roleManager.RoleExistsAsync(roleName);
-            if (!roleExists)
-            {
-                return BadRequest("Role does not exist and seeding failed.");
-            }
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Any())
-            {
-                await _userManager.RemoveFromRolesAsync(user, userRoles);
-            }
-
-            await _userManager.AddToRoleAsync(user, roleName);
-            return Ok("Success");
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]

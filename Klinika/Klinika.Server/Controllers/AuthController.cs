@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Klinika.Server.Controllers
@@ -130,6 +131,7 @@ namespace Klinika.Server.Controllers
             try
             {
                 ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
+                var response = new LoginResponse();
 
                 if (user == null)
                 {
@@ -156,20 +158,26 @@ namespace Klinika.Server.Controllers
                 var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim("JWTID", Guid.NewGuid().ToString()),
-        };
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim("JWTID", Guid.NewGuid().ToString()),
+                };
 
                 foreach (var userRole in userRoles)
                 {
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var token = GenerateNewJsonWebToken(authClaims);
+                response.jwtToken = GenerateNewJsonWebToken(authClaims);
+                response.refreshToken = GenerateRefreshToken();
+                response.isLoggedIn = true;
+                
+                user.refreshToken = response.refreshToken;
+                user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
+                await _userManager.UpdateAsync(user);
 
-                return Ok(token);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -178,8 +186,40 @@ namespace Klinika.Server.Controllers
                 return BadRequest(new { error = "An unexpected error occurred. Please try again later." });
             }
         }
+        
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult> RefreshTokens(RefreshTokenModel model)
+        {
+            var loginResponse = await RefreshToken(model);
+            if (loginResponse.isLoggedIn)
+            {
+                return Ok(loginResponse);
+            }
+            return Unauthorized();
+        }
+        
+        /*
+         [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<ActionResult<ApplicationUser>> GetCurrent()
+        {
+            // Get the user's ID from the User property
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Get the user's email from the User property
+            string email = User.FindFirstValue(ClaimTypes.Email);
 
+            // Use the UserManager to get the ApplicationUser object
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            return currentUser;
+        }
+         */
 
         [HttpGet("logout"), Authorize]
         public async Task<ActionResult> LogoutUser()
@@ -238,6 +278,79 @@ namespace Klinika.Server.Controllers
             string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
 
             return token;
+        }
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+
+            using (var numberGenerator = RandomNumberGenerator.Create())
+            {
+                numberGenerator.GetBytes(randomNumber);
+            }
+
+            return Convert.ToBase64String(randomNumber);
+        }
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
+        {
+            var principal = GetTokenPrincipal(model.jwtToken);
+
+            var response = new LoginResponse();
+
+            if (principal?.Identity?.Name is null)
+            {
+                return response;
+            }
+
+            var user = await _userManager.FindByEmailAsync(principal.Identity.Name);
+            
+            if (user is null || user.refreshToken != model.refreshToken || user.refreshTokenExpiryTime < DateTime.Now)
+            {
+                return response;
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("JWTID", Guid.NewGuid().ToString()),
+            };
+
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+            
+            response.jwtToken = GenerateNewJsonWebToken(authClaims);
+            response.refreshToken = GenerateRefreshToken();
+            response.isLoggedIn = true;
+                
+            user.refreshToken = response.refreshToken;
+            user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
+            await _userManager.UpdateAsync(user);
+
+            return response;
+        }
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private ClaimsPrincipal? GetTokenPrincipal(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _configuration["JWT:ValidIssuer"],
+                ValidAudience = _configuration["JWT:ValidAudience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
+                ValidateLifetime = false
+            };
+
+            return new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out _);
         }
     }
 }

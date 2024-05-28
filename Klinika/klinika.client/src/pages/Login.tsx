@@ -41,50 +41,52 @@ export default function Login() {
   const [error, setError] = useState("");
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     axios
-      .post("/api/Auth/login", {
-        Email: data.email,
-        password: data.password,
-      })
-      .then((response) => {
-        const decoded = jwtDecode(response.data);
-        console.log(decoded);
-        const userData = {
-          email:
-            decoded[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-            ],
-          id: decoded[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-          ],
-          jwtid: decoded["JWTID"],
-          role: decoded[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ],
-          exp: decoded["exp"],
-          iss: decoded["iss"],
-          aud: decoded["aud"],
-        };
-        setData(userData as UserData);
+        .post("/api/Auth/login", {
+          Email: data.email,
+          password: data.password,
+        })
+        .then((response) => {
+          const decoded = jwtDecode(response.data.jwtToken); // decode the jwtToken
+          console.log(decoded);
+          const userData = {
+            email:
+                decoded[
+                    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+                    ],
+            id: decoded[
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+                ],
+            jwtid: decoded["JWTID"],
+            role: decoded[
+                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                ],
+            exp: decoded["exp"],
+            iss: decoded["iss"],
+            aud: decoded["aud"],
+            refreshToken: response.data.refreshToken,
+          };
+          
+          setData(userData as UserData);
 
-        const role = userData.role;
-        const finalized_routing = routes[role];
+          const role = userData.role;
+          const finalized_routing = routes[role];
 
-        if (role === "DEVELOPER") {
-          Swal.fire("Hello Developer!");
-        }
+          if (role === "DEVELOPER") {
+            Swal.fire("Hello Developer!");
+          }
 
-        if (!pathname.includes(finalized_routing)) {
-          return <Navigate to={finalized_routing} />;
-        }
-      })
-      .catch((error) => {
-        if (error.response.data) {
-          setError(error.response.data.error);
-        } else {
-          const errorMessage = getErrorMessage(error);
-          setGlobalError(errorMessage);
-        }
-      });
+          if (!pathname.includes(finalized_routing)) {
+            return <Navigate to={finalized_routing} />;
+          }
+        })
+        .catch((error) => {
+          if (error.response.data) {
+            setError(error.response.data.error);
+          } else {
+            const errorMessage = getErrorMessage(error);
+            setGlobalError(errorMessage);
+          }
+        });
   };
   console.log(isSubmitted ? "submitted" : "not submitted");
   console.log(!isSubmitting ? "submitting" : "not submitting");
