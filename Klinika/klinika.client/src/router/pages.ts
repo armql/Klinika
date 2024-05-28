@@ -17,6 +17,8 @@ const DeveloperServiceDeskData = lazy(() => import("../pages/developer/ServiceDe
 const DeveloperBlockData = lazy(() => import("../pages/developer/BlockData"));
 const DeveloperSettings = lazy(() => import("../pages/developer/Settings"));
 
+const PatientReservations = lazy(() => import("../pages/patient/Reservations"));
+
 export {
     Home,
     HelpCenter,
@@ -33,5 +35,6 @@ export {
     DeveloperHelpCenterCategoryData,
     DeveloperServiceDeskData,
     DeveloperBlockData,
-    DeveloperSettings
+    DeveloperSettings,
+    PatientReservations,
 };

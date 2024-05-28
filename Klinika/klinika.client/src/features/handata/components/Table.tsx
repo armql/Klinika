@@ -50,7 +50,6 @@ export default function Table<T extends BaseItem>({
         convPDF,
         setConvPDF,
         setHeaders,
-        selectedItemData,
         setOneSelectedItemData,
     } = zForm();
     const {data, isLoading, refetch} = useQuery(
