@@ -119,6 +119,12 @@ namespace Klinika.Server.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("refreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("refreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")

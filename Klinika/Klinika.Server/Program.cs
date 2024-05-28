@@ -69,6 +69,7 @@ namespace Klinika.Server
             builder.Services.AddScoped<RoleController>();
             builder.Services.AddScoped<MongoServices>();
 
+
             builder.Services.AddControllers().AddNewtonsoftJson();
 
             // Add services to the container.

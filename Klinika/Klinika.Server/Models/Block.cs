@@ -23,6 +23,5 @@ namespace Klinika.Server.Models
 
         [JsonIgnore]
         public virtual ICollection<ServiceDesk>? ServiceDesks { get; set; }
-
     }
 }

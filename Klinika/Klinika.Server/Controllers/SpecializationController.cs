@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Klinika.Server.Models.DTO.Developer;
 using Microsoft.AspNetCore.JsonPatch;
+using System.Security.Claims;
+
 
 namespace Klinika.Server.Controllers
 {
@@ -64,22 +66,41 @@ namespace Klinika.Server.Controllers
                 totalPages = (int)Math.Ceiling(count / (double)pageSize)
             });
         }
+        
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            var claims = User.Claims;
+            string userId = User.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
 
-        //[Authorize]
+            // Log all claims for debugging
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return null;
+            }
+
+            return await _userManager.FindByIdAsync(userId);
+        }
+
+        
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] SpecializationDto specializationDto)
         {
-            //var currentUser = await _userManager.GetUserAsync(User);
+            var currentUser = await GetCurrentUserAsync();
 
-            //if (currentUser == null)
-            //{
-            //    return Unauthorized(new { message = "User is not authenticated" });
-            //}
+            if (currentUser == null)
+            {
+                return Unauthorized(new { message = "User is not authenticated" });
+            }
 
             var newSpecialization = new Specialization()
             {
                 name = specializationDto.name,
-                createdBy = "Arlind",
+                createdBy = currentUser.firstName,
                 creationDate = DateTime.Now,
             };
 
