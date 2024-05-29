@@ -69,7 +69,9 @@ export default defineConfig({
                 'logout',
                 'pingauth',
                 'api/Auth',
-                'api/Auth/login'
+                'api/Auth/login',
+                'api/purchase',
+                'api/Auth/refreshToken',
             ], target),
 
             // SPECIALIZATION

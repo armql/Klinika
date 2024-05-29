@@ -15,9 +15,13 @@ const axios_instance = axios.create({
 
 axios_instance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            config.headers['Authorization'] = 'Bearer ' + token;
+        const auth = localStorage.getItem('auth');
+        if (auth) {
+            const parsedAuth = JSON.parse(auth);
+            const token = parsedAuth.state.data.jwtToken;
+            if (token) {
+                config.headers['Authorization'] = 'Bearer ' + token;
+            }
         }
         return config;
     },
@@ -32,29 +36,32 @@ axios_instance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
-            originalRequest.__isRetryRequest = true;
-            const refreshToken = localStorage.getItem('refreshToken');
-            try {
-                console.log('Attempting to refresh token');
-                const response = await axios_instance.post('Auth/refreshToken', {
-                    jwtToken: localStorage.getItem('jwtToken'),
-                    refreshToken: refreshToken
-                });
-                console.log('Token refreshed successfully', response.data);
-                localStorage.setItem('jwtToken', response.data.jwtToken);
-                localStorage.setItem('refreshToken', response.data.refreshToken);
-                axios_instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                originalRequest.headers['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                return axios_instance(originalRequest);
-            } catch (refreshError) {
-                console.error('Failed to refresh token', refreshError);
-                return Promise.reject(refreshError);
+        if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            const auth = localStorage.getItem('auth');
+            if (auth) {
+                const parsedAuth = JSON.parse(auth);
+                const jwtToken = parsedAuth.state.data.jwtToken;
+                const refreshToken = parsedAuth.state.data.refreshToken;
+
+                try {
+                    const response = await axios_instance.post('Auth/refreshToken', {
+                        jwtToken: jwtToken,
+                        refreshToken: refreshToken
+                    });
+                    parsedAuth.state.data.jwtToken = response.data.jwtToken;
+                    parsedAuth.state.data.refreshToken = response.data.refreshToken;
+                    localStorage.setItem('auth', JSON.stringify(parsedAuth));
+                    axios_instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                    originalRequest.headers['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                    return axios_instance(originalRequest);
+                } catch (refreshError) {
+                    console.log('Token refresh failed', refreshError);
+                }
             }
         }
         return Promise.reject(error);
     }
 );
-
 
 export default axios_instance;
