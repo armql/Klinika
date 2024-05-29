@@ -3,8 +3,11 @@ import {specialization_data} from "../data/specialization_data.ts";
 import {Tooltip} from "react-tooltip";
 import {Fragment} from "react";
 
+
 export default function Categories() {
-    const {setSpecialization} = zReservation();
+    const {setSelectedSpecialization} = zReservation();
+
+
     return (
         <div
             className={`w-[800px] h-[800px] border-2 shadow-sm p-12 rounded-3xl flex flex-col gap-6`}>
@@ -16,7 +19,7 @@ export default function Categories() {
                     <Fragment key={item.id}>
                         <button
                             type="button"
-                            onClick={() => setSpecialization(item)}
+                            onClick={() => setSelectedSpecialization(item)}
                             className={`w-52 h-32 cursor-pointer rounded-md bg-zinc-200 overflow-hidden ring-2 ring-transparent hover:ring-zinc-500 border-zinc-100 flex justify-center items-center relative`}>
                             {item.image && <img src={item.image} alt="Specialization 1"
                                                 className="w-full h-full object-contain absolute top-10"/>}

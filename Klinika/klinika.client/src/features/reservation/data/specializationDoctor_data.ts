@@ -5,7 +5,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Alex Jones',
         specializations: "Neurology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5, 6, 7, 8]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5, 6, 7, 8]},
             '05/30/2024': {timeslots: [1, 2, 3]},
         }
     },
@@ -14,7 +14,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Emily Smith',
         specializations: "Neurology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3]},
+            '05/31/2024': {timeslots: [1, 2, 3]},
             '05/30/2024': {timeslots: [4, 5, 6, 7, 8]},
         }
     },
@@ -24,7 +24,7 @@ export const SpecializedDoctors = [
         name: 'Dr. John Brown',
         specializations: "Stomatology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },
@@ -33,7 +33,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Sarah Davis',
         specializations: "Stomatology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -43,7 +43,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Michael White',
         specializations: "Dermatology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -52,7 +52,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Linda Green',
         specializations: "Dermatology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -62,7 +62,7 @@ export const SpecializedDoctors = [
         name: 'Dr. John Doe',
         specializations: "Cardiology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },
@@ -71,7 +71,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Lisa Black',
         specializations: "Cardiology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 3, 5, 7]},
+            '05/31/2024': {timeslots: [1, 3, 5, 7]},
             '05/30/2024': {timeslots: [2, 4, 6, 8]},
         }
     },
@@ -81,7 +81,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Jane Doe',
         specializations: "Oncology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },
@@ -90,7 +90,7 @@ export const SpecializedDoctors = [
         name: 'Dr. David Wilson',
         specializations: "Oncology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -100,7 +100,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Emma Clark',
         specializations: "Gynecology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -109,7 +109,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Olivia Lewis',
         specializations: "Gynecology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -119,7 +119,7 @@ export const SpecializedDoctors = [
         name: 'Dr. James Walker',
         specializations: "Urology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },
@@ -128,7 +128,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Mia Hall',
         specializations: "Urology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -138,7 +138,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Daniel Young',
         specializations: "Ophthalmology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5, 6, 7, 8]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5, 6, 7, 8]},
             '05/30/2024': {timeslots: [1, 2, 3]},
         }
     },
@@ -147,7 +147,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Sophia King',
         specializations: "Ophthalmology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -157,7 +157,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Anthony Scott',
         specializations: "Endocrinology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 3, 5, 7]},
+            '05/31/2024': {timeslots: [1, 3, 5, 7]},
             '05/30/2024': {timeslots: [2, 4, 6, 8]},
         }
     },
@@ -166,7 +166,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Isabella Allen',
         specializations: "Endocrinology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -176,7 +176,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Joshua Wright',
         specializations: "Rheumatology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -185,7 +185,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Amelia Adams',
         specializations: "Rheumatology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 3, 5, 7]},
+            '05/31/2024': {timeslots: [1, 3, 5, 7]},
             '05/30/2024': {timeslots: [2, 4, 6, 8]},
         }
     },
@@ -195,7 +195,7 @@ export const SpecializedDoctors = [
         name: 'Dr. William Evans',
         specializations: "Pulmonology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -204,7 +204,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Ava Harris',
         specializations: "Pulmonology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },
@@ -214,7 +214,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Ethan Parker',
         specializations: "Gastroenterology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -223,7 +223,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Charlotte Nelson',
         specializations: "Gastroenterology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 3, 5, 7]},
+            '05/31/2024': {timeslots: [1, 3, 5, 7]},
             '05/30/2024': {timeslots: [2, 4, 6, 8]},
         }
     },
@@ -233,7 +233,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Henry Collins',
         specializations: "Hematology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -252,7 +252,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Matthew Murphy',
         specializations: "Infectology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4, 5]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4, 5]},
             '05/30/2024': {timeslots: [6, 7, 8]},
         }
     },
@@ -261,7 +261,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Abigail Rivera',
         specializations: "Infectology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 3, 5, 7]},
+            '05/31/2024': {timeslots: [1, 3, 5, 7]},
             '05/30/2024': {timeslots: [2, 4, 6, 8]},
         }
     },
@@ -271,7 +271,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Alexander Stewart',
         specializations: "Nephrology",
         schedule: {
-            '05/28/2024': {timeslots: [2, 4, 6, 8]},
+            '05/31/2024': {timeslots: [2, 4, 6, 8]},
             '05/30/2024': {timeslots: [1, 3, 5, 7]},
         }
     },
@@ -280,7 +280,7 @@ export const SpecializedDoctors = [
         name: 'Dr. Chloe Morris',
         specializations: "Nephrology",
         schedule: {
-            '05/28/2024': {timeslots: [1, 2, 3, 4]},
+            '05/31/2024': {timeslots: [1, 2, 3, 4]},
             '05/30/2024': {timeslots: [5, 6, 7, 8]},
         }
     },

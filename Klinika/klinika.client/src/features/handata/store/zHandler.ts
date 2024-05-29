@@ -9,7 +9,8 @@ type State = {
     closeCreate: () => void;
     openEdit: () => void;
     closeEdit: () => void;
-    // refetching: () => void;
+    loading: boolean | undefined;
+    setLoading: (state: boolean) => void;
     setGlobalError: (error: string) => void;
 };
 
@@ -18,7 +19,7 @@ export const zHandler = create<State>((set) => ({
     create_modal: false,
     edit_modal: false,
     refetch_data: false,
-    // refetching: () => set((state) => ({...state, refetch_data: !state.refetch_data})),
+    loading: undefined,
     openCreate: () => set((state) => ({...state, create_modal: true})),
     closeCreate: () =>
         set((state) => ({
@@ -33,6 +34,7 @@ export const zHandler = create<State>((set) => ({
             edit_modal: false,
             refetch_data: !state.refetch_data,
         })),
+    setLoading: (state: boolean) => set({loading: state}),
     setGlobalError: (error) =>
         set((state) => ({...state, global_error: error})),
 }));

@@ -80,13 +80,13 @@ const Datepicker = () => {
                     <p className={`font-medium text-center h-24 ${formattedDate || "text-zinc-400"}`}>{formattedDate ? format(formattedDate, 'do MMMM yyyy') : format(new Date(), 'do MMMM yyyy')}</p>
                     <div
                         className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-3 text-center text-[11px] font-normal">
-                        <div>S</div>
-                        <div>M</div>
-                        <div>T</div>
-                        <div>W</div>
-                        <div>T</div>
-                        <div>F</div>
-                        <div>S</div>
+                        <span>S</span>
+                        <span>M</span>
+                        <span>T</span>
+                        <span>W</span>
+                        <span>T</span>
+                        <span>F</span>
+                        <span>S</span>
                     </div>
                     <div
                         className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-2 text-center text-[10px] font-normal">

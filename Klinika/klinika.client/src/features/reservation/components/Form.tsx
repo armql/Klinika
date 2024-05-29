@@ -1,16 +1,22 @@
 import {zReservation} from "../store/zReservation.ts";
 import {Textarea} from "../../validation/__validation.ts";
 import Datepicker from "./Datepicker.tsx";
-import {ClockClockwise, MagicWand, User} from "@phosphor-icons/react";
+import {Check, ClockClockwise, MagicWand, Spinner, User} from "@phosphor-icons/react";
 import {SpecializedDoctors} from "../data/specializationDoctor_data.ts";
 import {Tooltip} from "react-tooltip";
 import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {FormEvent} from "react";
+import {zAuth} from "../../../store/zAuth.ts";
+import axios_instance from "../../../api/axios.ts";
+import {zHandler} from "../../handata/__handata.ts";
 
+type FormProps = {
+    refetch: () => void;
+}
 
-export default function Form() {
+export default function Form({refetch}: FormProps) {
     const {
-        specialization,
+        selectedSpecialization,
         selectedDoctor,
         setOptions,
         options,
@@ -20,7 +26,11 @@ export default function Form() {
         // setSelectedTime,
         // setSelectedDate,
     } = zReservation();
-    const doctorsForSpecialization = SpecializedDoctors.filter(doctor => doctor.specializations === specialization?.title);
+    const {setGlobalError, loading, setLoading} = zHandler();
+
+
+    const {data} = zAuth();
+    const doctorsForSpecialization = SpecializedDoctors.filter(doctor => doctor.specializations === selectedSpecialization?.title);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -29,32 +39,53 @@ export default function Form() {
         event.preventDefault();
 
         if (!stripe || !elements) {
+            setGlobalError('Stripe or elements is not loaded');
             return;
         }
 
         const cardElement = elements.getElement(CardElement);
 
         if (cardElement) {
-            const {
-                error,
-                // paymentMethod
-            } = await stripe.createPaymentMethod({
+            const {error, paymentMethod} = await stripe.createPaymentMethod({
                 type: 'card',
                 card: cardElement,
             });
 
             if (error) {
-                console.error(error);
+                setGlobalError(`Error creating payment method, ${error.message}`);
             } else {
-                // Send paymentMethod.id to your server
+                try {
+                    setLoading(false);
+                    const response = await axios_instance.post('Fee/purchase', {
+                        specializationName: selectedSpecialization?.title,
+                        userId: data.id,
+                    });
+
+                    const {clientSecret} = response.data;
+
+                    const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+                        payment_method: paymentMethod?.id,
+                    });
+
+                    if (paymentResult.error) {
+                        setGlobalError(`Error confirming payment:, ${paymentResult.error.message}`);
+                    } else {
+                        if (paymentResult.paymentIntent.status === 'succeeded') {
+                            setLoading(true);
+                            refetch();
+                        }
+                    }
+                } catch (error: any) {
+                    setGlobalError(`Error sending POST request:, ${error.response.data}`);
+                }
             }
         }
     };
 
-
     return (
         <section className="border-2 p-12 w-[800px] relative h-fit rounded-3xl shadow-sm">
-            <h1 className="text-2xl font-medium">Reserving for [Firstname Lastname] in {specialization?.title}</h1>
+            <h1 className="text-2xl font-medium">Reserving for [Firstname Lastname]
+                in {selectedSpecialization?.title}</h1>
             <div className="mt-4 flex flex-col gap-4">
                 <Textarea
                     htmlFor={"reasonOfConsult"}
@@ -67,8 +98,8 @@ export default function Form() {
 
                         <button
                             type="button"
-                            onClick={() => setOptions(true)}
-                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md`}>
+                            onClick={() => setOptions(false)}
+                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options || "border-zinc-300"}`}>
                             <div>
                                 <MagicWand size={32} weight="duotone"/>
                             </div>
@@ -83,9 +114,9 @@ export default function Form() {
                             type="button"
                             onClick={() => {
                                 // handleEarliest();
-                                setOptions(false);
+                                setOptions(true);
                             }}
-                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md`}>
+                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options && "border-zinc-300"}`}>
                             <div>
                                 <ClockClockwise size={32} weight="duotone"/>
                             </div>
@@ -99,19 +130,8 @@ export default function Form() {
                             </div>
                         </button>
                     </div>
-                    <div>
+                    {options === undefined || options || <div>
 
-                        <div className="border-zinc-300 absolute top-0 right-0 p-4">
-                            {specialization?.isAvailable ? (
-                                <div data-tooltip-id="free-info-tooltip"
-                                     className="w-4 h-4 rounded-full bg-emerald-400 animate-pulse"
-                                     id="free-info-tooltip"/>
-                            ) : (
-                                <div data-tooltip-id="paid-info-tooltip"
-                                     className="w-4 h-4 rounded-full bg-amber-400 animate-pulse"
-                                     id="free-info-tooltip"/>
-                            )}
-                        </div>
                         <div className="w-full overflow-x-auto">
                             <div
                                 className="flex gap-4 rounded-l-sm h-[160px] min-w-max">
@@ -137,10 +157,21 @@ export default function Form() {
                                 })}
                             </div>
                         </div>
-                    </div>
+                    </div>}
                     {selectedDoctor && <Datepicker/>}
                 </div>
-                {specialization?.isAvailable ? null : (
+                <div className="border-zinc-300 absolute top-0 right-0 p-4">
+                    {selectedSpecialization?.isAvailable ? (
+                        <div data-tooltip-id="free-info-tooltip"
+                             className="w-4 h-4 rounded-full bg-emerald-400 animate-pulse"
+                             id="free-info-tooltip"/>
+                    ) : (
+                        <div data-tooltip-id="paid-info-tooltip"
+                             className="w-4 h-4 rounded-full bg-amber-400 animate-pulse"
+                             id="free-info-tooltip"/>
+                    )}
+                </div>
+                {selectedSpecialization?.isAvailable ? null : (
                     <form onSubmit={handleSubmit}>
                         <div className="mt-4">
                             <CardElement className="border-2 rounded-md px-4 py-2"/>
@@ -150,8 +181,9 @@ export default function Form() {
                         </div>
                         <div className="mt-4">
                             <button type="submit" disabled={!stripe}
-                                    className="rounded-full px-4 py-1 bg-gradient-to-tr from-green-400 to-green-200">
-                                Pay for a reservation
+                                    className="rounded-full px-4 w-60 flex justify-center items-center py-1.5 bg-gradient-to-tr from-green-400 to-green-200">
+                                {loading !== undefined ? loading ? <Check size={20}/> :
+                                    <Spinner size={20} className="animate-spin"/> : "Pay for a reservation"}
                             </button>
                         </div>
                     </form>

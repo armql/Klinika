@@ -9,9 +9,9 @@ namespace Klinika.Server.Controllers;
 [Route("api/[controller]")]
 public class MetricsController : Controller
 {
-    private readonly MongoServices _metricService;
+    private readonly MetricServices _metricService;
 
-    public MetricsController(MongoServices metricService)
+    public MetricsController(MetricServices metricService)
     {
         _metricService = metricService;
     }

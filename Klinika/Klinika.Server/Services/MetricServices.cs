@@ -6,15 +6,15 @@ using MongoDB.Driver;
 // MongoServices.cs
 namespace Klinika.Server.Services;
 
-public class MongoServices
+public class MetricServices
 {
     private readonly IMongoCollection<Metrics> _metricsCollection;
     
-    public MongoServices(IOptions<MongoSettings> clientSettings)
+    public MetricServices(IOptions<MongoSettings> clientSettings)
     {
         var client = new MongoClient(clientSettings.Value.ConnectionString);
         var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.CollectionName);
+        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.Metrics);
     }
         
     public async Task<List<Metrics>> GetAllAsync()

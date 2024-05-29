@@ -39,8 +39,9 @@ namespace Klinika.Server
             });
             
             builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
-            builder.Services.AddSingleton<MongoServices>();
             
+            builder.Services.AddSingleton<MetricServices>();
+            builder.Services.AddSingleton<FeeServices>();
             // Add Auth and JwtBearer
             builder.Services.AddAuthentication(options =>
                 {
@@ -66,7 +67,7 @@ namespace Klinika.Server
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
             builder.Services.AddTransient<UserManager<ApplicationUser>>();
             builder.Services.AddScoped<RoleController>();
-            builder.Services.AddScoped<MongoServices>();
+            builder.Services.AddScoped<MetricServices>();
 
 
             builder.Services.AddControllers().AddNewtonsoftJson();

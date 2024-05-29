@@ -1,4 +1,3 @@
-import neuro from "../assets/neuro-card.png"
 import stomatology from "../assets/stomatology-card.svg"
 import cardiology from "../assets/cardiology-card.svg"
 import dermatology from "../assets/dermatology-card.svg"
@@ -8,8 +7,8 @@ export const specialization_data = [
     {
         id: 1,
         title: "Neurology",
-        image: neuro,
-        isAvailable: true,
+        image: "https://i.ibb.co/sHR0RDj/neuro-card.png",
+        isAvailable: false,
     },
     {
         id: 2,

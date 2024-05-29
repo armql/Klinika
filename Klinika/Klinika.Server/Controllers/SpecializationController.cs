@@ -123,7 +123,7 @@ namespace Klinika.Server.Controllers
 
             if (currentUser == null)
             {
-                return Unauthorized(new { message = "User is not authenticated" });
+                return Unauthorized(new { message = "User is not authenticated" } );
             }
 
             var newSpecialization = new Specialization()

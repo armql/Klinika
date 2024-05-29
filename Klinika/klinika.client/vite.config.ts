@@ -70,7 +70,8 @@ export default defineConfig({
                 'pingauth',
                 'api/Auth',
                 'api/Auth/login',
-                'api/purchase',
+                'api/Fee/all',
+                'api/Fee/purchase',
                 'api/Auth/refreshToken',
             ], target),
 
