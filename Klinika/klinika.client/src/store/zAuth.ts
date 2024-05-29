@@ -9,6 +9,7 @@ export type UserData = {
   exp: number;
   iss: string;
   aud: string;
+  refreshToken: string;
 };
 
 type StoreProps = {
@@ -26,7 +27,8 @@ export const zAuth = create(
         role: "GUEST",
         exp: 0,
         iss: "",
-        aud: "",
+        aud: "", 
+          refreshToken: "",
       },
       setData: (data: UserData) => set({ data }),
     }),

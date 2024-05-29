@@ -31,23 +31,30 @@ axios_instance.interceptors.response.use(
         return response;
     },
     async (error) => {
-        if (error.response.status === 401 && error.config && !error.config.__isRetryRequest) {
-            error.config.__isRetryRequest = true;
+        const originalRequest = error.config;
+        if (error.response.status === 401 && !originalRequest.__isRetryRequest) {
+            originalRequest.__isRetryRequest = true;
             const refreshToken = localStorage.getItem('refreshToken');
-            return axios_instance
-                .post('Auth/refreshToken', {
+            try {
+                console.log('Attempting to refresh token');
+                const response = await axios_instance.post('Auth/refreshToken', {
                     jwtToken: localStorage.getItem('jwtToken'),
                     refreshToken: refreshToken
-                })
-                .then((response) => {
-                    localStorage.setItem('jwtToken', response.data.jwtToken);
-                    localStorage.setItem('refreshToken', response.data.refreshToken);
-                    axios_instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
-                    return axios_instance(error.config);
                 });
+                console.log('Token refreshed successfully', response.data);
+                localStorage.setItem('jwtToken', response.data.jwtToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                axios_instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                originalRequest.headers['Authorization'] = 'Bearer ' + response.data.jwtToken;
+                return axios_instance(originalRequest);
+            } catch (refreshError) {
+                console.error('Failed to refresh token', refreshError);
+                return Promise.reject(refreshError);
+            }
         }
         return Promise.reject(error);
     }
 );
+
 
 export default axios_instance;

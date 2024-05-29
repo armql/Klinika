@@ -11,6 +11,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http.HttpResults;
+using NuGet.Common;
 
 namespace Klinika.Server.Controllers
 {
@@ -186,42 +188,166 @@ namespace Klinika.Server.Controllers
                 return BadRequest(new { error = "An unexpected error occurred. Please try again later." });
             }
         }
-        
+
+        [HttpPost("refreshTokenMethod")]
+        public async Task<ActionResult<LoginResponse>> RefreshTokeno(RefreshTokenModel model)
+        {
+            var response = new LoginResponse();
+            
+            var principal = GetTokenPrincipal(model.jwtToken);
+
+            // Check if the model is valid
+            if (model == null || string.IsNullOrEmpty(model.jwtToken) || string.IsNullOrEmpty(model.refreshToken))
+            {
+                Console.WriteLine("Invalid client request");
+                return BadRequest(response + " Invalid client request");
+            }
+            
+            if (principal == null)
+            {
+                Console.WriteLine("Invalid token1" + model.jwtToken);
+                return BadRequest(response + model.jwtToken + " Invalid token");
+            }
+            
+
+            var user = await _userManager.FindByEmailAsync(principal.EmailAddress);
+            if (user == null)
+            {
+                Console.WriteLine("User not found");
+                return BadRequest(response + " User not found");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("JWTID", Guid.NewGuid().ToString()),
+            };
+
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+            
+            
+            response.jwtToken = GenerateNewJsonWebToken(authClaims);
+            response.refreshToken = GenerateRefreshToken();
+            response.isLoggedIn = true;
+
+            user.refreshToken = response.refreshToken;
+            user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
+            await _userManager.UpdateAsync(user);
+
+            return Ok(response);
+        }
+
+
+        [HttpPost("getTokenPrincipal")]
+        public TokenPayloadDTO GetTokenPrincipal(string jwtToken)
+        {
+            try
+            {
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("JWT:Secret").Value));
+                
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateActor = false,
+                    ValidIssuer = _configuration["JWT:ValidIssuer"],
+                    ValidAudience = _configuration["JWT:ValidAudience"],
+                    IssuerSigningKey = securityKey,
+                    ValidateLifetime = false
+                };
+
+                var principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, tokenValidationParameters, out var securityToken);
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
+                
+                if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new TokenPayloadDTO();
+                }
+                
+                if (principal != null)
+                {
+                    var payload = new TokenPayloadDTO()
+                    {
+                        EmailAddress = principal.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value,
+                        NameIdentifier = principal.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value,
+                        JwtId = principal.Claims.FirstOrDefault(c => c.Type == "JWTID")?.Value,
+                        Role = principal.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value,
+                        Expiration = long.Parse(principal.Claims.FirstOrDefault(c => c.Type == "exp")?.Value),
+                        Issuer = principal.Claims.FirstOrDefault(c => c.Type == "iss")?.Value,
+                        Audience = principal.Claims.FirstOrDefault(c => c.Type == "aud")?.Value,
+                    };
+
+                    return payload;
+                }
+
+                return new TokenPayloadDTO();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return new TokenPayloadDTO();
+            }
+        }
+
+
         [HttpPost("refreshToken")]
-        public async Task<ActionResult> RefreshTokens(RefreshTokenModel model)
+        public async Task<ActionResult> RefreshToken(RefreshTokenModel model)
         {
-            var loginResponse = await RefreshToken(model);
-            if (loginResponse.isLoggedIn)
+            try
             {
-                return Ok(loginResponse);
+                if (model == null)
+                {
+                    // Log the null model error
+                    return BadRequest("Model is null");
+                }
+
+                var actionResult = await RefreshTokeno(model);
+
+                if (actionResult == null)
+                {
+                    // Log the null actionResult error
+                    return BadRequest("Action result is null");
+                }
+
+                if (actionResult.Result is OkObjectResult okResult)
+                {
+                    var loginResponse = okResult.Value as LoginResponse;
+
+                    if (loginResponse == null)
+                    {
+                        // Log the null loginResponse error
+                        return BadRequest("Login response is null");
+                    }
+
+                    if (loginResponse.isLoggedIn)
+                    {
+                        return Ok(loginResponse);
+                    }
+
+                    return Unauthorized(model);
+                }
+
+                // Handle other possible results (BadRequest, Unauthorized, etc.)
+                if (actionResult.Result is BadRequestObjectResult badRequestResult)
+                {
+                    return BadRequest(badRequestResult.Value);
+                }
+
+                return Unauthorized(model);
             }
-            return Unauthorized();
-        }
-        
-        /*
-         [Authorize]
-        [HttpGet("currentUser")]
-        public async Task<ActionResult<ApplicationUser>> GetCurrent()
-        {
-            // Get the user's ID from the User property
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            // Get the user's email from the User property
-            string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Use the UserManager to get the ApplicationUser object
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-
-            if (currentUser == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                // Log the exception
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            return currentUser;
         }
-         */
 
-        [HttpGet("logout"), Authorize]
+        [HttpPost("logout"), Authorize]
         public async Task<ActionResult> LogoutUser()
         {
             string message = "You are free to go!";
@@ -268,17 +394,17 @@ namespace Klinika.Server.Controllers
             var authSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
             var tokenObject = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(1),
-                    claims: claims,
-                    signingCredentials: new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256)
-                );
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddHours(1),
+                claims: claims,
+                signingCredentials: new SigningCredentials(authSecret, SecurityAlgorithms.HmacSha256)
+            );
 
             string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
-
             return token;
         }
+
         
         [ApiExplorerSettings(IgnoreApi = true)]
         private string GenerateRefreshToken()
@@ -291,66 +417,6 @@ namespace Klinika.Server.Controllers
             }
 
             return Convert.ToBase64String(randomNumber);
-        }
-        
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
-        {
-            var principal = GetTokenPrincipal(model.jwtToken);
-
-            var response = new LoginResponse();
-
-            if (principal?.Identity?.Name is null)
-            {
-                return response;
-            }
-
-            var user = await _userManager.FindByEmailAsync(principal.Identity.Name);
-            
-            if (user is null || user.refreshToken != model.refreshToken || user.refreshTokenExpiryTime < DateTime.Now)
-            {
-                return response;
-            }
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim("JWTID", Guid.NewGuid().ToString()),
-            };
-
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
-            
-            response.jwtToken = GenerateNewJsonWebToken(authClaims);
-            response.refreshToken = GenerateRefreshToken();
-            response.isLoggedIn = true;
-                
-            user.refreshToken = response.refreshToken;
-            user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
-            await _userManager.UpdateAsync(user);
-
-            return response;
-        }
-        
-        [ApiExplorerSettings(IgnoreApi = true)]
-        private ClaimsPrincipal? GetTokenPrincipal(string token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidIssuer = _configuration["JWT:ValidIssuer"],
-                ValidAudience = _configuration["JWT:ValidAudience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"])),
-                ValidateLifetime = false
-            };
-
-            return new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out _);
         }
     }
 }

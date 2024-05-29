@@ -23,8 +23,7 @@ namespace Klinika.Server
 
             var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-
-            builder.Services.AddAuthorization();
+            
 
 
             //Add Identity
@@ -41,24 +40,24 @@ namespace Klinika.Server
             
             builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
             builder.Services.AddSingleton<MongoServices>();
+            
             // Add Auth and JwtBearer
-            builder.Services
-                .AddAuthentication(options =>
+            builder.Services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(options =>
+                })
+                .AddJwtBearer(options =>
                 {
-                    options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
                         ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                        ClockSkew = TimeSpan.Zero // Ensure tokens expire exactly at token expiration time
                     };
                 });
 
@@ -93,13 +92,7 @@ namespace Klinika.Server
                 return Results.Ok();
 
             }).RequireAuthorization();
-
-            //used to tell if user is logged in when called and if logged in, then return email (for react in later use)
-            app.MapGet("/pingauth", (ClaimsPrincipal user) =>
-            {
-                var email = user.FindFirstValue(ClaimTypes.Email); // get the user's email from the claim
-                return Results.Json(new { Email = email }); ; // return the email as a plain text response
-            }).RequireAuthorization();
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -112,8 +105,7 @@ namespace Klinika.Server
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-
+            
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");

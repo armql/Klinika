@@ -67,6 +67,7 @@ namespace Klinika.Server.Controllers
             });
         }
         
+        [Authorize]
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var claims = User.Claims;
@@ -85,12 +86,40 @@ namespace Klinika.Server.Controllers
 
             return await _userManager.FindByIdAsync(userId);
         }
+        
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<ApplicationUser> GetCurrent()
+        {
+            if (Request.Headers.ContainsKey("Authorization"))
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                Console.WriteLine(authHeader);
+            }
+            else
+            {
+                Console.WriteLine("Authorization header is missing");
+            }
+            
+            string nameIdentifier = User.Claims.FirstOrDefault(c =>
+                c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
+            // Use the UserManager to get the ApplicationUser object
+            ApplicationUser currentUser = await _userManager.FindByIdAsync(nameIdentifier);
+
+            if (currentUser == null)
+            {
+                return null;
+            }
+
+            return currentUser;
+        }
+        
         
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] SpecializationDto specializationDto)
         {
-            var currentUser = await GetCurrentUserAsync();
+            var currentUser = await GetCurrent();
 
             if (currentUser == null)
             {
