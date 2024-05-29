@@ -35,7 +35,10 @@ export default function Form() {
         const cardElement = elements.getElement(CardElement);
 
         if (cardElement) {
-            const {error, paymentMethod} = await stripe.createPaymentMethod({
+            const {
+                error,
+                // paymentMethod
+            } = await stripe.createPaymentMethod({
                 type: 'card',
                 card: cardElement,
             });
@@ -43,7 +46,7 @@ export default function Form() {
             if (error) {
                 console.error(error);
             } else {
-                // Send paymentMethod.id to your server (See Step 5)
+                // Send paymentMethod.id to your server
             }
         }
     };
@@ -57,8 +60,7 @@ export default function Form() {
                     htmlFor={"reasonOfConsult"}
                     labelName={"Reason for Consult"}
                     placeholder={"The reasoning for consult"} type={"textarea"}
-                    onChange={() => {
-                    }}
+                    // onChange={() => {}}
                     name={"reasonOfConsult"}/>
                 <div className="flex flex-col gap-6">
                     <div className="flex gap-2 flex-row">
@@ -97,7 +99,7 @@ export default function Form() {
                             </div>
                         </button>
                     </div>
-                    <div className={`${options === undefined ? options ? "hidden" : "block" : ""}`}>
+                    <div>
 
                         <div className="border-zinc-300 absolute top-0 right-0 p-4">
                             {specialization?.isAvailable ? (

@@ -18,7 +18,7 @@ export default function Categories() {
                             type="button"
                             onClick={() => setSpecialization(item)}
                             className={`w-52 h-32 cursor-pointer rounded-md bg-zinc-200 overflow-hidden ring-2 ring-transparent hover:ring-zinc-500 border-zinc-100 flex justify-center items-center relative`}>
-                            {item.image && <img src={item?.image} alt="Specialization 1"
+                            {item.image && <img src={item.image} alt="Specialization 1"
                                                 className="w-full h-full object-contain absolute top-10"/>}
                             <div
                                 className="absolute py-2 top-0 left-0 right-0 overflow-clip bottom-0 w-full h-full flex justify-center items-start">

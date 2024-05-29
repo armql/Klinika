@@ -11,7 +11,6 @@ const Datepicker = () => {
         selectedTime,
         setSelectedTime,
         selectedDoctor,
-        setSelectedDoctor,
     } = zReservation();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [formattedDate, setFormattedDate] = useState('');
@@ -144,7 +143,7 @@ const Datepicker = () => {
                     })}
                 </ul>
             </div>
-           
+
         </section>
     );
 };

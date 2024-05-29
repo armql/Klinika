@@ -89,7 +89,7 @@ export default function EditForm<T>({
                 setGlobalError("No id received");
                 return;
             }
-            ;
+            
             const response = await update(selectedItem, patchDoc);
             if (response) {
                 await Swal.fire({

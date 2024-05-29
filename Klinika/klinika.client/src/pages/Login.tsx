@@ -25,8 +25,6 @@ export default function Login() {
             errors,
             isSubmitting,
             isSubmitSuccessful,
-            isSubmitted,
-            isLoading,
         },
     } = useForm<FormFields>({
         mode: "onChange",
