@@ -26,7 +26,7 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly IConfiguration _configuration = configuration;
         private readonly RoleController _roleController = roleController;
-
+        
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
         {

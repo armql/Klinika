@@ -78,16 +78,16 @@ const Datepicker = () => {
     active:cursor-pointer`}
                 >
                     <p className={`font-medium text-center h-24 ${formattedDate || "text-zinc-400"}`}>{formattedDate ? format(formattedDate, 'do MMMM yyyy') : format(new Date(), 'do MMMM yyyy')}</p>
-                    <div
+                    <ul
                         className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-3 text-center text-[11px] font-normal">
-                        <span>S</span>
-                        <span>M</span>
-                        <span>T</span>
-                        <span>W</span>
-                        <span>T</span>
-                        <span>F</span>
-                        <span>S</span>
-                    </div>
+                        <li>S</li>
+                        <li>M</li>
+                        <li>T</li>
+                        <li>W</li>
+                        <li>T</li>
+                        <li>F</li>
+                        <li>S</li>
+                    </ul>
                     <div
                         className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-2 text-center text-[10px] font-normal">
                         {daysInMonthArray.map((day) => {

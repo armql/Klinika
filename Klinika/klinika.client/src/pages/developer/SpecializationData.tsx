@@ -15,6 +15,7 @@ const formFields: FormField[] = [
         name: "Specialization Name",
         placeholder: "Enter your specialization name",
     },
+    
 ];
 
 export default function SpecializationData() {

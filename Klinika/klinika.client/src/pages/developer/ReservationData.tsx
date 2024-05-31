@@ -1,9 +1,9 @@
 import axios_instance from "../../api/axios";
-import { ApiService } from "../../services/ApiServices";
-import { CreateForm, DataList, EditForm, Filters, Table, zHandler, } from "../../features/handata/__handata";
-import { FormField } from "../../features/handata/utils/form-fields";
-import { BaseItem } from "../../features/handata/__handata.ts";
-import { useQuery } from "react-query";
+import {ApiService} from "../../services/ApiServices";
+import {CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
+import {FormField} from "../../features/handata/utils/form-fields";
+import {BaseItem} from "../../features/handata/__handata.ts";
+import {useQuery} from "react-query";
 
 export type Reservation = BaseItem & {
     reasonOfConsultation: string;
@@ -13,7 +13,7 @@ export type Reservation = BaseItem & {
 };
 
 export default function ReservationData() {
-    const { create_modal: create, edit_modal: edit } = zHandler();
+    const {create_modal: create, edit_modal: edit} = zHandler();
     const specialization_api = new ApiService<Reservation>(
         {
             paginate: "Reservation/paginate",
@@ -27,22 +27,29 @@ export default function ReservationData() {
         },
         axios_instance
     );
-    const { data: categoryData, isLoading: isCategoryLoading, error: categoryError } = useQuery("category", specialization_api.category);
-    const { data: category2Data, isLoading: isCategory2Loading, error: category2Error } = useQuery("category2", specialization_api.category2);
+    const {
+        data: categoryData,
+        isLoading: isCategoryLoading,
+        error: categoryError
+    } = useQuery("category", specialization_api.category);
+    const {
+        data: category2Data,
+        isLoading: isCategory2Loading,
+        error: category2Error
+    } = useQuery("category2", specialization_api.category2);
 
 
     console.log('categoryData:', categoryData);
     console.log('category2Data:', category2Data);
-    
-    // Check if categoryData and category2Data are arrays
+
     const categoryOptions = Array.isArray(categoryData) ? categoryData.map((item) => ({
         id: item.id,
-        name: item.id,
+        name: item.fullName,
     })) : [];
 
     const category2Options = Array.isArray(category2Data) ? category2Data.map((item) => ({
         id: item.id,
-        name: item.id,
+        name: item.fullName,
     })) : [];
 
     const formFields: FormField[] = [
@@ -53,10 +60,25 @@ export default function ReservationData() {
             placeholder: "Enter your specialization name",
         },
         {
-            type: "number",
+            type: "text",
+            identifier: "date",
+            name: "Date",
+            placeholder: "Enter your reservation date",
+        },
+        {
+            type: "select",
             identifier: "slot",
-            name: "Slot",
-            placeholder: "Enter your slot",
+            name: "Available Slots",
+            options: [
+                {id: 1, name: '08:00 - 08:15'},
+                {id: 2, name: '08:15 - 08:30'},
+                {id: 3, name: '08:30 - 08:45'},
+                {id: 4, name: '08:45 - 09:00'},
+                {id: 5, name: '09:00 - 09:15'},
+                {id: 6, name: '09:15 - 09:30'},
+                {id: 7, name: '09:30 - 09:45'},
+                {id: 8, name: '09:45 - 10:00'},
+            ],
         },
         {
             type: "select",
@@ -93,10 +115,10 @@ export default function ReservationData() {
                 bulkDelete={specialization_api.bulk_delete}
             />
             <Table
-                headers={["Reservation ID", "Reason Of Consultation", "Created In", "Slot"]}
+                headers={["Reservation ID", "Reason Of Consultation", "Reservation Date", "Created In", "Slot"]}
                 all={specialization_api.paginate}
                 delete={specialization_api.delete}
-                dataField={["id", "reasonOfConsultation", "creationDate", "slot"]}
+                dataField={["id", "reasonOfConsultation", "date", "creationDate", "slot"]}
             />
             {edit && (
                 <EditForm<Reservation>

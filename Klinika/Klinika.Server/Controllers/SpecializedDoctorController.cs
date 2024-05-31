@@ -20,9 +20,20 @@ namespace Klinika.Server.Controllers
         }
         
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<SpecializedDoctor>>> GetAll()
+        public async Task<ActionResult<IEnumerable<object>>> GetAll()
         {
-            var specializedDoctors = await _dbContext.SpecializedDoctors.ToListAsync();
+            var specializedDoctors = await _dbContext.SpecializedDoctors
+                .Include(s => s.Specialization)
+                .Select(s => new
+                {
+                    s.id,
+                    s.specializationId,
+                    specializationName = s.Specialization.name,
+                    fullName = s.User.firstName + " " + s.User.lastName,
+                    s.Reservations
+                })
+                .ToListAsync();
+
             if (specializedDoctors == null)
             {
                 return NotFound();

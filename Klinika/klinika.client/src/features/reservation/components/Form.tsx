@@ -195,8 +195,7 @@ export default function Form({refetch}: FormProps) {
                     </p>
                     <button
                         type="button"
-                        onClick={() => {
-                        }}
+                        // onClick={() => {}}
                         className="border-2 w-72 bg-zinc-50 font-medium px-6 rounded-md py-2.5"
                     >
                         Reserve

@@ -72,8 +72,9 @@ namespace Klinika.Server.Controllers
             var newReservation = new Reservation()
             {
                 reasonOfConsultation = reservation.reasonOfConsultation,
-                creationDate = DateTime.Now,
+                date = reservation.date,
                 slot = reservation.slot,
+                creationDate = DateTime.Now,
                 specializedDoctorId = reservation.specializedDoctorId,
                 patientId = reservation.patientId
             };

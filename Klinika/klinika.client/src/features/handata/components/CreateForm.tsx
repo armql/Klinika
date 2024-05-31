@@ -1,5 +1,5 @@
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {Fragment} from "react/jsx-runtime";
 import {Spinner, X} from "@phosphor-icons/react";
 import {z} from "zod";
@@ -21,6 +21,7 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
     const global_schema = createGlobalSchema(fields);
     type RefinedInputs = z.infer<typeof global_schema>;
     const {
+        control,
         register,
         handleSubmit,
         formState: {errors, isSubmitting, isSubmitSuccessful},
@@ -49,7 +50,6 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
             }
         }
     };
-
     const generateInputs = (field: FormField) => {
         let inputElement;
         switch (field.type) {
@@ -63,6 +63,34 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
                         {...register(field.identifier)}
                         error={errors[field.identifier]?.message}
                         hidden={field.isHidden}
+                    />
+                );
+                break;
+            case "number":
+                inputElement = (
+                    <Controller
+                        name={field.identifier}
+                        control={control}
+                        render={({field: {onChange, onBlur, value, name, ref}}) => (
+                            <Input
+                                type="number"
+                                htmlFor={field.identifier}
+                                labelName={field.name}
+                                placeholder={field.placeholder}
+                                value={value || ''} // Provide a default value
+                                onChange={async e => {
+                                    onChange(e.target.valueAsNumber);
+                                    return Promise.resolve();
+                                }}
+                                onBlur={async () => {
+                                    onBlur();
+                                    return Promise.resolve();
+                                }}
+                                error={errors[name]?.message}
+                                hidden={field.isHidden}
+                                ref={ref}
+                            />
+                        )}
                     />
                 );
                 break;

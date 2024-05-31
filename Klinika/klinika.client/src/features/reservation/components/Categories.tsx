@@ -7,7 +7,6 @@ import {Fragment} from "react";
 export default function Categories() {
     const {setSelectedSpecialization} = zReservation();
 
-
     return (
         <div
             className={`w-[800px] h-[800px] border-2 shadow-sm p-12 rounded-3xl flex flex-col gap-6`}>

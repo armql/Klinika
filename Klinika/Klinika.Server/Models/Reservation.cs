@@ -14,11 +14,12 @@ public class Reservation
     
     [MaxLength(1000)]
     public string reasonOfConsultation { get; set; }
-    
-    public DateTime creationDate { get; set; }
+    public string date { get; set; }
     
     [Required]
     public int slot { get; set; }
+    
+    public DateTime creationDate { get; set; }
     
     [Required]
     public string specializedDoctorId { get; set; }

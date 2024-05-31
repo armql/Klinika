@@ -19,9 +19,16 @@ namespace Klinika.Server.Controllers
         }
         
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<Patient>>> GetAll()
+        public async Task<ActionResult<IEnumerable<object>>> GetAll()
         {
-            var patients = await _dbContext.Patients.ToListAsync();
+            var patients = await _dbContext.Patients
+                .Select(p => new 
+                {
+                    p.id,
+                    fullName = p.User.firstName + " " + p.User.lastName,
+                })
+                .ToListAsync();
+
             if (patients == null)
             {
                 return NotFound();

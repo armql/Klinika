@@ -81,10 +81,23 @@ const schemaMap: Record<string, T> = {
     file: fileSchema,
 };
 
+// const createGlobalSchema = (fields: FormField[]) => {
+//     const globalSchemaFields = fields.map((field) => ({
+//         [field.identifier]: schemaMap[field.type],
+//     }));
+//
+//     return z.object(Object.assign({}, ...globalSchemaFields));
+// };
+
 const createGlobalSchema = (fields: FormField[]) => {
-    const globalSchemaFields = fields.map((field) => ({
-        [field.identifier]: schemaMap[field.type],
-    }));
+    const globalSchemaFields = fields.map((field) => {
+        if (!schemaMap[field.type]) {
+            throw new Error(`No schema found for field type "${field.type}"`);
+        }
+        return {
+            [field.identifier]: schemaMap[field.type],
+        };
+    });
 
     return z.object(Object.assign({}, ...globalSchemaFields));
 };
