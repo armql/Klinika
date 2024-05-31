@@ -149,6 +149,46 @@ export default defineConfig({
                 'api/Metrics/all',
                 'api/Metrics/create',
             ], target),
+
+            // Reservation
+            ...createProxyRoutes([
+                'api/Reservation/paginate',
+                'api/Reservation/get',
+                'api/Reservation/getAll',
+                'api/Reservation/create',
+                'api/Reservation/update',
+                'api/Reservation/delete',
+                'api/Reservation/bulkDelete'
+            ], target),
+            
+            // Consultation
+            ...createProxyRoutes([
+                'api/Consultation/paginate',
+                'api/Consultation/get',
+                'api/Reservation/getAll',
+                'api/Consultation/create',
+                'api/Consultation/update',
+                'api/Consultation/delete',
+                'api/Consultation/bulkDelete'
+            ], target),
+            ...createProxyRoutes([
+                'api/Patient/paginate',
+                'api/Patient/get',
+                'api/Patient/getAll',
+                'api/Patient/create',
+                'api/Patient/update',
+                'api/Patient/delete',
+                'api/Patient/bulkDelete'
+            ], target),
+            ...createProxyRoutes([
+                'api/SpecializedDoctor/paginate',
+                'api/SpecializedDoctor/get',
+                'api/SpecializedDoctor/getAll',
+                'api/SpecializedDoctor/create',
+                'api/SpecializedDoctor/update',
+                'api/SpecializedDoctor/delete',
+                'api/SpecializedDoctor/bulkDelete'
+            ], target),
         },
         port: 5173,
         https: {

@@ -7,6 +7,11 @@ import {
   DeveloperHelpCenterData,
   DeveloperServiceDeskData,
   DeveloperBlockData,
+  DeveloperUserRolesData,
+  DeveloperReservationData,
+  DeveloperConsultationData,
+  DeveloperPatientData,
+  DeveloperSpecializedDoctorData
 } from "../../../router/pages";
 import { Data } from "../../navigation/store/zNavigation";
 
@@ -34,6 +39,7 @@ export const developer_routes: Data[] = [
         links: [
           { to: "user-data", text: "User List", component: DeveloperUserData },
           { to: "role-data", text: "Role List", component: DeveloperRoleData },
+          { to: "user-roles-data", text: "User Roles List", component: DeveloperUserRolesData },
         ],
       },
       {
@@ -76,6 +82,32 @@ export const developer_routes: Data[] = [
             to: "block-data",
             text: "Block List",
             component: DeveloperBlockData,
+          },
+        ],
+      },
+      {
+        id: 8,
+        name: "Reservation",
+        links: [
+          {
+            to: "reservation-data",
+            text: "Reservation List",
+            component: DeveloperReservationData,
+          },
+          {
+            to: "consultation-data",
+            text: "Consultation List",
+            component: DeveloperConsultationData,
+          },
+          {
+            to: "specialized-doctor-data",
+            text: "Specialized Doctor List",
+            component: DeveloperSpecializedDoctorData,
+          },
+          {
+            to: "patient-data",
+            text: "Patient List",
+            component:DeveloperPatientData,
           },
         ],
       },

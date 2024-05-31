@@ -31,6 +31,11 @@ namespace Klinika.Server.Models.Data
         public DbSet<ServiceDesk> ServiceDesks { get; set; }
 
         public DbSet<Block> Blocks { get; set; }
+        
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Consultation> Consultations { get; set; }
+        
+        
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -68,6 +73,15 @@ namespace Klinika.Server.Models.Data
 
             builder.Entity<Block>()
                 .HasKey(x => x.id);
+            
+            builder.Entity<Reservation>()
+                .HasKey(x => x.id);
+            
+            builder.Entity<Consultation>()
+                .HasKey(x => x.id);
+            
+
+            
 
         }
         public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

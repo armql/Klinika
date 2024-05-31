@@ -29,6 +29,11 @@ export default function HelpCenterData() {
     );
     const {data, isLoading} = useQuery("category", helpcenter_api.category);
 
+    const Options = Array.isArray(data) ? data.map((item) => ({
+        id: item.id,
+        name: item.name,
+    })) : [];
+    
     const formFields: FormField[] = [
         {
             type: "email",
@@ -65,10 +70,7 @@ export default function HelpCenterData() {
                         name: "Loading Options...",
                     },
                 ]
-                : data?.map((item) => ({
-                    id: item.id,
-                    name: item.name,
-                })),
+                : Options,
         },
     ];
 

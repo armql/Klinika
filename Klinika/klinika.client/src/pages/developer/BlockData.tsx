@@ -26,6 +26,11 @@ export default function BlockData() {
     );
     const {data, isLoading} = useQuery("getAll", Block_api.category);
 
+    const Options = Array.isArray(data) ? data.map((item) => ({
+        id: item.id,
+        name: item.name,
+    })) : [];
+
     const formFields: FormField[] = [
         {
             type: "text",
@@ -44,10 +49,7 @@ export default function BlockData() {
                         name: "Loading Options...",
                     },
                 ]
-                : data?.map((item) => ({
-                    id: item.id,
-                    name: item.name,
-                })),
+                : Options,
         },
     ];
 

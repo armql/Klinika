@@ -26,6 +26,7 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "DEVELOPER")]
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
         {
@@ -38,6 +39,7 @@ namespace Klinika.Server.Controllers
             return specializations;
         }
         
+        [Authorize(Roles = "DEVELOPER")]
         [HttpGet("paginate")]
         public ActionResult<IEnumerable<Specialization>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
@@ -67,27 +69,7 @@ namespace Klinika.Server.Controllers
             });
         }
         
-        [Authorize]
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            var claims = User.Claims;
-            string userId = User.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
-
-            // Log all claims for debugging
-            foreach (var claim in claims)
-            {
-                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-            }
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return null;
-            }
-
-            return await _userManager.FindByIdAsync(userId);
-        }
-        
-        
+        [Authorize(Roles = "DEVELOPER")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ApplicationUser> GetCurrent()
         {
@@ -116,6 +98,7 @@ namespace Klinika.Server.Controllers
         }
         
         
+        [Authorize(Roles = "DEVELOPER")]
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] SpecializationDto specializationDto)
         {
@@ -123,7 +106,7 @@ namespace Klinika.Server.Controllers
 
             if (currentUser == null)
             {
-                return Unauthorized(new { message = "User is not authenticated" } );
+                return Unauthorized(new { message = "User is not authenticated" });
             }
 
             var newSpecialization = new Specialization()
@@ -138,7 +121,8 @@ namespace Klinika.Server.Controllers
 
             return Ok(new { message = newSpecialization.id + ", with the name:" + newSpecialization.name + " was created." });
         }
-
+        
+        [Authorize(Roles = "DEVELOPER")]
         [HttpGet("get")]
         public async Task<ActionResult<Specialization>> Get(int id)
         {
@@ -154,9 +138,10 @@ namespace Klinika.Server.Controllers
                 return NotFound();
             }
 
-            return specialization;
+            return Ok(specialization);
         }
 
+        [Authorize(Roles = "DEVELOPER")]
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<Specialization> patchDoc)
         {
@@ -187,6 +172,7 @@ namespace Klinika.Server.Controllers
         }
 
 
+        [Authorize(Roles = "DEVELOPER")]
         [HttpDelete("delete")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -204,9 +190,11 @@ namespace Klinika.Server.Controllers
 
             _dbContext.Specializations.Remove(specialization);
             await _dbContext.SaveChangesAsync();
+            
             return Ok(new { message = specialization.name + " was removed" });
         }
         
+        [Authorize(Roles = "DEVELOPER")]
         [HttpDelete("bulkDelete")]
         public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
         {

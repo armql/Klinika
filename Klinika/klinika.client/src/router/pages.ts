@@ -16,8 +16,16 @@ const DeveloperHelpCenterCategoryData = lazy(() => import("../pages/developer/He
 const DeveloperServiceDeskData = lazy(() => import("../pages/developer/ServiceDeskData"));
 const DeveloperBlockData = lazy(() => import("../pages/developer/BlockData"));
 const DeveloperSettings = lazy(() => import("../pages/developer/Settings"));
-
+const DeveloperUserRolesData = lazy(() => import("../pages/developer/UserRolesData"));
 const PatientReservations = lazy(() => import("../pages/patient/Reservations"));
+
+const DeveloperReservationData = lazy(() => import("../pages/developer/ReservationData"));
+
+const DeveloperConsultationData = lazy(() => import("../pages/developer/ConsultationData"));
+
+const DeveloperSpecializedDoctorData: any = lazy(() => import("../pages/developer/SpecializedDoctorData"));
+
+const DeveloperPatientData: any = lazy(() => import("../pages/developer/PatientData"));
 
 export {
     Home,
@@ -37,4 +45,9 @@ export {
     DeveloperBlockData,
     DeveloperSettings,
     PatientReservations,
+    DeveloperUserRolesData,
+    DeveloperReservationData,
+    DeveloperConsultationData,
+    DeveloperSpecializedDoctorData,
+    DeveloperPatientData
 };

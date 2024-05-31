@@ -28,6 +28,11 @@ export default function ServiceDeskData() {
     );
     const {data, isLoading} = useQuery("category", ServiceDesk_api.category);
 
+    const Options = Array.isArray(data) ? data.map((item) => ({
+        id: item.id,
+        name: item.name,
+    })) : [];
+    
     const formFields: FormField[] = [
         {
             type: "text",
@@ -58,10 +63,7 @@ export default function ServiceDeskData() {
                         name: "Loading Options...",
                     },
                 ]
-                : data?.map((item) => ({
-                    id: item.id,
-                    name: item.name,
-                })),
+                : Options,
         },
     ];
 

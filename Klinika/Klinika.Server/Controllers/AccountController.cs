@@ -54,6 +54,24 @@ namespace Klinika.Server.Controllers
             });
         }
 
+        [HttpGet("getAll")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll()
+        {
+            if (_userManager.Users == null)
+            {
+                return NotFound();
+            }
+
+            var users = await _userManager.Users.ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return users;
+        }
+        
         [HttpGet("get")]
         public async Task<ActionResult<ApplicationUser>> Get(string id)
         {
