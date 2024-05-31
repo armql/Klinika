@@ -41,7 +41,7 @@ namespace Klinika.Server
             builder.Services.AddSignalR();
             builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
             builder.Services.AddSingleton<MetricServices>();
-            
+            builder.Services.AddSingleton<FeeServices>();
             // Add Auth and JwtBearer
             builder.Services.AddAuthentication(options =>
                 {

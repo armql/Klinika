@@ -13,16 +13,24 @@ export type TimeSlot = {
     end: string,
 }
 
-export type SelectedDoctor = {
-    id: number,
-    name: string,
-    specializations: string,
-    schedule: {
-        [key: string]: { timeslots: number[] },
-    },
-}
+type Reservation = {
+    date: string;
+    slots: number[];
+};
+
+type SelectedDoctor = {
+    id: string;
+    specializationId: number;
+    specializationName: string;
+    fullName: string;
+    reservations: Reservation[];
+};
 
 type State = {
+    formError: string | null,
+    loading: boolean | undefined,
+    setLoading: (loading: boolean) => void,
+    setFormError: (formError: string) => void,
     selectedSpecialization: Specialization | undefined,
     selectedDoctor: SelectedDoctor | undefined,
     setSelectedDoctor: (doctor: SelectedDoctor) => void,
@@ -35,7 +43,8 @@ type State = {
     setSelectedDate: (date: Date | null) => void,
     selectedTime: TimeSlot | null,
     setSelectedTime: (time: TimeSlot) => void,
-
+    reasonOfConsult: string | null,
+    setReasonOfConsult: (reason: string | null) => void,
 }
 
 export const zReservation = create<State>((set) => ({
@@ -44,6 +53,10 @@ export const zReservation = create<State>((set) => ({
     reserving: undefined,
     selectedDate: null,
     selectedDoctor: undefined,
+    formError: null,
+    loading: undefined,
+    setLoading: (loading: boolean) => set({loading}),
+    setFormError: (formError: string) => set({formError}),
     setSelectedDoctor: (doctor: SelectedDoctor) => set({selectedDoctor: doctor}),
     setOptions: (options: boolean) => set({options}),
     setReserving: (reserving: boolean) => set({reserving}),
@@ -51,6 +64,8 @@ export const zReservation = create<State>((set) => ({
     setSelectedDate: (date: Date | null) => set({selectedDate: date}),
     selectedTime: null,
     setSelectedTime: (time: TimeSlot) => set({selectedTime: time}),
+    reasonOfConsult: null,
+    setReasonOfConsult: (reason: string | null) => set({reasonOfConsult: reason}),
 }));
 
 export const timeSlots: TimeSlot[] = [

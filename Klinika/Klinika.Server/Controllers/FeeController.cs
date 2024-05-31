@@ -34,6 +34,39 @@ namespace Klinika.Server.Controllers
             return Ok(fees);
         }
         
+        [HttpPost("cleanup")]
+        public async Task<IActionResult> RemoveFee(PurchaseProductRequest request)
+        {
+            if (string.IsNullOrEmpty(request.userId) || string.IsNullOrEmpty(request.specializationName))
+            {
+                return BadRequest(new { error = "User ID and specialization name must be provided." });
+            }
+
+            var feeId = new ObjectId("6657212297a1aaaf1e124ee6"); // Replace with the actual fee ID
+            var fee = await _feeServices.GetFeeAsync(feeId);
+
+            if (fee == null)
+            {
+                return NotFound(new { error = $"Fee with ID {feeId} not found." });
+            }
+
+            var specialization = fee.Specializations.FirstOrDefault(s => s.name == request.specializationName);
+            if (specialization == null)
+            {
+                return NotFound(new { error = $"Specialization {request.specializationName} not found in fee." });
+            }
+
+            if (!specialization.feeReleased.Contains(request.userId))
+            {
+                return BadRequest(new { error = $"Fee not released for this user for {request.specializationName}." });
+            }
+
+            specialization.feeReleased.Remove(request.userId);
+            await _feeServices.UpdateFeeAsync(feeId, fee);
+
+            return Ok(new { message = $"Fee for user {request.userId} for specialization {request.specializationName} has been removed." });
+        }
+        
         [HttpPost("purchase")]
         public async Task<IActionResult> PurchaseProduct(PurchaseProductRequest request)
         {

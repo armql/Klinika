@@ -1,18 +1,39 @@
 import {zReservation} from "../store/zReservation.ts";
 import {Textarea} from "../../validation/__validation.ts";
 import Datepicker from "./Datepicker.tsx";
-import {Check, ClockClockwise, MagicWand, Spinner, User} from "@phosphor-icons/react";
-import {SpecializedDoctors} from "../data/specializationDoctor_data.ts";
+import {ClockClockwise, Info, MagicWand, Spinner, User} from "@phosphor-icons/react";
 import {Tooltip} from "react-tooltip";
-import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
-import {FormEvent} from "react";
 import {zAuth} from "../../../store/zAuth.ts";
 import axios_instance from "../../../api/axios.ts";
-import {zHandler} from "../../handata/__handata.ts";
+import {useQuery} from "react-query";
+import {format} from "date-fns";
+import {useNavigate} from "react-router-dom";
+import PaymentGate from "./PaymentGate.tsx";
 
 type FormProps = {
     refetch: () => void;
 }
+
+type Reservation = {
+    date: string;
+    slots: number[];
+};
+
+type ReservationForm = {
+    reasonOfConsultation: string,
+    date: string,
+    slot: number,
+    specializedDoctorId: string,
+    patientId: string
+};
+
+type SpecializedDoctor = {
+    id: string;
+    specializationId: number;
+    specializationName: string;
+    fullName: string;
+    reservations: Reservation[];
+};
 
 export default function Form({refetch}: FormProps) {
     const {
@@ -21,64 +42,91 @@ export default function Form({refetch}: FormProps) {
         setOptions,
         options,
         setSelectedDoctor,
-        // selectedTime,
-        // selectedDate,
-        // setSelectedTime,
-        // setSelectedDate,
+        selectedDate,
+        selectedTime,
+        reasonOfConsult,
+        setReasonOfConsult,
+        formError,
+        setFormError,
+        loading: reserveLoading,
+        setLoading: setReserveLoading
     } = zReservation();
-    const {setGlobalError, loading, setLoading} = zHandler();
+    const {data: authData} = zAuth();
+
+    const navigate = useNavigate();
+    const fetchSpecializedDoctors = async (): Promise<SpecializedDoctor[]> => {
+        const response = await axios_instance.get<SpecializedDoctor[]>('SpecializedDoctor/getAll');
+        return response.data;
+    };
+
+    const {
+        data: specializedDoctors,
+        error,
+        isLoading
+    } = useQuery<SpecializedDoctor[]>('specializedDoctors', fetchSpecializedDoctors);
 
 
-    const {data} = zAuth();
-    const doctorsForSpecialization = SpecializedDoctors.filter(doctor => doctor.specializations === selectedSpecialization?.title);
+    const doctorsForSpecialization = specializedDoctors
+        ? specializedDoctors.filter((doctor: SpecializedDoctor) => doctor.specializationName === selectedSpecialization?.title)
+        : [];
 
-    const stripe = useStripe();
-    const elements = useElements();
 
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-        if (!stripe || !elements) {
-            setGlobalError('Stripe or elements is not loaded');
+    if (error) {
+        return <div>Error: {(error as Error).message}</div>;
+    }
+
+
+    const handleReserve = async () => {
+        setReserveLoading(true);
+
+        if (!selectedSpecialization?.isAvailable) {
+            setFormError('You have to pay for reservation to this specialization, fee is 20EUR');
+            setReserveLoading(false);
             return;
         }
 
-        const cardElement = elements.getElement(CardElement);
+        if (!selectedDate || !selectedTime || !selectedDoctor || !reasonOfConsult) {
+            setFormError('Ensure that all fields are filled in');
+            setReserveLoading(false);
+            return;
+        }
 
-        if (cardElement) {
-            const {error, paymentMethod} = await stripe.createPaymentMethod({
-                type: 'card',
-                card: cardElement,
+        const reservation: ReservationForm = {
+            reasonOfConsultation: reasonOfConsult,
+            date: format(selectedDate, 'MM/dd/yyyy'),
+            slot: selectedTime.id,
+            specializedDoctorId: selectedDoctor.id,
+            patientId: authData.id
+        };
+
+        try {
+            await axios_instance.post('Fee/cleanup', {
+                userId: authData.id,
+                specializationName: selectedSpecialization.title,
             });
+        } catch (error: unknown) {
+            setFormError(`Error removing fee: ${error.message}`);
+            setReserveLoading(false);
+            return;
+        }
 
-            if (error) {
-                setGlobalError(`Error creating payment method, ${error.message}`);
+        try {
+            const response = await axios_instance.post('Reservation/create', reservation);
+
+            if (response.status === 200) {
+                navigate('../dashboard');
+                setReserveLoading(false);
             } else {
-                try {
-                    setLoading(false);
-                    const response = await axios_instance.post('Fee/purchase', {
-                        specializationName: selectedSpecialization?.title,
-                        userId: data.id,
-                    });
-
-                    const {clientSecret} = response.data;
-
-                    const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-                        payment_method: paymentMethod?.id,
-                    });
-
-                    if (paymentResult.error) {
-                        setGlobalError(`Error confirming payment:, ${paymentResult.error.message}`);
-                    } else {
-                        if (paymentResult.paymentIntent.status === 'succeeded') {
-                            setLoading(true);
-                            refetch();
-                        }
-                    }
-                } catch (error: any) {
-                    setGlobalError(`Error sending POST request:, ${error.response.data}`);
-                }
+                setFormError(`Error creating reservation ${response.data}`);
+                setReserveLoading(false);
             }
+        } catch (error) {
+            setFormError(`Error creating reservation ${error}`);
+            setReserveLoading(false);
         }
     };
 
@@ -91,11 +139,12 @@ export default function Form({refetch}: FormProps) {
                     htmlFor={"reasonOfConsult"}
                     labelName={"Reason for Consult"}
                     placeholder={"The reasoning for consult"} type={"textarea"}
-                    // onChange={() => {}}
+                    onChange={(e) => {
+                        setReasonOfConsult(e.target.value);
+                    }}
                     name={"reasonOfConsult"}/>
                 <div className="flex flex-col gap-6">
                     <div className="flex gap-2 flex-row">
-
                         <button
                             type="button"
                             onClick={() => setOptions(false)}
@@ -131,11 +180,10 @@ export default function Form({refetch}: FormProps) {
                         </button>
                     </div>
                     {options === undefined || options || <div>
-
                         <div className="w-full overflow-x-auto">
                             <div
                                 className="flex gap-4 rounded-l-sm h-[160px] min-w-max">
-                                {doctorsForSpecialization.map((doctor) => {
+                                {doctorsForSpecialization.map((doctor: SpecializedDoctor) => {
                                     return (
                                         <button
                                             type="button"
@@ -147,9 +195,9 @@ export default function Form({refetch}: FormProps) {
                                                 <User size={64} weight="duotone"/>
                                             </div>
                                             <div>
-                                                <h1 className="text-zinc-800 text-center">{doctor.name}</h1>
+                                                <h1 className="text-zinc-800 text-center">{doctor.fullName}</h1>
                                                 <p className="text-xs text-zinc-500 font-light text-center">
-                                                    {doctor.specializations}
+                                                    {doctor.specializationName}
                                                 </p>
                                             </div>
                                         </button>
@@ -160,6 +208,7 @@ export default function Form({refetch}: FormProps) {
                     </div>}
                     {selectedDoctor && <Datepicker/>}
                 </div>
+                <PaymentGate refetch={refetch}/>
                 <div className="border-zinc-300 absolute top-0 right-0 p-4">
                     {selectedSpecialization?.isAvailable ? (
                         <div data-tooltip-id="free-info-tooltip"
@@ -168,37 +217,35 @@ export default function Form({refetch}: FormProps) {
                     ) : (
                         <div data-tooltip-id="paid-info-tooltip"
                              className="w-4 h-4 rounded-full bg-amber-400 animate-pulse"
-                             id="free-info-tooltip"/>
+                             id="paid-info-tooltip"/>
                     )}
                 </div>
-                {selectedSpecialization?.isAvailable ? null : (
-                    <form onSubmit={handleSubmit}>
-                        <div className="mt-4">
-                            <CardElement className="border-2 rounded-md px-4 py-2"/>
-                            <span className="text-sm px-1 text-zinc-500">
-                                The reservation fee is 20EUR
-                            </span>
-                        </div>
-                        <div className="mt-4">
-                            <button type="submit" disabled={!stripe}
-                                    className="rounded-full px-4 w-60 flex justify-center items-center py-1.5 bg-gradient-to-tr from-green-400 to-green-200">
-                                {loading !== undefined ? loading ? <Check size={20}/> :
-                                    <Spinner size={20} className="animate-spin"/> : "Pay for a reservation"}
-                            </button>
-                        </div>
-                    </form>
-                )}
                 <div className="flex flex-col gap-2 justify-center items-start py-4">
+                    {formError && (
+                        <div
+                            className="shadow-sm flex flex-col p-2 w-full text-sm text-red-600 rounded-md bg-red-50">
+                            <div className="flex items-center justify-start flex-row gap-2">
+                                <Info size={16} weight="bold"/>
+                                <span className="font-medium">
+                    Ensure that these requirements are met:
+                  </span>
+                            </div>
+                            <ul className="mt-1.5 list-disc ml-6 text-sm">
+                                <li>{formError}</li>
+                            </ul>
+                        </div>
+                    )}
                     <p className="text-sm w-full">
                         By clicking on the reserve button, you agree to the <span className="text-green-500">terms and conditions</span> of
                         the reservation
                     </p>
                     <button
                         type="button"
-                        // onClick={() => {}}
-                        className="border-2 w-72 bg-zinc-50 font-medium px-6 rounded-md py-2.5"
+                        onClick={() => handleReserve()}
+                        className="border-2 flex justify-center items-center w-72 bg-zinc-50 font-medium px-6 rounded-md py-2.5"
                     >
-                        Reserve
+                        {reserveLoading ?
+                            <Spinner size={20} className="animate-spin"/> : "Reserve"}
                     </button>
                 </div>
             </div>

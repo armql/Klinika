@@ -36,12 +36,22 @@ const Datepicker = () => {
         }
 
         const formattedDate = format(newDate, 'MM/dd/yyyy');
-        if (selectedDoctor && selectedDoctor.schedule[formattedDate] && selectedDoctor.schedule[formattedDate].timeslots.length === timeSlots.length) {
+        const reservation = selectedDoctor?.reservations.find(res => res.date === formattedDate);
+        if (reservation && reservation.slots.length === timeSlots.length) {
             return;
         }
 
         setSelectedDate(newDate);
         setFormattedDate(formattedDate);
+    };
+
+    const isTimeSlotReserved = (day: number, slot: number) => {
+        const formattedDate = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'MM/dd/yyyy');
+        if (selectedDoctor && selectedDoctor.reservations) {
+            const reservation = selectedDoctor.reservations.find(res => res.date === formattedDate);
+            return reservation?.slots.includes(slot);
+        }
+        return false;
     };
 
     const isDateSelected = (day: number) => {
@@ -92,7 +102,7 @@ const Datepicker = () => {
                         className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-2 text-center text-[10px] font-normal">
                         {daysInMonthArray.map((day) => {
                             const formattedDate = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'MM/dd/yyyy');
-                            const isFullyBooked = selectedDoctor && selectedDoctor.schedule[formattedDate] && selectedDoctor.schedule[formattedDate].timeslots.length === timeSlots.length;
+                            const isFullyBooked = selectedDoctor && selectedDoctor.reservations && selectedDoctor.reservations[formattedDate] && selectedDoctor.reservations[formattedDate].timeslots.length === timeSlots.length;
                             return (
                                 <button
                                     type="button"
@@ -123,8 +133,7 @@ const Datepicker = () => {
             <div>
                 <ul className="flex flex-col w-32 items-center justify-center">
                     {timeSlots.map((slot) => {
-                        const isTimeSlotReserved = selectedDoctor && selectedDoctor.schedule[formattedDate]?.timeslots.includes(slot.id);
-
+                        const isTimeSlotReservedForSelectedDate = selectedDate && isTimeSlotReserved(selectedDate.getDate(), slot.id);
 
                         return (
                             <li key={slot.id}>
@@ -132,9 +141,9 @@ const Datepicker = () => {
                                     type="button"
                                     onClick={() => setSelectedTime(slot)}
                                     className={`border-2 px-1 py-1.5 text-xs w-32
-                    ${selectedTime === slot ? "border-green-500" : "border-transparent bg-white hover:border-zinc-200 "}
-                    ${isTimeSlotReserved ? "cursor-not-allowed bg-zinc-200" : "cursor-pointer"}
-                `}
+                                ${selectedTime === slot ? "border-green-500" : "border-transparent bg-white hover:border-zinc-200 "}
+                                ${isTimeSlotReservedForSelectedDate ? "cursor-not-allowed bg-zinc-200" : "cursor-pointer"}
+                            `}
                                 >
                                     {`${slot.start} - ${slot.end}`}
                                 </button>

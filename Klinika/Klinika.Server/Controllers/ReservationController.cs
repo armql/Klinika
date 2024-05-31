@@ -1,10 +1,12 @@
 using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
+using Klinika.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.ProjectModel;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
 namespace Klinika.Server.Controllers
 {
@@ -13,10 +15,12 @@ namespace Klinika.Server.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly FeeServices _feeServices;
 
-        public ReservationController(ApplicationDbContext dbContext)
+        public ReservationController(ApplicationDbContext dbContext, FeeServices feeServices)
         {
             _dbContext = dbContext;
+            _feeServices = feeServices;
         }
 
         [HttpGet("getAll")]
@@ -81,6 +85,7 @@ namespace Klinika.Server.Controllers
             
             await _dbContext.Reservations.AddAsync(newReservation);
             await _dbContext.SaveChangesAsync();
+
             return Ok(reservation);
         }
 

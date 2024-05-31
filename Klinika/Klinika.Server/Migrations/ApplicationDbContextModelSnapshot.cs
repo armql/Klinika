@@ -246,6 +246,10 @@ namespace Klinika.Server.Migrations
                     b.Property<DateTime>("creationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("patientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");

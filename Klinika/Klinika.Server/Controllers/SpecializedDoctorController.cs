@@ -24,13 +24,21 @@ namespace Klinika.Server.Controllers
         {
             var specializedDoctors = await _dbContext.SpecializedDoctors
                 .Include(s => s.Specialization)
+                .Include(s => s.Reservations)
                 .Select(s => new
                 {
                     s.id,
                     s.specializationId,
                     specializationName = s.Specialization.name,
                     fullName = s.User.firstName + " " + s.User.lastName,
-                    s.Reservations
+                    Reservations = s.Reservations
+                        .GroupBy(r => r.date)
+                        .Select(g => new 
+                        {
+                            date = g.Key,
+                            slots = g.Select(r => r.slot).ToList()
+                        })
+                        .ToList()
                 })
                 .ToListAsync();
 

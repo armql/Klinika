@@ -70,9 +70,10 @@ export default defineConfig({
                 'pingauth',
                 'api/Auth',
                 'api/Auth/login',
+                'api/Auth/refreshToken',
                 'api/Fee/all',
                 'api/Fee/purchase',
-                'api/Auth/refreshToken',
+                'api/Fee/cleanup',
             ], target),
 
             // SPECIALIZATION
@@ -158,9 +159,9 @@ export default defineConfig({
                 'api/Reservation/create',
                 'api/Reservation/update',
                 'api/Reservation/delete',
-                'api/Reservation/bulkDelete'
+                'api/Reservation/bulkDelete',
             ], target),
-            
+
             // Consultation
             ...createProxyRoutes([
                 'api/Consultation/paginate',
