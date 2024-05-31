@@ -13,7 +13,7 @@ namespace Klinika.Server.Models.User
 
         [ForeignKey(nameof(id))]
         [JsonIgnore]
-        public virtual ApplicationUser? User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<Reservation>? Reservations { get; set; }
     }

@@ -16,11 +16,11 @@ namespace Klinika.Server.Models.User
 
         [ForeignKey(nameof(specializationId))]
         [JsonIgnore]
-        public virtual Specialization? Specialization { get; set; }
+        public virtual Specialization Specialization { get; set; }
 
         [ForeignKey(nameof(id))]
         [JsonIgnore]
-        public virtual ApplicationUser? User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<Reservation>? Reservations { get; set; }
     }

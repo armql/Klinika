@@ -49,8 +49,8 @@ export default function ReservationData() {
         {
             type: "text",
             identifier: "reasonOfConsultation",
-            name: "Reason Of Consultation",
-            placeholder: "Enter your reason of consultation",
+            name: "Specialization Name",
+            placeholder: "Enter your specialization name",
         },
         {
             type: "number",
