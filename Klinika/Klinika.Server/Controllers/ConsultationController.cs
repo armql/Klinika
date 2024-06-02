@@ -19,6 +19,35 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
         }
         
+        [HttpGet("paginateById")]
+        public ActionResult<IEnumerable<Consultation>> PaginateById(string userId, string search = "", int pageNumber = 1, int pageSize = 15)
+        {
+            if (_dbContext.Consultations == null)
+            {
+                return NotFound();
+            }
+
+            var query = _dbContext.Consultations.Include(c => c.reservation).Where(c => c.reservation.patientId == userId).AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.notes.Contains(search) || s.evaluation.Contains(search));
+            }
+
+            var count = query.Count();
+
+            var consultations = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = consultations,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
+        }
+        
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<Consultation>>> GetAll()
         {

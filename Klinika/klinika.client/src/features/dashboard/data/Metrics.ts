@@ -14,7 +14,7 @@ export default function HandleMetrics() {
         const final = await axios_instance.get('Metrics/all').then((response) => {
             return response;
         });
-        setUserCount(final.data);
+        setUserCount(final.data.userCount);
         return final.data;
     }, []);
 

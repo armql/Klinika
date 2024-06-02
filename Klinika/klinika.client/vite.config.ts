@@ -124,7 +124,8 @@ export default defineConfig({
                 'api/Account/update',
                 'api/Account/delete',
                 'api/Account/assignRole',
-                'api/Account/count'
+                'api/Account/count',
+                'api/Account/getCurrent'
             ], target),
 
             // ServiceDesk
@@ -153,6 +154,7 @@ export default defineConfig({
 
             // Reservation
             ...createProxyRoutes([
+                'api/Reservation/paginateById',
                 'api/Reservation/paginate',
                 'api/Reservation/get',
                 'api/Reservation/getAll',
@@ -164,6 +166,7 @@ export default defineConfig({
 
             // Consultation
             ...createProxyRoutes([
+                'api/Consultation/paginateById',
                 'api/Consultation/paginate',
                 'api/Consultation/get',
                 'api/Reservation/getAll',
@@ -172,6 +175,7 @@ export default defineConfig({
                 'api/Consultation/delete',
                 'api/Consultation/bulkDelete'
             ], target),
+
             ...createProxyRoutes([
                 'api/Patient/paginate',
                 'api/Patient/get',

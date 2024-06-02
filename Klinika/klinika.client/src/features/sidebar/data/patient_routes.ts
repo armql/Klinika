@@ -1,4 +1,9 @@
-import {PatientDashboard, PatientReports, PatientReservations} from "../../../router/pages";
+import {
+    PatientConsultationsList,
+    PatientDashboard,
+    PatientReservations,
+    PatientReservationsList
+} from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
 export const patient_routes: Data[] = [
@@ -24,7 +29,8 @@ export const patient_routes: Data[] = [
                 id: 2,
                 name: "Reports",
                 links: [
-                    {to: "reports", text: "Reports List", component: PatientReports},
+                    {to: "reservations-list", text: "Reservations List", component: PatientReservationsList},
+                    {to: "consultations-list", text: "Consultations List", component: PatientConsultationsList},
                 ],
             },
         ],
@@ -37,11 +43,11 @@ export const patient_routes: Data[] = [
                 id: 3,
                 name: "Learning Center",
                 links: [
-                    {to: "learn-more", text: "Learn More", component: PatientReports},
+                    {to: "learn-more", text: "Learn More", component: PatientConsultationsList},
                     {
                         to: "ask-question",
                         text: "Ask Questions",
-                        component: PatientReports,
+                        component: PatientConsultationsList,
                     },
                 ],
             },

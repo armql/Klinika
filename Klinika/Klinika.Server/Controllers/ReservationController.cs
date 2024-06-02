@@ -88,6 +88,49 @@ namespace Klinika.Server.Controllers
 
             return Ok(reservation);
         }
+        
+        [HttpGet("paginateById")]
+        public ActionResult<IEnumerable<Reservation>> PaginateById(string userId, string search = "", int pageNumber = 1, int pageSize = 15)
+        {
+            if (_dbContext.Reservations == null)
+            {
+                return NotFound();
+            }
+
+            var query = _dbContext.Reservations
+                .Include(r => r.specializedDoctor)
+                .ThenInclude(sd => sd.Specialization)
+                .Where(r => r.patientId == userId)
+                .Select(r => new
+                {
+                    r.id,
+                    r.reasonOfConsultation,
+                    r.date,
+                    r.slot,
+                    r.creationDate,
+                    specializedDoctorName = r.specializedDoctor.User.firstName + " " + r.specializedDoctor.User.lastName,
+                    specializationName = r.specializedDoctor.Specialization.name
+                })
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(s => s.reasonOfConsultation.Contains(search) || s.slot == int.Parse(search));
+            }
+
+            var count = query.Count();
+
+            var reservations = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+
+            return Ok(new
+            {
+                data = reservations,
+                pageNumber,
+                pageSize,
+                totalCount = count,
+                totalPages = (int)Math.Ceiling(count / (double)pageSize)
+            });
+        }
 
         [HttpGet("get")]
         public async Task<ActionResult<Reservation>> Get(int id)

@@ -32,12 +32,12 @@ function SimpleStats({type, newValue}: StatsProps) {
                     <TrendDown size={64} className="text-red-500"/>
             )
         },
-        visits: {
-            label: 'Visits',
-            value: values['visits'] || 0,
-            boostPercentage: boostPercentages['visits'] || 0,
+        specialized: {
+            label: 'Specialized Doctor',
+            value: values['specialized'] || 0,
+            boostPercentage: boostPercentages['specialized'] || 0,
             icon: (
-                boostPercentages['visits'] >= 0 ?
+                boostPercentages['specialized'] >= 0 ?
                     <TrendUp size={64} className="text-emerald-500"/> :
                     <TrendDown size={64} className="text-red-500"/>
             )
@@ -52,12 +52,12 @@ function SimpleStats({type, newValue}: StatsProps) {
                     <TrendDown size={64} className="text-red-500"/>
             )
         },
-        newUsers: {
-            label: 'New Users',
-            value: values['newUsers'] || 0,
-            boostPercentage: boostPercentages['newUsers'] || 0,
+        patients: {
+            label: 'Patients',
+            value: values['patients'] || 0,
+            boostPercentage: boostPercentages['patients'] || 0,
             icon: (
-                boostPercentages['newUsers'] >= 0 ?
+                boostPercentages['patients'] >= 0 ?
                     <TrendUp size={64} className="text-emerald-500"/> :
                     <TrendDown size={64} className="text-red-500"/>
             )

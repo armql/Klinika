@@ -131,7 +131,8 @@ export default function Form({refetch}: FormProps) {
     };
 
     return (
-        <section className="border-2 p-12 w-[800px] relative h-fit rounded-3xl shadow-sm">
+        <section
+            className="border-2 xl:p-12 lg:p-8 p-4 xl:w-[800px] lg:w-[700px] md:w-[700px] relative h-fit rounded-3xl shadow-sm">
             <h1 className="text-2xl font-medium">Reserving for [Firstname Lastname]
                 in {selectedSpecialization?.title}</h1>
             <div className="mt-4 flex flex-col gap-4">
@@ -144,11 +145,11 @@ export default function Form({refetch}: FormProps) {
                     }}
                     name={"reasonOfConsult"}/>
                 <div className="flex flex-col gap-6">
-                    <div className="flex gap-2 flex-row">
+                    <div className="flex gap-2 md:flex-row flex-col">
                         <button
                             type="button"
                             onClick={() => setOptions(false)}
-                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options || "border-zinc-300"}`}>
+                            className={`border-2 md:w-1/2 w-full h-24 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options || "border-zinc-300"}`}>
                             <div>
                                 <MagicWand size={32} weight="duotone"/>
                             </div>
@@ -165,7 +166,7 @@ export default function Form({refetch}: FormProps) {
                                 // handleEarliest();
                                 setOptions(true);
                             }}
-                            className={`border-2 w-1/2 h-20 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options && "border-zinc-300"}`}>
+                            className={`border-2 md:w-1/2 w-full h-24 hover:border-zinc-300 gap-4 flex justify-start flex-row items-center px-4 rounded-md ${options && "border-zinc-300"}`}>
                             <div>
                                 <ClockClockwise size={32} weight="duotone"/>
                             </div>

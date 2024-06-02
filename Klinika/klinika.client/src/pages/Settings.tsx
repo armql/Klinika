@@ -1,6 +1,6 @@
 import {CaretRight} from "@phosphor-icons/react";
 import {useState} from "react";
-import {Contact, PersonalInfo, Preferences, Tos} from "../../features/settings/__settings.ts";
+import {Contact, PersonalInfo, Preferences, Tos} from "../features/settings/__settings.ts";
 
 const settings = [
     {

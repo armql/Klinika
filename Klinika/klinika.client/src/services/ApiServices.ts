@@ -4,17 +4,16 @@ import {AxiosInstance, AxiosResponse} from "axios";
 type ApiEndpoints = {
     category?: string;
     category2?: string;
-    // getAll: string;
-    paginate: string;
-    get: string;
-    create: string;
-    update: string;
-    delete: string;
+    reservations?: string;
+    paginate?: string;
+    get?: string;
+    create?: string;
+    update?: string;
+    delete?: string;
     bulk_delete?: string;
 };
 
 type PatchProps = { op: string; path: string; value: number | string | boolean; }[];
-
 
 export class ApiService<T> {
     endpoints: ApiEndpoints;
@@ -47,13 +46,6 @@ export class ApiService<T> {
         }
     };
 
-    // getAll = async (): Promise<T[]> => {
-    //     const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-    //         this.endpoints.getAll
-    //     );
-    //     return response.data;
-    // };
-
     paginate = async (
         currentPage: number,
         pageSize: number,
@@ -65,13 +57,24 @@ export class ApiService<T> {
         return response.data;
     };
 
+    reservations = async (
+        userId: string,
+        currentPage: number,
+        pageSize: number,
+        search: string
+    ): Promise<T[]> => {
+        const response: AxiosResponse<T[]> = await this.axiosInstance.get(
+            `${this.endpoints.reservations}?userId=${userId}&pageNumber=${currentPage}&pageSize=${pageSize}&search=${search}`
+        );
+        return response.data;
+    };
+
     get = async (id: number | string): Promise<T> => {
         const response: AxiosResponse<T> = await this.axiosInstance.get(
             `${this.endpoints.get}/?id=${id}`
         );
         return response.data;
     };
-
 
     create = async (item: T): Promise<T> => {
         const response: AxiosResponse<T> = await this.axiosInstance.post(

@@ -1,7 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 import {HandleMetrics} from "../__dashboard.ts";
 
-function VisitorsTraffic() {
+function ReservationsTraffic() {
     const {metricsState} = HandleMetrics();
 
     const series = metricsState ? [{
@@ -95,4 +95,4 @@ function VisitorsTraffic() {
     );
 }
 
-export default VisitorsTraffic;
+export default ReservationsTraffic;

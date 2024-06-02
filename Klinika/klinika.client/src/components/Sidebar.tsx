@@ -3,8 +3,10 @@ import {
     developer_routes as dev,
     Header,
     patient_routes as patient,
+    primary_routes as primary,
     Profile,
     Resizer,
+    specialized_routes as spec,
     Starred,
 } from "../features/sidebar/__sidebar";
 import {CaretDown, Faders, Folder, FolderOpen} from "@phosphor-icons/react";
@@ -40,6 +42,12 @@ export default function Sidebar({user, children}: InnerProp) {
         switch (user) {
             case "dev":
                 setData(dev);
+                break;
+            case "spec":
+                setData(spec);
+                break;
+            case "primary":
+                setData(primary);
                 break;
             case "patient":
                 setData(patient);

@@ -19,10 +19,67 @@ namespace Klinika.Server.Controllers
         private readonly ApplicationDbContext _dbContext = dbContext;
 
         [HttpGet("count")]
-        public async Task<ActionResult<int>> CountUsers()
+        public async Task<ActionResult> CountEntities()
         {
-            var count = await _userManager.Users.CountAsync();
-            return Ok(count);
+            var usersCount = await _userManager.Users.CountAsync();
+            var reservationsCount = await _dbContext.Reservations.CountAsync();
+            var specializedDoctorsCount = await _dbContext.SpecializedDoctors.CountAsync();
+            var patientsCount = await _dbContext.Patients.CountAsync();
+
+            var result = new
+            {
+                usersCount,
+                reservationsCount,
+                specializedDoctorsCount,
+                patientsCount
+            };
+
+            return Ok(result);
+        }
+        
+        [HttpGet("getCurrent")]
+        public async Task<ActionResult> GetCurrent(string id)
+        {
+            if (_dbContext.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var reservations = await _dbContext.Reservations
+                .Where(r => r.patientId == id)
+                .Include(r => r.specializedDoctor)
+                .ThenInclude(sd => sd.Specialization)
+                .Select(r => new 
+                {
+                    r.id,
+                    r.reasonOfConsultation,
+                    r.date,
+                    r.slot,
+                    r.creationDate,
+                    specializedDoctorName = r.specializedDoctor.User.firstName + " " + r.specializedDoctor.User.lastName,
+                    specializationName = r.specializedDoctor.Specialization.name
+                })
+                .ToListAsync();
+
+            var reservationCount = reservations.Count;
+
+            var result = new
+            {
+                firstName = user.firstName,
+                lastName = user.lastName,
+                gender = user.gender,
+                reservationsCount = reservationCount,
+                reservations
+            };
+
+            return Ok(result);
         }
         
         [HttpGet("paginate")]

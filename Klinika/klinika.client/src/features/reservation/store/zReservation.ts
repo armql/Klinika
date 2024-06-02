@@ -31,10 +31,10 @@ type State = {
     loading: boolean | undefined,
     setLoading: (loading: boolean) => void,
     setFormError: (formError: string) => void,
-    selectedSpecialization: Specialization | undefined,
+    selectedSpecialization: Specialization | null,
     selectedDoctor: SelectedDoctor | undefined,
     setSelectedDoctor: (doctor: SelectedDoctor) => void,
-    setSelectedSpecialization: (specialization: Specialization) => void,
+    setSelectedSpecialization: (specialization: Specialization | null) => void,
     options: boolean | undefined,
     setOptions: (options: boolean) => void,
     reserving: boolean | undefined,
@@ -48,7 +48,7 @@ type State = {
 }
 
 export const zReservation = create<State>((set) => ({
-    selectedSpecialization: undefined,
+    selectedSpecialization: null,
     options: undefined,
     reserving: undefined,
     selectedDate: null,
@@ -60,7 +60,7 @@ export const zReservation = create<State>((set) => ({
     setSelectedDoctor: (doctor: SelectedDoctor) => set({selectedDoctor: doctor}),
     setOptions: (options: boolean) => set({options}),
     setReserving: (reserving: boolean) => set({reserving}),
-    setSelectedSpecialization: (specialization: Specialization) => set({selectedSpecialization: specialization}),
+    setSelectedSpecialization: (specialization: Specialization | null) => set({selectedSpecialization: specialization}),
     setSelectedDate: (date: Date | null) => set({selectedDate: date}),
     selectedTime: null,
     setSelectedTime: (time: TimeSlot) => set({selectedTime: time}),

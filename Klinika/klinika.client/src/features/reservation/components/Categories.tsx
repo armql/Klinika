@@ -9,11 +9,11 @@ export default function Categories() {
 
     return (
         <div
-            className={`w-[800px] h-[800px] border-2 shadow-sm p-12 rounded-3xl flex flex-col gap-6`}>
-            <h1 className={`text-3xl font-medium`}>Pick one of the specializations that you want to reserve
+            className={`w-[800px] h-[800px] border-2 shadow-sm xl:p-12 lg:p-8 p-4 rounded-3xl flex flex-col gap-6`}>
+            <h1 className={`text-3xl font-medium text-center`}>Pick one of the specializations that you want to reserve
                 on</h1>
 
-            <div className={`flex flex-row overflow-y-auto py-4 px-2 flex-wrap items-center justify-between gap-6`}>
+            <div className={`flex flex-row overflow-y-auto py-4 px-2 flex-wrap items-center justify-center gap-6`}>
                 {specialization_data.map((item) => (
                     <Fragment key={item.id}>
                         <button

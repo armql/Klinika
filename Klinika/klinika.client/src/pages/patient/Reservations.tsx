@@ -7,14 +7,14 @@ import {useEffect, useState} from "react";
 import {specialization_data} from "../../features/reservation/data/specialization_data.ts";
 import axios_instance from "../../api/axios.ts";
 import {useQuery} from "react-query";
+import {CaretLeft} from "@phosphor-icons/react";
 
 const stripePromise = loadStripe("pk_test_51PLLAYET6IMeC9ZTgP36mqJEWbaxtYtuJElKW4PbjzG5I2wYJXrLe0L8VgPTHhsqVRtfCQOSt20BP27P4c6rgWlb00RHgd9aZ6");
 
 function Reservations() {
-    const {selectedSpecialization} = zReservation();
+    const {selectedSpecialization, setSelectedSpecialization} = zReservation();
     const {data: userData} = zAuth();
     const [specializations, setSpecializations] = useState(specialization_data);
-
     const fetchFees = async () => {
         const response = await axios_instance.get('Fee/all');
         const fees = response.data[0].specializations;
@@ -39,10 +39,19 @@ function Reservations() {
     }, [data]);
 
     return (
-        <section className={`w-full h-fit py-12 flex justify-center items-center`}>
+        <section className={`w-full h-fit py-12 px-12 flex justify-center items-center`}>
             {selectedSpecialization ?
                 <Elements stripe={stripePromise}>
-                    <Form refetch={refetch}/></Elements>
+                    <div className="relative">
+                        <Form refetch={refetch}/>
+                        <button
+                            type="button"
+                            onClick={() => setSelectedSpecialization(null)}
+                            className="absolute group top-0 -left-40 border-2 w-40 bottom-0 flex justify-end items-center">
+                            <CaretLeft size={48} weight="duotone" className="group-hover:block hidden"/>
+                        </button>
+                    </div>
+                </Elements>
                 : <Categories/>
             }
         </section>

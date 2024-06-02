@@ -1,16 +1,26 @@
 import {createBrowserRouter, Navigate} from "react-router-dom";
 import {
-  AdministrationLayout,
-  DeveloperLayout,
-  GuestLayout,
-  NotFound,
-  PatientLayout,
-  PrimaryDoctorLayout,
-  SpecializedDoctorLayout,
+    AdministrationLayout,
+    DeveloperLayout,
+    GuestLayout,
+    NotFound,
+    PatientLayout,
+    PrimaryDoctorLayout,
+    SpecializedDoctorLayout,
 } from "./global";
-import {About, DeveloperDashboard, DeveloperSettings, HelpCenter, Home, Login, PatientDashboard,} from "./pages";
+import {
+    About,
+    DeveloperDashboard,
+    HelpCenter,
+    Home,
+    Login,
+    PatientDashboard,
+    PrimaryDashboard,
+    Settings,
+    SpecializedDashboard,
+} from "./pages";
 import ProtectedRoutes from "../util/ProtectedRoutes";
-import {developer_routes, patient_routes,} from "../features/sidebar/__sidebar";
+import {developer_routes, patient_routes, primary_routes, specialized_routes} from "../features/sidebar/__sidebar";
 import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
@@ -100,6 +110,33 @@ export const router = createBrowserRouter([
                 <SpecializedDoctorLayout/>
             </ProtectedRoutes>
         ),
+        children: [
+            {
+                path: "/specialized",
+                element: <Navigate to="dashboard"/>,
+            },
+            {
+                path: "dashboard",
+                element: <SpecializedDashboard/>,
+            },
+            {
+                path: "settings",
+                element: <Settings/>,
+            },
+            ...specialized_routes
+                .map((category) => {
+                    return category.folders.map((folder) => {
+                        return folder.links.map((link) => {
+                            const Component = link.component;
+                            return {
+                                path: link.to,
+                                element: <Component/>,
+                            };
+                        });
+                    });
+                })
+                .flat(2),
+        ],
     },
     {
         path: "/primary",
@@ -108,6 +145,33 @@ export const router = createBrowserRouter([
                 <PrimaryDoctorLayout/>
             </ProtectedRoutes>
         ),
+        children: [
+            {
+                path: "/primary",
+                element: <Navigate to="dashboard"/>,
+            },
+            {
+                path: "dashboard",
+                element: <PrimaryDashboard/>,
+            },
+            {
+                path: "settings",
+                element: <Settings/>,
+            },
+            ...primary_routes
+                .map((category) => {
+                    return category.folders.map((folder) => {
+                        return folder.links.map((link) => {
+                            const Component = link.component;
+                            return {
+                                path: link.to,
+                                element: <Component/>,
+                            };
+                        });
+                    });
+                })
+                .flat(2),
+        ],
     },
     {
         path: "/development",
@@ -127,7 +191,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "settings",
-                element: <DeveloperSettings/>,
+                element: <Settings/>,
             },
             ...developer_routes
                 .map((category) => {

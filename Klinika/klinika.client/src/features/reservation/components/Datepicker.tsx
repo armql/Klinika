@@ -69,67 +69,68 @@ const Datepicker = () => {
     }, !!selectedDoctor, [selectedDoctor]);
 
     return (
-        <section className="flex w-full flex-row items-center justify-between gap-6 px-4 py-4">
-            <button
-                type="button"
-                className={`${
-                    isBefore(endOfDay(addMonths(currentMonth, -1)), new Date())
-                        ? "cursor-not-allowed opacity-40 "
-                        : ""
-                }`}
-                onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
-                disabled={isBefore(endOfDay(addMonths(currentMonth, -1)), new Date())}
-            >
-                <CaretLeft size={24}/>
-            </button>
-            <div className="flex w-full justify-around gap-2 h-[280px]">
-                <div
-                    className={`flex cursor-pointer flex-col gap-2 border-2 border-green-500 px-4 py-4 transition duration-300
-    active:cursor-pointer`}
+        <section className="flex w-full md:flex-row flex-col items-center justify-between gap-6">
+            <div className="flex flex-row justify-between gap-2">
+                <button
+                    type="button"
+                    className={` ${
+                        isBefore(endOfDay(addMonths(currentMonth, -1)), new Date())
+                            ? "cursor-not-allowed opacity-40 "
+                            : ""
+                    }`}
+                    onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
+                    disabled={isBefore(endOfDay(addMonths(currentMonth, -1)), new Date())}
                 >
-                    <p className={`font-medium text-center h-24 ${formattedDate || "text-zinc-400"}`}>{formattedDate ? format(formattedDate, 'do MMMM yyyy') : format(new Date(), 'do MMMM yyyy')}</p>
-                    <ul
-                        className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-3 text-center text-[11px] font-normal">
-                        <li>S</li>
-                        <li>M</li>
-                        <li>T</li>
-                        <li>W</li>
-                        <li>T</li>
-                        <li>F</li>
-                        <li>S</li>
-                    </ul>
+                    <CaretLeft size={24}/>
+                </button>
+                <div className="flex w-full justify-around gap-2 h-[280px]">
                     <div
-                        className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-2 text-center text-[10px] font-normal">
-                        {daysInMonthArray.map((day) => {
-                            const formattedDate = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'MM/dd/yyyy');
-                            const isFullyBooked = selectedDoctor && selectedDoctor.reservations && selectedDoctor.reservations[formattedDate] && selectedDoctor.reservations[formattedDate].timeslots.length === timeSlots.length;
-                            return (
-                                <button
-                                    type="button"
-                                    key={day}
-                                    onClick={() => onDateClick(day)}
-                                    disabled={isDayInPast(day) || isFullyBooked}
-                                    className={`
+                        className={`flex cursor-pointer flex-col gap-2 border-2 border-green-500 px-4 py-4 transition duration-300
+    active:cursor-pointer`}
+                    >
+                        <p className={`font-medium text-center h-24 ${formattedDate || "text-zinc-400"}`}>{formattedDate ? format(formattedDate, 'do MMMM yyyy') : format(new Date(), 'do MMMM yyyy')}</p>
+                        <ul
+                            className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-3 text-center text-[11px] font-normal">
+                            <li>S</li>
+                            <li>M</li>
+                            <li>T</li>
+                            <li>W</li>
+                            <li>T</li>
+                            <li>F</li>
+                            <li>S</li>
+                        </ul>
+                        <div
+                            className="grid grid-cols-7 items-center justify-center gap-4 px-4 pt-2 text-center text-[10px] font-normal">
+                            {daysInMonthArray.map((day) => {
+                                const formattedDate = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'MM/dd/yyyy');
+                                const isFullyBooked = selectedDoctor && selectedDoctor.reservations && selectedDoctor.reservations[formattedDate] && selectedDoctor.reservations[formattedDate].timeslots.length === timeSlots.length;
+                                return (
+                                    <button
+                                        type="button"
+                                        key={day}
+                                        onClick={() => onDateClick(day)}
+                                        disabled={isDayInPast(day) || isFullyBooked}
+                                        className={`
                 flex items-center justify-center p-[3px] text-center
                 ${isDateSelected(day) ? "bg-green-400 text-white" : ""}
                 ${isDayInPast(day) ? "cursor-not-allowed opacity-40" : ""}
                 ${isFullyBooked ? "cursor-not-allowed opacity-20" : ""}
             `}
-                                >
-                                    {day}
-                                </button>
-                            );
-                        })}
+                                    >
+                                        {day}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
+                <button
+                    type="button"
+                    onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                >
+                    <CaretRight size={24}/>
+                </button>
             </div>
-            <button
-                type="button"
-                onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-            >
-                <CaretRight size={24}/>
-            </button>
-
             <div>
                 <ul className="flex flex-col w-32 items-center justify-center">
                     {timeSlots.map((slot) => {

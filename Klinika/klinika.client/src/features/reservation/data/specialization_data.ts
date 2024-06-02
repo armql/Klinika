@@ -31,7 +31,7 @@ export const specialization_data = [
     {
         id: 5,
         title: "Oncology",
-        image: "https://static-00.iconduck.com/assets.00/biology-cancer-cell-disease-health-human-tumor-illustration-2048x2000-cknist75.png",
+        image: "https://cdn-icons-png.freepik.com/512/8358/8358513.png",
         isAvailable: false,
     },
     {
