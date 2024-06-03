@@ -28,6 +28,10 @@ const App = () => {
                 signalConnection.on("RecieveSpecificMessage", (user, message) => {
                     setMessages(messages => [...messages, {user, message}]);
                 });
+                signalConnection.on("RecieveMessage", (user, message) => {
+                    setMessages(messages => [...messages, {user, message}]);
+                });
+                
                 setConnection(signalConnection);
                 if (signalConnection.state === HubConnectionState.Connected) {
                     signalConnection.invoke("JoinSpecificChatRoom", {userName: username, chatRoom: chatroom});
@@ -37,6 +41,7 @@ const App = () => {
 
         return () => {
             signalConnection.off("RecieveSpecificMessage");
+            signalConnection.off("RecieveMessage");
             signalConnection.stop();
         };
     };
