@@ -35,6 +35,7 @@ namespace Klinika.Server.Models.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Consultation> Consultations { get; set; }
         
+        public DbSet<Image> Images { get; set; }
         
 
 
@@ -78,6 +79,9 @@ namespace Klinika.Server.Models.Data
                 .HasKey(x => x.id);
             
             builder.Entity<Consultation>()
+                .HasKey(x => x.id);
+            
+            builder.Entity<Image>()
                 .HasKey(x => x.id);
             
 

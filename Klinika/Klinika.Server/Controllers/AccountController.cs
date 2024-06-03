@@ -1,5 +1,6 @@
 ﻿using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
+using Klinika.Server.Models.DTO;
 using Klinika.Server.Models.DTO.Developer;
 using Klinika.Server.Models.User;
 using Microsoft.AspNetCore.Http;
@@ -254,7 +255,69 @@ namespace Klinika.Server.Controllers
 
             return Ok(new { message = message, result = result });
         }
+        
+        [HttpPost("updateEmail")]
+        public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailDto model)
+        {
+            var user = await _userManager.FindByIdAsync(model.id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.newEmail);
+            var result = await _userManager.ChangeEmailAsync(user, model.newEmail, token);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
+        }
+        
+        [HttpPost("updatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto model)
+        {
+            var user = await _userManager.FindByIdAsync(model.id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.currentPassword, model.newPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("updateName")]
+        public async Task<IActionResult> UpdateName([FromBody] UpdateNameDto model)
+        {
+            var user = await _userManager.FindByIdAsync(model.id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.firstName = model.firstName;
+            user.lastName = model.lastName;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
+        }
+
+         
         [ApiExplorerSettings(IgnoreApi = true)]
         public string HashPassword(string password)
         {

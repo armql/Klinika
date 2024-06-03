@@ -1,16 +1,19 @@
 import {
-  DeveloperBlockData,
-  DeveloperConsultationData,
-  DeveloperDashboard,
-  DeveloperHelpCenterCategoryData,
-  DeveloperHelpCenterData,
-  DeveloperPatientData,
-  DeveloperReservationData,
-  DeveloperRoleData,
-  DeveloperServiceDeskData,
-  DeveloperSpecializationData,
-  DeveloperSpecializedDoctorData,
-  DeveloperUserData
+    DeveloperBlockData,
+    DeveloperConsultationData,
+    DeveloperDashboard,
+    DeveloperHelpCenterCategoryData,
+    DeveloperHelpCenterData,
+    DeveloperPatientData,
+    DeveloperReservationData,
+    DeveloperRoleData,
+    DeveloperServiceDeskData,
+    DeveloperSpecializationData,
+    DeveloperSpecializedDoctorData,
+    DeveloperUserData,
+    DeveloperImageData, 
+    DeveloperUserRolesData,
+    DeveloperPrimaryDoctorData
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -98,15 +101,38 @@ export const developer_routes: Data[] = [
                         text: "Consultation List",
                         component: DeveloperConsultationData,
                     },
+                ],
+            },
+            {
+                id: 10,
+                name: "Roles",
+                links: [
                     {
                         to: "specialized-doctor-data",
                         text: "Specialized Doctor List",
                         component: DeveloperSpecializedDoctorData,
                     },
                     {
+                        to:"primary-doctor-data",
+                        text: "Primary Doctor List",
+                        component: DeveloperPrimaryDoctorData,
+                    },
+                    {
                         to: "patient-data",
                         text: "Patient List",
                         component: DeveloperPatientData,
+                    },
+                    
+                ],
+            },
+            {
+                id: 9,
+                name: "Images",
+                links: [
+                    {
+                        to: "image-data",
+                        text: "Images List",
+                        component: DeveloperImageData,
                     },
                 ],
             },

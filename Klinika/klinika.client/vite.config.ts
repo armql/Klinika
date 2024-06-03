@@ -125,7 +125,10 @@ export default defineConfig({
                 'api/Account/delete',
                 'api/Account/assignRole',
                 'api/Account/count',
-                'api/Account/getCurrent'
+                'api/Account/getCurrent',
+                'api/Account/updateEmail',
+                'api/Account/updatePassword',
+                'api/Account/updateName'
             ], target),
 
             // ServiceDesk
@@ -193,6 +196,33 @@ export default defineConfig({
                 'api/SpecializedDoctor/update',
                 'api/SpecializedDoctor/delete',
                 'api/SpecializedDoctor/bulkDelete'
+            ], target),
+            ...createProxyRoutes([
+                'api/Image/paginate',
+                'api/Image/get',
+                'api/Image/getAll',
+                'api/Image/create',
+                'api/Image/update',
+                'api/Image/delete',
+                'api/Image/bulkDelete'
+            ], target),
+            ...createProxyRoutes([
+                'api/UserRoles/paginate',
+                'api/UserRoles/get',
+                'api/UserRoles/getAll',
+                'api/UserRoles/create',
+                'api/UserRoles/update',
+                'api/UserRoles/delete',
+                'api/UserRoles/bulkDelete'
+            ], target),
+            ...createProxyRoutes([
+                'api/PrimaryCareDoctor/paginate',
+                'api/PrimaryCareDoctor/get',
+                'api/PrimaryCareDoctor/getAll',
+                'api/PrimaryCareDoctor/create',
+                'api/PrimaryCareDoctor/update',
+                'api/PrimaryCareDoctor/delete',
+                'api/PrimaryCareDoctor/bulkDelete'
             ], target),
         },
         port: 5173,

@@ -23,7 +23,9 @@ const DeveloperReservationData = lazy(() => import("../pages/developer/Reservati
 const DeveloperConsultationData = lazy(() => import("../pages/developer/ConsultationData"));
 const DeveloperSpecializedDoctorData = lazy(() => import("../pages/developer/SpecializedDoctorData"));
 const DeveloperPatientData = lazy(() => import("../pages/developer/PatientData"));
-// const DeveloperUserRolesData = lazy(() => import("../pages/developer/UserRolesData"));
+const DeveloperImageData = lazy(() => import("../pages/developer/ImageData"));
+const DeveloperUserRolesData = lazy(() => import("../pages/developer/UserRolesData"));
+const DeveloperPrimaryDoctorData = lazy(() => import("../pages/developer/PrimaryDoctorData"));
 
 
 const SpecializedDashboard = lazy(() => import("../pages/specialized/Dashboard"));
@@ -58,6 +60,9 @@ export {
     DeveloperConsultationData,
     DeveloperSpecializedDoctorData,
     DeveloperPatientData,
+    DeveloperImageData,
+    DeveloperUserRolesData,
+    DeveloperPrimaryDoctorData,
 
     SpecializedDashboard,
     SpecializedAppointments,
