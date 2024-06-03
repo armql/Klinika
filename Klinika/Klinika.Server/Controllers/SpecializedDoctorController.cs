@@ -50,6 +50,60 @@ namespace Klinika.Server.Controllers
             return Ok(specializedDoctors);
         }
         
+        [HttpGet("getOverview")]
+        public async Task<ActionResult> GetPatientsBySpecializedDoctorId(string id)
+        {
+            var reservations = await _dbContext.Reservations
+                .Include(r => r.patient)
+                .ThenInclude(p => p.User)
+                .Where(r => r.specializedDoctorId == id)
+                .ToListAsync();
+
+            var patients = reservations
+                .GroupBy(r => r.patientId)
+                .Select(g => new 
+                {
+                    fullName = g.First().patient.User.firstName + " " + g.First().patient.User.lastName,
+                    reservationsCount = g.Count()
+                })
+                .ToList();
+
+            var result = new
+            {
+                patientsCount = patients.Count,
+                totalReservationsCount = reservations.Count,
+                patients
+            };
+
+            return Ok(result);
+        }
+        
+        [HttpGet("getReservationsWithoutConsultation")]
+        public async Task<ActionResult> GetReservationsWithoutConsultation(string id)
+        {
+            string currentDate = DateTime.UtcNow.ToString("MM/dd/yyyy");
+            
+            currentDate = currentDate.Replace('.', '/');
+            
+            Console.WriteLine("Current date: " + currentDate);
+
+            var reservations = await _dbContext.Reservations
+                .Include(r => r.patient)
+                .ThenInclude(p => p.User)
+                .Where(r => r.specializedDoctorId == id && r.Consultations.Count == 0 && r.date == currentDate)
+                .Select(r => new
+                {
+                    id = r.id,
+                    patientFullName = r.patient.User.firstName + " " + r.patient.User.lastName,
+                    reasonOfConsultation = r.reasonOfConsultation,
+                    date = r.date,
+                    slot = r.slot
+                })
+                .ToListAsync();
+
+            return Ok(reservations);
+        }
+        
         [HttpGet("paginate")]
         public ActionResult<IEnumerable<SpecializedDoctor>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {

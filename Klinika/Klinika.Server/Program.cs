@@ -38,13 +38,14 @@ namespace Klinika.Server
             {
                 options.SignIn.RequireConfirmedAccount = false;
             });
-            builder.Services.AddSignalR();
             builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
             builder.Services.AddSingleton<FeeServices>();
             builder.Services.AddSingleton<ReservationServices>();
             builder.Services.AddSingleton<PatientsServices>();
             builder.Services.AddSingleton<SpecializedServices>();
             builder.Services.AddSingleton<RegisteredServices>();
+            builder.Services.AddSingleton<SharedDatabase>();
+            
             // Add Auth and JwtBearer
             builder.Services.AddAuthentication(options =>
                 {
@@ -83,6 +84,19 @@ namespace Klinika.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSignalR();
+            
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("reactApp", builder =>
+                {
+                    builder.WithOrigins("http://localhost:7045")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -93,13 +107,23 @@ namespace Klinika.Server
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseDeveloperExceptionPage();
             }
 
             app.MapHub<NotificationHub>("/notificationHub");
             app.UseHttpsRedirection();
 
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
+
+            app.UseCors("reactApp");
             
             app.MapControllers();
 

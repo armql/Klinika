@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@microsoft/signalr": "^8.0.0",
     "@phosphor-icons/react": "^2.1.4",
     "@react-pdf/renderer": "^3.4.4",
     "@stripe/react-stripe-js": "^2.7.1",
@@ -22,6 +23,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
+    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.2",
     "react-query": "^3.39.3",

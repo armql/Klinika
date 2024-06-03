@@ -11,9 +11,10 @@ import {
     DeveloperSpecializationData,
     DeveloperSpecializedDoctorData,
     DeveloperUserData,
-    DeveloperImageData, 
-    DeveloperUserRolesData,
-    DeveloperPrimaryDoctorData
+    DeveloperImageData,
+    DeveloperPrimaryDoctorData,
+    DeveloperChatData,
+    //DeveloperUserRolesData,
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -133,6 +134,17 @@ export const developer_routes: Data[] = [
                         to: "image-data",
                         text: "Images List",
                         component: DeveloperImageData,
+                    },
+                ],
+            },
+            {
+                id: 11,
+                name: "Chat",
+                links: [
+                    {
+                        to: "chat-data",
+                        text: "Chat",
+                        component: DeveloperChatData,
                     },
                 ],
             },

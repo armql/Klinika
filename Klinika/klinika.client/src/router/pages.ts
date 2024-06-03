@@ -27,6 +27,8 @@ const DeveloperImageData = lazy(() => import("../pages/developer/ImageData"));
 const DeveloperUserRolesData = lazy(() => import("../pages/developer/UserRolesData"));
 const DeveloperPrimaryDoctorData = lazy(() => import("../pages/developer/PrimaryDoctorData"));
 
+const DeveloperChatData = lazy(() => import("../pages/developer/ChatData"));
+
 
 const SpecializedDashboard = lazy(() => import("../pages/specialized/Dashboard"));
 const SpecializedAppointments = lazy(() => import("../pages/specialized/Appointments"));
@@ -63,6 +65,7 @@ export {
     DeveloperImageData,
     DeveloperUserRolesData,
     DeveloperPrimaryDoctorData,
+    DeveloperChatData,
 
     SpecializedDashboard,
     SpecializedAppointments,
