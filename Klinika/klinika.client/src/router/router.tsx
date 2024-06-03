@@ -10,6 +10,7 @@ import {
 } from "./global";
 import {
     About,
+    AdministrationDashboard,
     DeveloperDashboard,
     HelpCenter,
     Home,
@@ -20,7 +21,13 @@ import {
     SpecializedDashboard,
 } from "./pages";
 import ProtectedRoutes from "../util/ProtectedRoutes";
-import {developer_routes, patient_routes, primary_routes, specialized_routes} from "../features/sidebar/__sidebar";
+import {
+    administration_routes,
+    developer_routes,
+    patient_routes,
+    primary_routes,
+    specialized_routes
+} from "../features/sidebar/__sidebar";
 import Register from "../pages/Register";
 
 export const router = createBrowserRouter([
@@ -59,7 +66,7 @@ export const router = createBrowserRouter([
         ],
     },
     {
-        path: "/administrative",
+        path: "/administration",
         element: (
             <ProtectedRoutes suspense={true}>
                 <AdministrationLayout/>
@@ -67,9 +74,26 @@ export const router = createBrowserRouter([
         ),
         children: [
             {
-                path: "about",
-                element: <About/>,
+                path: "/administration",
+                element: <Navigate to="dashboard"/>,
             },
+            {
+                path: "dashboard",
+                element: <AdministrationDashboard/>,
+            },
+            ...administration_routes
+                .map((category) => {
+                    return category.folders.map((folder) => {
+                        return folder.links.map((link) => {
+                            const Component = link.component;
+                            return {
+                                path: link.to,
+                                element: <Component/>,
+                            };
+                        });
+                    });
+                })
+                .flat(2),
         ],
     },
     {

@@ -60,10 +60,34 @@ const selectSchema = z
         message: "Please select a type",
     });
 
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
 const fileSchema = z
+    .any()
+// .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+// .refine(
+//     (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+//     "Only .jpg, .jpeg, .png and .webp formats are supported."
+// );
+
+const passwordSchema = z
     .string()
-    .refine((value) => /\.(jpe?g|png|gif)$/i.test(value), {
-        message: "File must be a .jpeg, .jpg, .png, or .gif image",
+    .min(8, "Password should be at least 8 characters long")
+    .refine((value) => value.length > 0, {
+        message: "Password is required",
+    })
+    .refine((value) => /[A-Z]/.test(value), {
+        message: "Password must contain at least one uppercase letter",
+    })
+    .refine((value) => /[a-z]/.test(value), {
+        message: "Password must contain at least one lowercase letter",
+    })
+    .refine((value) => /[0-9]/.test(value), {
+        message: "Password must contain at least one digit",
+    })
+    .refine((value) => /\W|_/.test(value), {
+        message: "Password must contain at least one special character",
     });
 
 // PLAIN DATE
@@ -79,6 +103,7 @@ const schemaMap: Record<string, T> = {
     age: ageSchema,
     email: emailSchema,
     file: fileSchema,
+    password: passwordSchema,
 };
 
 // const createGlobalSchema = (fields: FormField[]) => {

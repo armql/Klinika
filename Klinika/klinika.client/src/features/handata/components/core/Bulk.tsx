@@ -9,11 +9,13 @@ type BulkProps = {
 };
 
 function Bulk({__delete}: BulkProps) {
+
     const {selectedItems, deselectAll, setConvPDF} = zForm();
     const {setCurrentPage} = zPagination();
     const [effect, setEffect] = useState(false);
 
     const bulkDeleter = async () => {
+        console.log('Delete clicked')
         try {
             Swal.fire({
                 title: "Are you sure?",
@@ -32,6 +34,7 @@ function Bulk({__delete}: BulkProps) {
                                 title: "Deleted",
                                 text: "Successfully deleted",
                             }).then(() => {
+                                window.location.reload();
                                 deselectAll();
                                 setCurrentPage(1);
                             });
@@ -40,6 +43,7 @@ function Bulk({__delete}: BulkProps) {
                 }
             })
         } catch (e) {
+            console.log(e)
             await Swal.fire({
                 icon: "error",
                 title: "Oops...",

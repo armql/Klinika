@@ -60,10 +60,10 @@ const formField: FormField[] = [
     },
 ];
 
-export default function UserData() {
+export default function RegistrationData() {
     const {create_modal: create, edit_modal: edit} = zHandler();
 
-    const role_api = new ApiService<ApplicationUser>(
+    const registration_api = new ApiService<ApplicationUser>(
         {
             paginate: "Account/paginate",
             get: "Account/get",
@@ -86,8 +86,8 @@ export default function UserData() {
                     "Birth Date",
                     "Email",
                 ]}
-                all={role_api.paginate}
-                delete={role_api.delete}
+                all={registration_api.paginate}
+                delete={registration_api.delete}
                 dataField={[
                     "id",
                     "firstName",
@@ -100,15 +100,15 @@ export default function UserData() {
             {edit && (
                 <EditForm<ApplicationUser>
                     header="User"
-                    get={role_api.get}
-                    update={role_api.update}
+                    get={registration_api.get}
+                    update={registration_api.update}
                     fields={formField}
                 />
             )}
             {create && (
                 <CreateForm<ApplicationUser>
                     header="User"
-                    api={role_api.create}
+                    api={registration_api.create}
                     fields={formField}
                 />
             )}

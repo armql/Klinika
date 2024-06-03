@@ -19,15 +19,18 @@ namespace Klinika.Server.Controllers
             _dbContext = dbContext;
         }
         
-        [HttpGet("paginateById")]
-        public ActionResult<IEnumerable<Consultation>> PaginateById(string userId, string search = "", int pageNumber = 1, int pageSize = 15)
+        [HttpGet("paginateByPatientId")]
+        public ActionResult<IEnumerable<Consultation>> PaginateByPatientId(string userId, string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Consultations == null)
             {
                 return NotFound();
             }
 
-            var query = _dbContext.Consultations.Include(c => c.reservation).Where(c => c.reservation.patientId == userId).AsQueryable();
+            var query = _dbContext.Consultations
+                .Include(c => c.reservation)
+                .Where(c => c.reservation.patientId == userId)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {

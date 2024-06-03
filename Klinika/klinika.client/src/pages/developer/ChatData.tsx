@@ -1,48 +1,52 @@
-﻿import {Col, Container, Row} from "react-bootstrap";
+﻿import {useState} from 'react';
+import {HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
+import {Col, Container, Row} from "react-bootstrap";
 import WaitingRoom from "../../hub/components/waitingRoom.tsx";
-import {useState} from 'react';
-import {HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import ChatRoom from "../../hub/components/ChatRoom";
-import {ConsoleLogger} from "@microsoft/signalr/dist/esm/Utils";
-
 
 const App = () => {
-        const [conn, setConnection] = useState();
-        const[messages, setMessages] = useState();
+    const [conn, setConnection] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [username, setUsername] = useState('');
+    const [chatroom, setChatroom] = useState('');
+
+    const joinChatRoom = async (username, chatroom) => {
+        setUsername(username);
+        setChatroom(chatroom);
+
         const signalConnection = new HubConnectionBuilder()
-            .withUrl("http://localhost:7045/chatHub")
+            .withUrl("https://localhost:7045/chatHub", {
+                skipNegotiation: true,
+                transport: HttpTransportType.WebSockets
+            })
+            .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();
-        
-        const joinChatRoom = async (userName, chatRoom) => {
-            try {
-                
 
-                signalConnection.on("JoinSpecificChatRoom", (userName, msg) => {
-                    console.log("msg: ", msg);
+        signalConnection.start()
+            .then(() => {
+                signalConnection.on("RecieveSpecificMessage", (user, message) => {
+                    setMessages(messages => [...messages, {user, message}]);
                 });
-                
-                signalConnection.on("RecieveSpecificMessage", (userName, msg) => {
-                    setMessages(messages => [...messages, {userName, msg}] );
-                });
-
-                await signalConnection.start();
-                await signalConnection.invoke("JoinChatRoom", {userName, chatRoom});
-
                 setConnection(signalConnection);
-            } catch (e) {
-                console.log(e);
-            }
+                if (signalConnection.state === HubConnectionState.Connected) {
+                    signalConnection.invoke("JoinSpecificChatRoom", {userName: username, chatRoom: chatroom});
+                }
+            })
+            .catch(err => console.error('Connection failed: ', err));
+
+        return () => {
+            signalConnection.off("RecieveSpecificMessage");
+            signalConnection.stop();
         };
-        
-        const sendMessage = async(message) => {
-            try {
-                await signalConnection.invoke("SendMessage", message);
-            } catch (e) {
-                console.log(e);
-            }
+    };
+
+    const sendMessage = async (message) => {
+        if (conn && conn.state === HubConnectionState.Connected) {
+            await conn.invoke("SendMessage", message);
         }
-    
+    };
+
     return (
         <Container>
             <Row className={"px-5 my-5"}>
@@ -50,11 +54,10 @@ const App = () => {
                     <h1 className={"font-weight-light"}>Welcome to the ChatApp</h1>
                 </Col>
             </Row>
-            { !conn
+            {!conn
                 ? <WaitingRoom joinChatRoom={joinChatRoom}/>
                 : <ChatRoom messages={messages} sendMessage={sendMessage}/>
             }
-            
         </Container>
     );
 };

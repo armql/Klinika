@@ -5,7 +5,7 @@ import axios_instance from "../../../api/axios.ts";
 import {zAppointments} from "../__specialized.ts";
 import {Input, Textarea} from "../../validation/__validation.ts";
 import {z} from "zod";
-import {Spinner} from "@phosphor-icons/react";
+import {Spinner, X} from "@phosphor-icons/react";
 import {format, parse} from "date-fns";
 import {getTimespanForSlot} from "../../../util/timeslot-handle.ts";
 
@@ -76,7 +76,16 @@ function AppointmentModal() {
         <div
             className="absolute top-0 bottom-0 right-0 left-0 bg-black bg-opacity-20 flex justify-center items-center">
 
-            <div className='border-2 rounded-xl p-8 flex flex-col bg-white gap-6'>
+            <div className='border-2 rounded-xl p-8 flex flex-col bg-white gap-6 relative'>
+                <div className="absolute top-0 right-0 p-2">
+                    <button
+                        type="button"
+                        className='rounded-full p-1 hover:bg-zinc-100'
+                        onClick={() => setForm(null)}
+                    >
+                        <X size={24}/>
+                    </button>
+                </div>
                 <h1 className="text-xl font-medium my-4">
                     Appointments Form for {form?.patientFullName}
                 </h1>

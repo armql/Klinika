@@ -3,8 +3,8 @@ import {useState} from "react";
 
 
 const SendMessageForm = ({sendMessage}) => {
-    const[msg, setMessage] = useState('');
-    
+    const [msg, setMessage] = useState('');
+
     return <Form onSubmit={e => {
         e.preventDefault();
         sendMessage(msg);
@@ -12,7 +12,7 @@ const SendMessageForm = ({sendMessage}) => {
     }}>
         <InputGroup className="mb-3">
             <InputGroup.Text>Chat</InputGroup.Text>
-            <Form.Control placeholder="Message" onChange={e => setMessage(e.target.value)} value={msg} />
+            <Form.Control placeholder="Message" onChange={e => setMessage(e.target.value)} value={msg}/>
             <Button variant="primary" type="submit" disabled={!msg}>Send</Button>
         </InputGroup>
     </Form>

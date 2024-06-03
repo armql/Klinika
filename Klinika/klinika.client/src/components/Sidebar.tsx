@@ -1,5 +1,6 @@
 import {Fragment, ReactNode, useEffect} from "react";
 import {
+    administration_routes as administration,
     developer_routes as dev,
     Header,
     patient_routes as patient,
@@ -51,6 +52,9 @@ export default function Sidebar({user, children}: InnerProp) {
                 break;
             case "patient":
                 setData(patient);
+                break;
+            case "administration":
+                setData(administration);
                 break;
             default:
                 break;

@@ -7,29 +7,29 @@ interface Metric {
     creationDate: Date;
 }
 
-export default function HandleMetrics() {
+export default function HandleMetricsUser() {
     const [metricsState, setMetricsState] = useState<Metric[] | undefined>(undefined);
     const [userCount, setUserCount] = useState<number | undefined>(undefined);
+
     const fetchMetrics = useCallback(async (): Promise<Metric[]> => {
         const final = await axios_instance.get('Metrics/all').then((response) => {
-            return response;
+            return response.data.registeredMetrics;
         });
-        setUserCount(final.data.userCount);
-        return final.data;
+        setUserCount(final);
+        return final;
     }, []);
 
     const fetchUserCount = useCallback(async (): Promise<number> => {
         const {data} = await axios_instance.get('Account/count');
-        return data;
+        return data.usersCount;
     }, []);
 
     const createMetricIfNotExists = useCallback(async (value: number): Promise<void> => {
         const metrics = await fetchMetrics();
-        const metricExists = metrics.some((metric: Metric) => metric.value === value);
-
-        if (!metricExists) {
+        const latestMetricValue = metrics[metrics.length - 1]?.value;
+        if (latestMetricValue !== value) {
             const newMetric = {value: value};
-            const {data} = await axios_instance.post('Metrics/create', newMetric);
+            const {data} = await axios_instance.post('Metrics/create-user', newMetric);
             console.log('Metric created:', data);
         } else {
             console.log('Metric with this value already exists');

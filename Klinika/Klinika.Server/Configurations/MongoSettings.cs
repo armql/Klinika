@@ -6,4 +6,5 @@ public class MongoSettings
     public string Database { get; set; } = null!;
     public string Metrics { get; set; } = null!;
     public string Fees { get; set; } = null!;
+    public string Report { get; set; } = null!;
 }

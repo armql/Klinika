@@ -37,6 +37,9 @@ const SpecializedAppointments = lazy(() => import("../pages/specialized/Appointm
 const PrimaryDashboard = lazy(() => import("../pages/primary/Dashboard"));
 const PrimaryAppointments = lazy(() => import("../pages/primary/Appointments"));
 
+const AdministrationDashboard = lazy(() => import("../pages/administration/Dashboard"));
+const AdministrationPatientRegistration = lazy(() => import("../pages/administration/RegistrationData"));
+const AdministrationPatientReservation = lazy(() => import("../pages/administration/ReservationData"));
 export {
     Home,
     HelpCenter,
@@ -71,5 +74,9 @@ export {
     SpecializedAppointments,
 
     PrimaryDashboard,
-    PrimaryAppointments
+    PrimaryAppointments,
+
+    AdministrationDashboard,
+    AdministrationPatientRegistration,
+    AdministrationPatientReservation
 };

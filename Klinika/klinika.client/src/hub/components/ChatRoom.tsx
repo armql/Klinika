@@ -1,4 +1,4 @@
-﻿import { Row, Col } from "react-bootstrap";
+﻿import {Col, Row} from "react-bootstrap";
 import MessageContainer from "./MessageContainer";
 import SendMessageForm from "./SendMessageForm.tsx";
 
@@ -9,15 +9,15 @@ const ChatRoom = ({messages, sendMessage}) => <div>
             <h2 className={"font-weight-light"}>ChatRoom</h2>
         </Col>
         <Col>
-            
+
         </Col>
     </Row>
     <Row className="px-5 py-5">
         <Col sm={12}>
-            <MessageContainer messages={messages} />
+            <MessageContainer messages={messages}/>
         </Col>
         <Col sm={12}>
-            <SendMessageForm sendMessage={sendMessage} />
+            <SendMessageForm sendMessage={sendMessage}/>
         </Col>
     </Row>
 </div>

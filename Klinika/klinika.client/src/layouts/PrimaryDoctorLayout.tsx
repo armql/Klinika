@@ -1,14 +1,17 @@
-import { Fragment } from "react";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
+import Sidebar from "../components/Sidebar.tsx";
+import {QueryClient, QueryClientProvider} from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function PrimaryDoctorLayout() {
-  return (
-    <Fragment>
-      {/* TODO: Header */}
-      <main className="relative overflow-hidden">
-        <Outlet />
-      </main>
-      {/* TODO: Footer */}
-    </Fragment>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <Sidebar user="primary">
+                <main className="relative overflow-hidden">
+                    <Outlet/>
+                </main>
+            </Sidebar>
+        </QueryClientProvider>
+    );
 }

@@ -1,14 +1,17 @@
-import {Fragment} from "react";
 import {Outlet} from "react-router-dom";
+import Sidebar from "../components/Sidebar.tsx";
+import {QueryClient, QueryClientProvider} from "react-query";
 
-export default function PatientLayout() {
+const queryClient = new QueryClient();
+
+export default function AdministrationLayout() {
     return (
-        <Fragment>
-            {/* TODO: Header */}
-            <main className="relative overflow-hidden">
-                <Outlet/>
-            </main>
-            {/* TODO: Footer */}
-        </Fragment>
+        <QueryClientProvider client={queryClient}>
+            <Sidebar user="administration">
+                <main className="relative overflow-hidden">
+                    <Outlet/>
+                </main>
+            </Sidebar>
+        </QueryClientProvider>
     );
 }

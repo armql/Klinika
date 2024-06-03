@@ -1,4 +1,4 @@
-import {PrimaryAppointments, PrimaryDashboard} from "../../../router/pages";
+import {PrimaryDashboard} from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
 export const primary_routes: Data[] = [
@@ -16,30 +16,30 @@ export const primary_routes: Data[] = [
             },
         ],
     },
-    {
-        id: 2,
-        category: "Data Manage",
-        folders: [
-            {
-                id: 2,
-                name: "Workspace",
-                links: [
-                    {to: "appointments", text: "Appointments", component: PrimaryAppointments},
-                ],
-            },
-        ],
-    },
-    {
-        id: 3,
-        category: "Community",
-        folders: [
-            {
-                id: 3,
-                name: "Learning Center",
-                links: [
-                    {to: "learn-more", text: "Learn More", component: PrimaryAppointments},
-                ],
-            },
-        ],
-    },
+    // {
+    //     id: 2,
+    //     category: "Data Manage",
+    //     folders: [
+    //         {
+    //             id: 2,
+    //             name: "Workspace",
+    //             links: [
+    //                 {to: "appointments", text: "Appointments", component: PrimaryAppointments},
+    //             ],
+    //         },
+    //     ],
+    // },
+    // {
+    //     id: 3,
+    //     category: "Community",
+    //     folders: [
+    //         {
+    //             id: 3,
+    //             name: "Learning Center",
+    //             links: [
+    //                 {to: "learn-more", text: "Learn More", component: PrimaryAppointments},
+    //             ],
+    //         },
+    //     ],
+    // },
 ];

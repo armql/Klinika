@@ -30,7 +30,7 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
         resolver: zodResolver(global_schema),
     });
     const {closeCreate: close, setGlobalError, global_error} = zHandler();
-
+    console.log(errors)
     const onSubmit = async (data: RefinedInputs) => {
         try {
             const response = await api(data);
@@ -96,14 +96,25 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
                 break;
             case "file":
                 inputElement = (
-                    <File
-                        type={field.type}
-                        htmlFor={field.identifier}
-                        labelName={field.name}
-                        placeholder={field.placeholder}
-                        {...register(field.identifier)}
-                        error={errors[field.identifier]?.message}
-                        hidden={field.isHidden}
+                    <Controller
+                        control={control}
+                        name="file"
+                        render={({field: {onChange, onBlur, name, ref}}) => (
+                            <File
+                                type="file"
+                                htmlFor="file"
+                                labelName="Image"
+                                placeholder="Upload your image"
+                                onChange={e => {
+                                    console.log(e.target.files[0]); // Add this line
+                                    onChange(e.target.files[0]);
+                                }}
+                                onBlur={onBlur}
+                                name={name}
+                                ref={ref}
+                                error={errors.file?.message}
+                            />
+                        )}
                     />
                 );
                 break;

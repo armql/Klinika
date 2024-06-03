@@ -7,7 +7,7 @@ import {Reservation} from "../developer/ReservationData.tsx";
 export default function ReservationsList() {
     const specialization_api = new ApiService<Reservation>(
         {
-            reservations: "Consultation/paginateById",
+            reservations: "Consultation/paginateByPatientId",
             delete: 'Reservation/delete',
         },
         axios_instance

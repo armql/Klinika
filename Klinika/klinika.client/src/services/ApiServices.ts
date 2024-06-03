@@ -8,6 +8,7 @@ type ApiEndpoints = {
     paginate?: string;
     get?: string;
     create?: string;
+    create_image?: string;
     update?: string;
     delete?: string;
     bulk_delete?: string;
@@ -44,6 +45,26 @@ export class ApiService<T> {
         } else {
             throw new Error("Category endpoint is undefined");
         }
+    };
+
+    createImage = async (image: File): Promise<T> => {
+        if (!this.endpoints.create_image) {
+            throw new Error("create_image endpoint is undefined");
+        }
+
+        const formData = new FormData();
+        formData.append('file', image);
+
+        const response: AxiosResponse<T> = await this.axiosInstance.post(
+            this.endpoints.create_image,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+        return response.data;
     };
 
     paginate = async (

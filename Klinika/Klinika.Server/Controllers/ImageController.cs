@@ -62,19 +62,19 @@ namespace Klinika.Server.Controllers
             });
         }
         
-        [Authorize]
+        // [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
-            var currentUser = await GetCurrent();
-
-            if (currentUser == null)
-            {
-                return Unauthorized(new { message = "User is not authenticated" });
-            }
+            // var currentUser = await GetCurrent();
+            //
+            // if (currentUser == null)
+            // {
+            //     return Unauthorized(new { message = "User is not authenticated" });
+            // }
 
             var filePath = Path.Combine(_imageFolderPath, file.FileName);
 
@@ -89,7 +89,7 @@ namespace Klinika.Server.Controllers
                 fileName = file.FileName,
                 filePath = filePath,
                 fileUrl = fileUrl,
-                createdBy = currentUser.Email,
+                createdBy = "currentUser.Emai",
                 creationDate = DateTime.Now
             };
 

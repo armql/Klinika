@@ -1,6 +1,6 @@
 ﻿import axios_instance from "../../api/axios";
 import {ApiService} from "../../services/ApiServices";
-import {BaseItem, CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
+import {BaseItem, CreateForm, DataList, Filters, Table, zHandler,} from "../../features/handata/__handata";
 import {FormField} from "../../features/handata/utils/form-fields";
 
 export type Image = BaseItem & {
@@ -10,10 +10,11 @@ export type Image = BaseItem & {
     createdBy: string;
     createdDate: string;
 };
+
 const formField: FormField[] = [
     {
         type: "file",
-        identifier: "fileName",
+        identifier: "file",
         name: "Image",
         placeholder: "Upload your image",
     },
@@ -26,7 +27,7 @@ export default function ImageData() {
         {
             paginate: "Image/paginate",
             get: "Image/get",
-            create: "Image/create",
+            create_image: "Image/create",
             delete: "Image/delete",
             bulk_delete: "Image/bulkDelete",
         },
@@ -35,7 +36,7 @@ export default function ImageData() {
 
     return (
         <DataList>
-            <Filters name="Image List"/>
+            <Filters name="Image List" bulkDelete={role_api.bulk_delete}/>
             <Table<Image>
                 headers={["Image Id", "File Path", "File Url", "Created By", "Created Date"]}
                 all={role_api.paginate}
@@ -45,7 +46,7 @@ export default function ImageData() {
             {create && (
                 <CreateForm<Image>
                     header="Identity Role"
-                    api={role_api.create}
+                    api={role_api.createImage}
                     fields={formField}
                 />
             )}

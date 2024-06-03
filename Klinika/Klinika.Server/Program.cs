@@ -13,6 +13,7 @@ using Klinika.Server.Controllers;
 using Klinika.Server.Hub;
 using Klinika.Server.Services;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace Klinika.Server
 {
@@ -75,7 +76,11 @@ namespace Klinika.Server
             builder.Services.AddScoped<RoleController>();
 
             builder.Services.AddControllers().AddNewtonsoftJson();
-
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -90,7 +95,7 @@ namespace Klinika.Server
             {
                 options.AddPolicy("reactApp", builder =>
                 {
-                    builder.WithOrigins("http://localhost:7045")
+                    builder.WithOrigins("https://localhost:5173")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -114,16 +119,17 @@ namespace Klinika.Server
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("reactApp");
+
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chatHub");
             });
 
-            app.UseCors("reactApp");
             
             app.MapControllers();
 
