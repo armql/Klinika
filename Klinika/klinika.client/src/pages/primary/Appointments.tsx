@@ -1,62 +1,118 @@
-import {Input, Textarea} from "../../features/validation/__validation.ts";
+import axios_instance from "../../api/axios";
+import {ApiService} from "../../services/ApiServices";
+import {BaseItem, CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
+import {FormField} from "../../features/handata/utils/form-fields";
+import {useQuery} from "react-query";
+import {zAuth} from "../../store/zAuth.ts";
+
+export type ApplicationUser = BaseItem & {
+    id: string;
+    note: string;
+    userFullName: string;
+    primaryCareFullName: string;
+};
+
 
 export default function Appointments() {
+    const {create_modal: create, edit_modal: edit} = zHandler();
+    const {data: userData} = zAuth();
+    const appointment_api = new ApiService<ApplicationUser>(
+        {
+            paginate: "Report/paginate",
+            create: "Report/prescribe",
+            category: "Account/getAll",
+            category2: 'Specialization/getAll'
+        },
+        axios_instance
+    );
+    const {data: categoryData, isLoading: isCategoryLoading} = useQuery("category", appointment_api.category);
+    const {data: categoryData2, isLoading: isCategoryLoading2} = useQuery("category2", appointment_api.category2);
+
+    const categoryOptions = Array.isArray(categoryData) ? categoryData.map((item) => ({
+        id: item.id,
+        name: item.firstName + " " + item.lastName + " : " + item.email
+    })) : [];
+
+    const categoryOptions2 = Array.isArray(categoryData2) ? categoryData2.map((item) => ({
+        id: item.name,
+        name: item.name
+    })) : [];
+
+    const formField: FormField[] = [
+        {
+            type: "textarea",
+            identifier: "note",
+            name: "Report notes",
+            placeholder: "Enter your First Name",
+        },
+        {
+            type: "select",
+            identifier: "userId",
+            name: "Patient Name",
+            options: isCategoryLoading
+                ? [
+                    {
+                        id: 1,
+                        name: "Loading Options...",
+                    },
+                ]
+                : categoryOptions,
+        },
+        {
+            type: "select",
+            identifier: "specializationName",
+            name: "Specialization Name",
+            options: isCategoryLoading2
+                ? [
+                    {
+                        id: 1,
+                        name: "Loading Options...",
+                    },
+                ]
+                : categoryOptions2,
+        },
+        {
+            type: "hidden",
+            identifier: "primaryCareId",
+            name: "Primary Care Doctor",
+            value: userData.id
+        }
+    ];
+
     return (
-        <section className="xl:p-12 lg:p-8 md:p-6 p-4 w-full h-screen">
-            <div className="flex flex-col gap-4 h-full">
-                <div className='w-full border-2 h-[700px] p-8 flex flex-col gap-2'>
-                    <h1 className="text-xl font-medium">
-                        Appointments Form for [Patient Name]
-                    </h1>
-                    <div className="flex flex-row gap-12">
-
-                        <div className="w-80 flex flex-col gap-4">
-                            <Input htmlFor="patientFullname" labelName="Patients Full Name" placeholder="" type="text"
-                                   name="patientFullname"/>
-                            <Textarea htmlFor="reasonOfConsult" labelName="Reason of Consult" placeholder="" type="text"
-                                      name="reasonOfConsult"/>
-                            
-                        </div>
-                        <div className="w-80 flex flex-col gap-4">
-                            <Textarea htmlFor="evaluation" labelName="Evaluation" placeholder=""
-                                      type="text"
-                                      name="evaluation"
-                                      style={{
-                                          height: "300px"
-
-                                      }}
-                            />
-                            <Textarea htmlFor="notes" labelName="Notes for Consult" placeholder="" type="text"
-                                      name="notes"
-                                      style={{
-                                          height: "300px"
-
-                                      }}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full h-full border-2">
-                    <ul className="flex flex-row border-2 justify-between px-2 py-2">
-                        <li className="w-40 border-2">
-                            Appointment id
-                        </li>
-                        <li className="w-40 border-2">
-                            Reason for consult
-                        </li>
-                        <li className="w-40 border-2">
-                            Reason for consult
-                        </li>
-                        <li className="w-40 border-2">
-                            Reason for consult
-                        </li>
-                        <li className="w-40 border-2">
-                            Reason for consult
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        <DataList>
+            <Filters name="User List"/>
+            <Table<ApplicationUser>
+                headers={[
+                    "ID",
+                    "Report notes",
+                    "Primary Care Doctor",
+                    "Patient Name",
+                ]}
+                all={appointment_api.paginate}
+                delete={appointment_api.delete}
+                dataField={[
+                    "id",
+                    "note",
+                    "primaryCareFullName",
+                    "userFullName",
+                ]}
+            />
+            {edit && (
+                <EditForm<ApplicationUser>
+                    header="User"
+                    get={appointment_api.get}
+                    update={appointment_api.update}
+                    fields={formField}
+                />
+            )}
+            {create && (
+                <CreateForm<ApplicationUser>
+                    header="User"
+                    api={appointment_api.create}
+                    fields={formField}
+                />
+            )}
+        </DataList>
     );
 }
-

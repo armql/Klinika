@@ -10,4 +10,5 @@ export type FormField = {
     options?: Options[];
     placeholder?: string;
     isHidden?: boolean;
+    value?: string | number;
 };

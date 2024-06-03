@@ -34,7 +34,6 @@ export default function SpecializedDoctorData() {
         id: item.id,
         name: item.firstName + " " + item.lastName,
     })) : [];
-    console.log(categoryData)
     const category2Options = Array.isArray(category2Data) ? category2Data.map((item) => ({
         id: item.id,
         name: item.name,

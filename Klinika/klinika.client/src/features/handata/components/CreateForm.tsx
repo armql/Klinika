@@ -33,6 +33,12 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
     console.log(errors)
     const onSubmit = async (data: RefinedInputs) => {
         try {
+            fields.forEach((field) => {
+                if (field.type === "hidden") {
+                    data[field.identifier] = field.value;
+                }
+            });
+            
             const response = await api(data);
             if (response) {
                 await Swal.fire({
@@ -49,8 +55,11 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
                 setGlobalError(errorMessage);
             }
         }
+
+
     };
     const generateInputs = (field: FormField) => {
+        const betterOptions = field.options?.map(option => ({value: option.id, label: option.name}));
         let inputElement;
         switch (field.type) {
             case "checkbox":
@@ -94,6 +103,16 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
                     />
                 );
                 break;
+            case "hidden":
+                inputElement = (
+                    <input
+                        type="hidden"
+                        name={field.identifier}
+                        {...register}
+                        defaultValue={field.value}
+                    />
+                );
+                break;
             case "file":
                 inputElement = (
                     <Controller
@@ -121,10 +140,10 @@ export default function CreateForm<T>({header, fields, api}: FormProps<T>) {
             case "select":
                 inputElement = (
                     <Select
-                        htmlFor={field.identifier}
+                        control={control}
+                        name={field.identifier}
                         labelName={field.name}
-                        options={field.options}
-                        {...register(field.identifier)}
+                        options={betterOptions}
                         error={errors[field.identifier]?.message}
                         hidden={field.isHidden}
                     />

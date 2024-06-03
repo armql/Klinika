@@ -55,10 +55,7 @@ const ageSchema = z
 
 // PLAIN SELECT
 const selectSchema = z
-    .union([z.string(), z.number()])
-    .refine((value) => value !== "select", {
-        message: "Please select a type",
-    });
+    .string();
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -93,6 +90,8 @@ const passwordSchema = z
 // PLAIN DATE
 const dateSchema = z.string();
 
+const hiddenSchema = z.any();
+
 const schemaMap: Record<string, T> = {
     plain_text: plainTextSchema,
     text: textSchema,
@@ -104,6 +103,7 @@ const schemaMap: Record<string, T> = {
     email: emailSchema,
     file: fileSchema,
     password: passwordSchema,
+    hidden: hiddenSchema,
 };
 
 // const createGlobalSchema = (fields: FormField[]) => {

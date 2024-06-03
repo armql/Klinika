@@ -26,7 +26,7 @@ namespace Klinika.Server.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "DEVELOPER")]
+        [Authorize(Roles = "DEVELOPER,PRIMARYDOC")]
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<Specialization>>> GetAll()
         {
@@ -141,7 +141,7 @@ namespace Klinika.Server.Controllers
             return Ok(specialization);
         }
 
-        [Authorize(Roles = "DEVELOPER")]
+        [Authorize(Roles = "DEVELOPER" )]
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] JsonPatchDocument<Specialization> patchDoc)
         {

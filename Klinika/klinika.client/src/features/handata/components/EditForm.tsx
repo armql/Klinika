@@ -89,7 +89,7 @@ export default function EditForm<T>({
                 setGlobalError("No id received");
                 return;
             }
-            
+
             const response = await update(selectedItem, patchDoc);
             if (response) {
                 await Swal.fire({
@@ -129,10 +129,10 @@ export default function EditForm<T>({
             case "select":
                 inputElement = (
                     <Select
-                        htmlFor={field.identifier}
+                        control={control}
+                        name={field.identifier}
                         labelName={field.name}
                         options={field.options}
-                        {...register(field.identifier)}
                         error={errors[field.identifier]?.message}
                         hidden={field.isHidden}
                     />
