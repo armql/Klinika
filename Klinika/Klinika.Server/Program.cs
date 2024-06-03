@@ -40,8 +40,11 @@ namespace Klinika.Server
             });
             builder.Services.AddSignalR();
             builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoDatabase"));
-            builder.Services.AddSingleton<MetricServices>();
             builder.Services.AddSingleton<FeeServices>();
+            builder.Services.AddSingleton<ReservationServices>();
+            builder.Services.AddSingleton<PatientsServices>();
+            builder.Services.AddSingleton<SpecializedServices>();
+            builder.Services.AddSingleton<RegisteredServices>();
             // Add Auth and JwtBearer
             builder.Services.AddAuthentication(options =>
                 {
@@ -67,8 +70,8 @@ namespace Klinika.Server
             builder.Services.AddTransient<RoleManager<IdentityRole>>();
             builder.Services.AddTransient<UserManager<ApplicationUser>>();
             builder.Services.AddScoped<RoleController>();
-            builder.Services.AddScoped<MetricServices>();
-
+            builder.Services.AddScoped<ReservationServices>();
+            builder.Services.AddScoped<RoleController>();
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 
@@ -84,7 +87,6 @@ namespace Klinika.Server
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

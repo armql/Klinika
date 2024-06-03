@@ -18,7 +18,9 @@ namespace Klinika.Server.Controllers
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly ApplicationDbContext _dbContext = dbContext;
+        private readonly RoleController _roleController;
 
+        
         [HttpGet("count")]
         public async Task<ActionResult> CountEntities()
         {
@@ -110,6 +112,38 @@ namespace Klinika.Server.Controllers
                 totalCount = count,
                 totalPages = (int)Math.Ceiling(count / (double)pageSize)
             });
+        }
+        
+        [HttpPost("assignRole")]
+        public async Task<ActionResult> AssignRole(string id, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists)
+            {
+                await _roleController.SeedRoles();
+            }
+
+            roleExists = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExists)
+            {
+                return BadRequest("Role does not exist and seeding failed.");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(user, userRoles);
+            }
+
+            await _userManager.AddToRoleAsync(user, roleName);
+            return Ok("Success");
         }
 
         [HttpGet("getAll")]

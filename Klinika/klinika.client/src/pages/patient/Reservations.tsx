@@ -47,7 +47,7 @@ function Reservations() {
                         <button
                             type="button"
                             onClick={() => setSelectedSpecialization(null)}
-                            className="absolute group top-0 -left-40 border-2 w-40 bottom-0 flex justify-end items-center">
+                            className="absolute group top-0 -left-40 w-40 bottom-0 flex justify-end items-center">
                             <CaretLeft size={48} weight="duotone" className="group-hover:block hidden"/>
                         </button>
                     </div>

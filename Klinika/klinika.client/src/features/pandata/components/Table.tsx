@@ -196,7 +196,7 @@ export default function Table<T extends BaseItem>({
                                 <ArrowsDownUp size={20} className="group-hover:block hidden"/>
                             </li>
                         ))}
-                        <li className="truncate">Remove item</li>
+                        {/*<li className="truncate">Remove item</li>*/}
                     </ul>
                     <div className="h-full bg-zinc-50">
                         {data?.data.map((item: BaseItem) => (
@@ -254,17 +254,17 @@ export default function Table<T extends BaseItem>({
                                 {/*        Edit*/}
                                 {/*    </button>*/}
                                 {/*</li>*/}
-                                <li>
-                                    <button
-                                        title="Remove item"
-                                        type="button"
-                                        onClick={() => deleteItem(item.id)}
-                                        className="flex items-center gap-1 px-4 py-1 rounded-lg bg-red-200 text-red-950 hover:bg-red-300"
-                                    >
-                                        <X size={14}/>
-                                        Remove
-                                    </button>
-                                </li>
+                                {/*<li>*/}
+                                {/*    <button*/}
+                                {/*        title="Remove item"*/}
+                                {/*        type="button"*/}
+                                {/*        onClick={() => deleteItem(item.id)}*/}
+                                {/*        className="flex items-center gap-1 px-4 py-1 rounded-lg bg-red-200 text-red-950 hover:bg-red-300"*/}
+                                {/*    >*/}
+                                {/*        <X size={14}/>*/}
+                                {/*        Remove*/}
+                                {/*    </button>*/}
+                                {/*</li>*/}
                             </ul>
                         ))}
                     </div>
