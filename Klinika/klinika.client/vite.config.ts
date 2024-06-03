@@ -224,6 +224,12 @@ export default defineConfig({
                 'api/PrimaryCareDoctor/delete',
                 'api/PrimaryCareDoctor/bulkDelete'
             ], target),
+
+            // REPORT
+            ...createProxyRoutes([
+                'api/Report/paginate',
+                'api/Report/prescribe',
+            ], target),
         },
         port: 5173,
         https: {

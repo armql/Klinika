@@ -1,8 +1,8 @@
 import {useNavigate} from "react-router-dom";
 import axios_instance from "../../../api/axios";
-import {user} from "../../../data/user";
 import {SignOut, User} from "@phosphor-icons/react";
 import {UserData, zAuth} from "../../../store/zAuth";
+import {zPersonal} from "../../settings/__settings.ts";
 
 type Props = {
     effect: boolean;
@@ -11,6 +11,7 @@ type Props = {
 export default function Profile({effect}: Props) {
     const navigate = useNavigate();
     const {setData} = zAuth();
+    const {data: accountData} = zPersonal();
 
     function logout() {
         try {
@@ -40,12 +41,13 @@ export default function Profile({effect}: Props) {
             <div className="flex items-center justify-center gap-2 flex-row">
                 <div
                     className="h-9 w-9 overflow-hidden flex border justify-center items-center rounded-full bg-zinc-50">
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8kiSH5ZSAcVoj3tAQQDoP_ux0sSricMyUg&usqp=CAU"
-                        alt="not final" className="w-full h-full object-cover"/>
-                    <User weight="regular" size={24}/>
+                    {accountData.image ? (
+                        <img src={accountData.image} alt="profile" className="h-full rounded-full object-cover w-full"/>
+                    ) : (
+                        <User size={32} className="text-zinc-600"/>
+                    )}
                 </div>
-                {!effect && <span className="tracking-wide">{user.name} Maliqi</span>}
+                {!effect && <span className="tracking-wide">{accountData?.firstName} {accountData?.lastName}</span>}
             </div>
 
             <div className="rounded-lg bg-gray-100">

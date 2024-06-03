@@ -62,19 +62,32 @@ namespace Klinika.Server.Controllers
             });
         }
         
-        // [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
-            // var currentUser = await GetCurrent();
-            //
-            // if (currentUser == null)
-            // {
-            //     return Unauthorized(new { message = "User is not authenticated" });
-            // }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                if (user.profileImage.HasValue)
+                {
+                    var oldImage = await _dbContext.Images.FindAsync(user.profileImage.Value);
+                    if (oldImage != null)
+                    {
+                        if (System.IO.File.Exists(oldImage.filePath))
+                        {
+                            System.IO.File.Delete(oldImage.filePath);
+                        }
+
+                        _dbContext.Images.Remove(oldImage);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+            }
 
             var filePath = Path.Combine(_imageFolderPath, file.FileName);
 
@@ -83,22 +96,28 @@ namespace Klinika.Server.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var fileUrl = $"{Request.Scheme}://{Request.Host}/api/image/{file.FileName}";
+            var fileUrl = $"{Request.Scheme}://{Request.Host.Value.Replace("5173", "7045")}/Images/{file.FileName}";
             var image = new Image
             {
                 fileName = file.FileName,
                 filePath = filePath,
                 fileUrl = fileUrl,
-                createdBy = "currentUser.Emai",
+                createdBy = "currentUser.Email",
                 creationDate = DateTime.Now
             };
 
             await _dbContext.Images.AddAsync(image);
             await _dbContext.SaveChangesAsync();
 
+            if (user != null)
+            {
+                user.profileImage = image.id;
+                await _userManager.UpdateAsync(user);
+            }
+
             return Ok(new { image.id, image.fileName, image.fileUrl });
         }
-
+        
         [HttpGet("get")]
         public async Task<IActionResult> GetImage(string fileName)
         {

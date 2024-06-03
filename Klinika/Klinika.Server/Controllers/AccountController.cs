@@ -172,14 +172,26 @@ namespace Klinika.Server.Controllers
                 return NotFound();
             }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(s => s.Id == id);
+            // Include the Image object in the query
+            var user = await _userManager.Users
+                .Include(u => u.image)
+                .Select(u => new 
+                {
+                    u.Id,
+                    u.Email,
+                    u.firstName,
+                    u.lastName,
+                    u.profileImage,
+                    image = u.image != null ? u.image.fileUrl : null
+                })
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
 
@@ -239,6 +251,26 @@ namespace Klinika.Server.Controllers
                 if (user == null)
                 {
                     return NotFound();
+                }
+
+                var imageOperation = patchDoc.Operations.FirstOrDefault(o => o.path.ToLower() == "/image");
+                if (imageOperation != null)
+                {
+                    var imageFile = imageOperation.value as IFormFile;
+                    if (imageFile != null)
+                    {
+                        var imageController = new ImageController(_dbContext, _userManager);
+                        var imageResult = await imageController.UploadImage(imageFile) as OkObjectResult;
+
+                        if (imageResult != null)
+                        {
+                            var image = imageResult.Value as Image;
+                            if (image != null)
+                            {
+                                user.profileImage = image.id;
+                            }
+                        }
+                    }
                 }
 
                 patchDoc.ApplyTo(user, ModelState);

@@ -72,6 +72,7 @@ export const router = createBrowserRouter([
                 <AdministrationLayout/>
             </ProtectedRoutes>
         ),
+
         children: [
             {
                 path: "/administration",
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: <AdministrationDashboard/>,
+            },
+            {
+                path: "settings",
+                element: <Settings/>,
             },
             ...administration_routes
                 .map((category) => {
@@ -111,6 +116,10 @@ export const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: <PatientDashboard/>,
+            },
+            {
+                path: "settings",
+                element: <Settings/>,
             },
             ...patient_routes
                 .map((category) => {
