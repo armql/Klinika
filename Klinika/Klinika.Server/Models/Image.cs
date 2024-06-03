@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Klinika.Server.Models.Data;
+using Newtonsoft.Json;
 
 namespace Klinika.Server.Models;
 
@@ -19,4 +21,7 @@ public class Image
     public string createdBy { get; set; }
     
     public DateTime creationDate { get; set; }
+    
+    [JsonIgnore]
+    public virtual ICollection<ApplicationUser>? ApplicationUsers { get; set; }
 }
