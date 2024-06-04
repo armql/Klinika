@@ -37,7 +37,7 @@ export default function Table<T extends BaseItem>({
                                                       dataField,
                                                   }: TableProps<T>) {
     const HEADER_COLUMN = headers.length + 3;
-    const {openEdit: edit, refetch_data: handler} = zHandler();
+    const {refetch_data: handler} = zHandler();
     const {setTotalPages, currentPage, itemsPerPage} =
         zPagination();
     const {data: userData} = zAuth();
@@ -49,7 +49,6 @@ export default function Table<T extends BaseItem>({
         deselectItem,
         selectAll,
         deselectAll,
-        setSelectedItem,
         setAllSelectedItemData,
         convPDF,
         setConvPDF,

@@ -42,13 +42,17 @@ const WaitingRoom = ({joinChatRoom}: WaitingRoomProps) => {
         e.preventDefault();
         joinChatRoom(username, image, chatroom);
     }}>
-        <div className={"px-5 py-5"}>
-            <div className="py-12">
+        <div className={"mt-6 border-2 w-fit rounded-xl bg-zinc-50 p-12"}>
+            <div className="">
                 <div className="flex flex-row gap-2 items-center justify-start">
                     <div className="flex flex-col gap-2">
+                        <h3 className="font-medium text-xl">
+                            Chatroom Form
+                        </h3>
                         <div className="flex flex-col">
                             <label className="text-zinc-400 text-sm">Username</label>
-                            <Form.Control plaintext readOnly defaultValue={username} className="text-lg"/>
+                            <Form.Control plaintext readOnly defaultValue={username}
+                                          className="text-lg px-2 rounded-md py-0.5 border border-zinc-300"/>
                         </div>
                         <div className="w-60">
                             <label className="text-zinc-400 text-sm">Select a Chatroom</label>
@@ -56,6 +60,14 @@ const WaitingRoom = ({joinChatRoom}: WaitingRoomProps) => {
                                 name="chatroom"
                                 options={waitingRooms}
                                 onChange={handleChatroomChange}
+                                theme={(theme) => ({
+                                    ...theme,
+                                    colors: {
+                                        ...theme.colors,
+                                        primary25: 'neutral',
+                                        primary: 'black',
+                                    },
+                                })}
                             />
                         </div>
                         <div className="px-4 mt-2 py-1.5 w-fit rounded-md bg-zinc-800 text-white">

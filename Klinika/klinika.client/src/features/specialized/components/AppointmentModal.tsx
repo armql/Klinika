@@ -51,14 +51,13 @@ function AppointmentModal() {
         resolver: zodResolver(schema_consultation)
     });
 
-    const onSubmit: SubmitHandler<FormFields> = (data) => {
-        console.log('onSubmit called', data);
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
         try {
             const consultationData = {
                 ...data,
                 reservationId: form?.id,
             } as Consultation;
-            const response = dashboard_api.create(consultationData);
+            const response = await dashboard_api.create(consultationData);
             if (response) {
                 setForm(null);
             }
@@ -68,9 +67,9 @@ function AppointmentModal() {
         }
     };
 
-    const parsedDate = parse(form.date, 'MM/dd/yyyy', new Date());
+    const parsedDate = parse(form?.date || '', 'MM/dd/yyyy', new Date());
     const formattedDate = format(parsedDate, 'do MMMM yyyy');
-    const timeSpan = getTimespanForSlot(form.slot);
+    const timeSpan = getTimespanForSlot(form?.slot || 0);
 
     return (
         <div

@@ -30,17 +30,13 @@ export default function ReservationData() {
     const {
         data: categoryData,
         isLoading: isCategoryLoading,
-        error: categoryError
+        // error: categoryError
     } = useQuery("category", specialization_api.category);
     const {
         data: category2Data,
         isLoading: isCategory2Loading,
-        error: category2Error
+        // error: category2Error
     } = useQuery("category2", specialization_api.category2);
-
-
-    console.log('categoryData:', categoryData);
-    console.log('category2Data:', category2Data);
 
     const categoryOptions = Array.isArray(categoryData) ? categoryData.map((item) => ({
         id: item.id,

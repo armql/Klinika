@@ -1,6 +1,5 @@
 ﻿import {useState} from 'react';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
-import {Col, Container, Row} from "react-bootstrap";
 import WaitingRoom from "../hub/components/waitingRoom.tsx";
 import ChatRoom from "../hub/components/ChatRoom.tsx";
 
@@ -59,17 +58,24 @@ export default function Hub() {
     };
 
     return (
-        <Container>
-            <Row className={"px-5 my-5"}>
-                <Col sm={"12"}>
-                    <h1 className={"font-weight-light"}>Welcome to the ChatApp</h1>
-                </Col>
-            </Row>
+        <div className="p-12">
+            <div className={"py-4"}>
+                <div>
+                    <h1 className={"text-2xl font-medium"}>Welcome to the ChatApp</h1>
+                    <p className="text-zinc-600">
+                        This is a simple chat that uses SignalR to send and receive messages in real-time.
+                        There are 3 lobbies
+                    </p>
+                </div>
+            </div>
             {!conn
                 ? <WaitingRoom joinChatRoom={joinChatRoom}/>
-                : <ChatRoom messages={messages} sendMessage={sendMessage} leaveConn={() => setConnection(null)}/>
+                : <ChatRoom messages={messages} sendMessage={sendMessage} leaveConn={() => {
+                    setConnection(null);
+                    window.location.reload();
+                }}/>
             }
-        </Container>
+        </div>
     );
-};
+}
 

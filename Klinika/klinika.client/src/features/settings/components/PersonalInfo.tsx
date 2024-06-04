@@ -13,6 +13,8 @@ export type Account = {
     email: string;
     firstName: string;
     lastName: string;
+    profileImage: number;
+    image: string;
 }
 
 function PersonalInfo() {
@@ -105,7 +107,7 @@ function PersonalInfo() {
                 setLoading(false);
             })
             .catch(error => console.error(error));
-    }, [userData.id, setValue, setAccountData, settingImage]);
+    }, [userData.id, setValue, setAccountData, settingImage]); // eslint-disable-line react-hooks/exhaustive-deps -- this is exhaustive
 
     if (loading) {
         return <div className="bg-white w-full h-full"></div>;

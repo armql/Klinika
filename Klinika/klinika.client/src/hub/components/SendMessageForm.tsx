@@ -7,9 +7,9 @@ type SendMessageFormProps = {
 const SendMessageForm = ({sendMessage}: SendMessageFormProps) => {
     const [msg, setMessage] = useState('');
     return (
-        <div className="w-full flex justify-end items-center">
+        <div className="w-full flex justify-end items-center p-4">
             <div
-                className="flex flex-col overflow-hidden border-2 rounded-full items-center justify-center min-w-[200px] w-[620px] h-12">
+                className="flex flex-col overflow-hidden border-2 bg-white rounded-full items-center justify-center min-w-[200px] w-[620px] h-12">
                 <form onSubmit={e => {
                     e.preventDefault();
                     sendMessage(msg);

@@ -9,7 +9,6 @@ const PatientDashboard = lazy(() => import("../pages/patient/Dashboard"));
 const PatientReservations = lazy(() => import("../pages/patient/Reservations"));
 const PatientReservationsList = lazy(() => import("../pages/patient/ReservationsList"));
 const PatientConsultationsList = lazy(() => import("../pages/patient/ConsultationsList"));
-const PatientHub = lazy(() => import("../pages/patient/Hub"));
 
 const DeveloperDashboard = lazy(() => import("../pages/developer/Dashboard"));
 const DeveloperUserData = lazy(() => import("../pages/developer/UserData"));
@@ -67,7 +66,6 @@ export {
     DeveloperSpecializedDoctorData,
     DeveloperPatientData,
     DeveloperImageData,
-    DeveloperUserRolesData,
     DeveloperPrimaryDoctorData,
 
     SpecializedDashboard,

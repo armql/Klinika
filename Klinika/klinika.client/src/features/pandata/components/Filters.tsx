@@ -1,5 +1,5 @@
 import {ArrowsDownUp, FunnelSimple,} from "@phosphor-icons/react";
-import {zForm, zHandler} from "../../handata/__handata.ts";
+import {zForm} from "../../handata/__handata.ts";
 import Bulk from "../../handata/components/core/Bulk.tsx";
 import Search from "../../handata/components/core/Search.tsx";
 
@@ -11,7 +11,7 @@ type FiltersProps = {
 export default function Filters({name, bulkDelete}: FiltersProps) {
     const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems} =
         zForm();
-    const {openCreate: create} = zHandler();
+    // const {openCreate: create} = zHandler();
 
 
     return (

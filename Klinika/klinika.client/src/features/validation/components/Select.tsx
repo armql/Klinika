@@ -38,9 +38,9 @@ const Select = ({control, name, labelName, options, error, hidden}: SelectProps)
                                 primary: 'black',
                             },
                         })}
-                        onChange={option => field.onChange(option.value)} // Pass only the value to react-hook-form
+                        onChange={option => field.onChange(option.value)}
                         onBlur={field.onBlur}
-                        value={options?.find(option => option.value === field.value)} // Set the correct option as the selected value
+                        value={options?.find(option => option.value === field.value)}
                     />
                 )}
             />

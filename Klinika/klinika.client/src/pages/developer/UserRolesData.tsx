@@ -1,15 +1,8 @@
 import axios_instance from "../../api/axios";
-import { ApiService } from "../../services/ApiServices";
-import {
-    zHandler,
-    EditForm,
-    Table,
-    CreateForm,
-    Filters,
-    DataList,
-} from "../../features/handata/__handata";
-import { FormField } from "../../features/handata/utils/form-fields";
-import { useQuery } from "react-query";
+import {ApiService} from "../../services/ApiServices";
+import {CreateForm, DataList, EditForm, Filters, Table, zHandler,} from "../../features/handata/__handata";
+import {FormField} from "../../features/handata/utils/form-fields";
+import {useQuery} from "react-query";
 
 export type UserWithRole = {
     id: number;
@@ -18,7 +11,7 @@ export type UserWithRole = {
 };
 
 export default function UserRolesData() {
-    const { create_modal: create, edit_modal: edit } = zHandler();
+    const {create_modal: create, edit_modal: edit} = zHandler();
 
     const Block_api = new ApiService<UserWithRole>(
         {
@@ -33,10 +26,9 @@ export default function UserRolesData() {
         },
         axios_instance
     );
-    const { data: categoryData, isLoading: isCategoryLoading, error: categoryError } = useQuery("category", Block_api.category);
-    const { data: category2Data, isLoading: isCategory2Loading, error: category2Error } = useQuery("category2", Block_api.category2);
+    const {data: categoryData, isLoading: isCategoryLoading} = useQuery("category", Block_api.category);
+    const {data: category2Data, isLoading: isCategory2Loading} = useQuery("category2", Block_api.category2);
 
-    // Check if categoryData and category2Data are arrays
     const categoryOptions = Array.isArray(categoryData) ? categoryData.map((item) => ({
         id: item.id,
         name: item.roleName,
@@ -78,7 +70,7 @@ export default function UserRolesData() {
 
     return (
         <DataList>
-            <Filters name="User With Roles List" />
+            <Filters name="User With Roles List"/>
             <Table<UserWithRole>
                 headers={["User ID", "Email", "Role Name"]}
                 all={Block_api.getAll}

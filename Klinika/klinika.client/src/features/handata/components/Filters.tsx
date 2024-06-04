@@ -9,7 +9,7 @@ type FiltersProps = {
 };
 
 export default function Filters({name, bulkDelete}: FiltersProps) {
-    const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems, handleSearch, search} =
+    const {selectedItems, handleSearch, search} =
         zForm();
     const {openCreate: create} = zHandler();
 

@@ -29,7 +29,7 @@ export default function Settings() {
     const [currentTab, setCurrentTab] = useState(1);
     return (
         <section className="flex flex-row w-full h-full">
-            <div className="w-[350px] h-full bg-zinc-100 border-r-2">
+            <div className="w-[350px] min-w-[350px] h-full bg-zinc-100 border-r-2">
                 <ul className="flex flex-col items-start justify-center">
                     {settings.map((item) => (
                         <button
@@ -46,7 +46,7 @@ export default function Settings() {
                     ))}
                 </ul>
             </div>
-            <div className="flex flex-col w-full h-full p-6">
+            <div className="flex flex-col w-full h-full min-w-[1000px] p-6">
                 {settings.filter((item) => item.id === currentTab).map((item) => (
                     <item.component key={item.id}/>
                 ))}

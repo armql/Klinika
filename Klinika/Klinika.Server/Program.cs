@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Klinika.Server.Configurations;
 using Klinika.Server.Controllers;
-using Klinika.Server.Hub;
 using Klinika.Server.Services;
 using Microsoft.Extensions.FileProviders;
 using MongoDB.Driver;
@@ -120,7 +119,6 @@ namespace Klinika.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            app.MapHub<NotificationHub>("/notificationHub");
             app.UseHttpsRedirection();
 
             app.UseRouting();

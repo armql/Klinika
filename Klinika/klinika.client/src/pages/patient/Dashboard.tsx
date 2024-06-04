@@ -59,7 +59,7 @@ export default function Dashboard() {
                                 <HandWaving size={64}
                                             weight="duotone"/>
                                 Welcome
-                                {` ${data.firstName} ${data.lastName} `}
+                                {` ${data?.firstName} ${data?.lastName} `}
                                 you have
                                 [notifications], and you made
                                 {data?.reservationsCount ? ` ${data.reservationsCount} reservations by now` : 'no reservations by now'}.
