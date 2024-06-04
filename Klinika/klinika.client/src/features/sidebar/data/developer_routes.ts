@@ -1,20 +1,19 @@
 import {
     DeveloperBlockData,
+    DeveloperChatData,
     DeveloperConsultationData,
     DeveloperDashboard,
     DeveloperHelpCenterCategoryData,
     DeveloperHelpCenterData,
+    DeveloperImageData,
     DeveloperPatientData,
+    DeveloperPrimaryDoctorData,
     DeveloperReservationData,
     DeveloperRoleData,
     DeveloperServiceDeskData,
     DeveloperSpecializationData,
     DeveloperSpecializedDoctorData,
     DeveloperUserData,
-    DeveloperImageData,
-    DeveloperPrimaryDoctorData,
-    DeveloperChatData,
-    //DeveloperUserRolesData,
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -114,7 +113,7 @@ export const developer_routes: Data[] = [
                         component: DeveloperSpecializedDoctorData,
                     },
                     {
-                        to:"primary-doctor-data",
+                        to: "primary-doctor-data",
                         text: "Primary Doctor List",
                         component: DeveloperPrimaryDoctorData,
                     },
@@ -123,7 +122,7 @@ export const developer_routes: Data[] = [
                         text: "Patient List",
                         component: DeveloperPatientData,
                     },
-                    
+
                 ],
             },
             {
@@ -134,17 +133,6 @@ export const developer_routes: Data[] = [
                         to: "image-data",
                         text: "Images List",
                         component: DeveloperImageData,
-                    },
-                ],
-            },
-            {
-                id: 11,
-                name: "Chat",
-                links: [
-                    {
-                        to: "chat-data",
-                        text: "Chat",
-                        component: DeveloperChatData,
                     },
                 ],
             },
@@ -159,14 +147,9 @@ export const developer_routes: Data[] = [
                 name: "Learning Center",
                 links: [
                     {
-                        to: "learn-more",
-                        text: "Learn More",
-                        component: DeveloperUserData,
-                    },
-                    {
-                        to: "ask-question",
-                        text: "Ask Questions",
-                        component: DeveloperUserData,
+                        to: "chat-data",
+                        text: "Chat",
+                        component: DeveloperChatData,
                     },
                 ],
             },

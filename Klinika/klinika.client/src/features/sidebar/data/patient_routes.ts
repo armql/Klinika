@@ -1,6 +1,7 @@
 import {
     PatientConsultationsList,
     PatientDashboard,
+    PatientHub,
     PatientReservations,
     PatientReservationsList
 } from "../../../router/pages";
@@ -43,12 +44,7 @@ export const patient_routes: Data[] = [
                 id: 3,
                 name: "Learning Center",
                 links: [
-                    {to: "learn-more", text: "Learn More", component: PatientConsultationsList},
-                    {
-                        to: "ask-question",
-                        text: "Ask Questions",
-                        component: PatientConsultationsList,
-                    },
+                    {to: "hub", text: "Patient Hub", component: PatientHub},
                 ],
             },
         ],

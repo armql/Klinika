@@ -1,19 +1,21 @@
 ﻿import {useState} from 'react';
-import {HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
+import {HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {Col, Container, Row} from "react-bootstrap";
 import WaitingRoom from "../../hub/components/waitingRoom.tsx";
 import ChatRoom from "../../hub/components/ChatRoom";
 
-const App = () => {
-    const [conn, setConnection] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [username, setUsername] = useState('');
-    const [chatroom, setChatroom] = useState('');
+type Message = {
+    user: string;
+    profileImage: string;
+    message: string;
+};
 
-    const joinChatRoom = async (username, chatroom) => {
-        setUsername(username);
-        setChatroom(chatroom);
 
+export default function Hub() {
+    const [conn, setConnection] = useState<HubConnection | null>(null);
+    const [messages, setMessages] = useState<Message[]>([]);
+
+    const joinChatRoom = async (username: string, profileImage: string, chatroom: string) => {
         const signalConnection = new HubConnectionBuilder()
             .withUrl("https://localhost:7045/chatHub", {
                 skipNegotiation: true,
@@ -25,16 +27,20 @@ const App = () => {
 
         signalConnection.start()
             .then(() => {
-                signalConnection.on("RecieveSpecificMessage", (user, message) => {
-                    setMessages(messages => [...messages, {user, message}]);
+                signalConnection.on("RecieveSpecificMessage", (user, profileImage, message) => {
+                    setMessages(messages => [...messages, {user, profileImage, message}]);
                 });
-                signalConnection.on("RecieveMessage", (user, message) => {
-                    setMessages(messages => [...messages, {user, message}]);
+                signalConnection.on("RecieveMessage", (user, profileImage, message) => {
+                    setMessages(messages => [...messages, {user, profileImage, message}]);
                 });
-                
+
                 setConnection(signalConnection);
                 if (signalConnection.state === HubConnectionState.Connected) {
-                    signalConnection.invoke("JoinSpecificChatRoom", {userName: username, chatRoom: chatroom});
+                    signalConnection.invoke("JoinSpecificChatRoom", {
+                        userName: username,
+                        profileImage: profileImage,
+                        chatRoom: chatroom
+                    });
                 }
             })
             .catch(err => console.error('Connection failed: ', err));
@@ -46,7 +52,7 @@ const App = () => {
         };
     };
 
-    const sendMessage = async (message) => {
+    const sendMessage = async (message: string) => {
         if (conn && conn.state === HubConnectionState.Connected) {
             await conn.invoke("SendMessage", message);
         }
@@ -67,4 +73,3 @@ const App = () => {
     );
 };
 
-export default App;

@@ -11,17 +11,17 @@ public class ChatHub : Hub
     public async Task JoinChat(UserConnection conn)
     {
         await Clients.All
-            .SendAsync("RecieveMessage", "admin", $"{conn.userName} has joined the chat");
+            .SendAsync("RecieveMessage", $"{conn.userName}", $"{conn.userName} has joined the chat");
     }
 
     public async Task JoinSpecificChatRoom(UserConnection conn)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conn.chatRoom);
-        
+
         _shared.connections[Context.ConnectionId] = conn;
-        
+
         await Clients.Group(conn.chatRoom)
-            .SendAsync("RecieveMessage", "admin", $"{conn.userName} has joined the chat");
+            .SendAsync("RecieveMessage", conn.userName, conn.profileImage, $"{conn.userName} has joined the chat");
     }
 
     public async Task SendMessage(string msg)
@@ -29,7 +29,7 @@ public class ChatHub : Hub
         if(_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection conn))
         {
             await Clients.Group(conn.chatRoom)
-                .SendAsync("RecieveSpecificMessage", conn.userName, msg);
+                .SendAsync("RecieveSpecificMessage", conn.userName, conn.profileImage, msg);
         }
     }
 }

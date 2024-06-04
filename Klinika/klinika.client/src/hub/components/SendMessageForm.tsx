@@ -1,21 +1,20 @@
-﻿import {Button, Form, InputGroup} from "react-bootstrap";
-import {useState} from "react";
+﻿import {useState} from "react";
 
 
 const SendMessageForm = ({sendMessage}) => {
     const [msg, setMessage] = useState('');
 
-    return <Form onSubmit={e => {
+    return <form onSubmit={e => {
         e.preventDefault();
         sendMessage(msg);
         setMessage('');
     }}>
-        <InputGroup className="mb-3">
-            <InputGroup.Text>Chat</InputGroup.Text>
-            <Form.Control placeholder="Message" onChange={e => setMessage(e.target.value)} value={msg}/>
-            <Button variant="primary" type="submit" disabled={!msg}>Send</Button>
-        </InputGroup>
-    </Form>
+        <div className="w-full h-full relative flex justify-between">
+            <input placeholder="Message" className="w-full h-full border-2" onChange={e => setMessage(e.target.value)}
+                   value={msg}/>
+            <button type="submit" disabled={!msg} className="border-2 px-4 h-full rounded-full">Send</button>
+        </div>
+    </form>
 }
 
 export default SendMessageForm;
