@@ -2,7 +2,6 @@ import {
     Hub,
     PatientConsultationsList,
     PatientDashboard,
-    PatientHub,
     PatientReservations,
     PatientReservationsList
 } from "../../../router/pages";

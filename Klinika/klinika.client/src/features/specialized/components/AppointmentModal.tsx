@@ -60,8 +60,8 @@ function AppointmentModal() {
             const response = await dashboard_api.create(consultationData);
             if (response) {
                 setForm(null);
+                window.location.reload();
             }
-            console.log(response);
         } catch (error) {
             console.error(error);
         }

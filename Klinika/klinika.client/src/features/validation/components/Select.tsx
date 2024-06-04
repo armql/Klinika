@@ -38,6 +38,15 @@ const Select = ({control, name, labelName, options, error, hidden}: SelectProps)
                                 primary: 'black',
                             },
                         })}
+                        styles={{
+                            control: (baseStyles, state) => ({
+                                ...baseStyles,
+                                height: 45,
+                                borderWidth: 2,
+                                outlineColor: state.isFocused ?? "6EC841",
+                                borderColor: state.isFocused ? '#6EC841' : '#E5E7EB',
+                            }),
+                        }}
                         onChange={option => field.onChange(option.value)}
                         onBlur={field.onBlur}
                         value={options?.find(option => option.value === field.value)}

@@ -3,6 +3,7 @@ import axios_instance from "../../../api/axios";
 import {SignOut, User} from "@phosphor-icons/react";
 import {UserData, zAuth} from "../../../store/zAuth";
 import {zPersonal} from "../../settings/__settings.ts";
+import {zNavigation} from "../../navigation/__navigation.ts";
 
 type Props = {
     effect: boolean;
@@ -13,7 +14,8 @@ export default function Profile({effect}: Props) {
     const {setData} = zAuth();
     const {data: accountData, setData: setAccountData} = zPersonal();
 
-    // const { setData: setNavData } = zNavigation();
+    const {deselectFavoritenRecents} = zNavigation();
+
     function logout() {
         try {
             axios_instance.get("/api/Auth/logout").then(() => {
@@ -27,6 +29,7 @@ export default function Profile({effect}: Props) {
                     aud: "",
                 } as UserData);
                 setAccountData(null);
+                deselectFavoritenRecents();
                 navigate("/login");
             });
         } catch (error) {

@@ -117,10 +117,10 @@ export default function Login() {
                                 {...register("password")}
                                 error={errors.password?.message}
                             />
-                            <span
-                                className="text-sm hover:text-blue-500 cursor-pointer text-blue-600 underline absolute right-0 top-0">
-                Forgot Password?
-              </span>
+                            {/*              <span*/}
+                            {/*                  className="text-sm hover:text-blue-500 cursor-pointer text-blue-600 underline absolute right-0 top-0">*/}
+                            {/*  Forgot Password?*/}
+                            {/*</span>*/}
                         </div>
                         <Checkbox
                             htmlFor="rememberMe"

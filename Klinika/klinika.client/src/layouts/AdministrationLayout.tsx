@@ -23,7 +23,7 @@ export default function AdministrationLayout() {
         return response;
     }
 
-    const {isLoading, data} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
+    const {isLoading} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
         onSuccess: (data) => {
             const accountData = {
                 id: data.id,

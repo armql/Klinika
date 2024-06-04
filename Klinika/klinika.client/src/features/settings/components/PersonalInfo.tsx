@@ -125,7 +125,8 @@ function PersonalInfo() {
                 <div className="flex flex-row items-center gap-6">
                     <div className="border-2 w-32 h-32 rounded-full flex justify-center items-center">
                         {accountData && accountData.image ? (
-                            <img src={accountData.image} alt="profile" className="w-32 h-32 rounded-full"/>
+                            <img src={accountData.image} alt="profile"
+                                 className="w-full h-full object-cover rounded-full"/>
                         ) : (
                             <User size={32} className="text-zinc-600"/>
                         )}
@@ -135,6 +136,7 @@ function PersonalInfo() {
                             ref={fileInputRef}
                             style={{display: 'none'}}
                             onChange={handleFileChange}
+
                         />
                     </div>
                     <div className="flex flex-col gap-2 items-start">

@@ -30,12 +30,10 @@ export default function ReservationData() {
     const {
         data: categoryData,
         isLoading: isCategoryLoading,
-        error: categoryError
     } = useQuery("category", specialization_api.category);
     const {
         data: category2Data,
         isLoading: isCategory2Loading,
-        error: category2Error
     } = useQuery("category2", specialization_api.category2);
 
 

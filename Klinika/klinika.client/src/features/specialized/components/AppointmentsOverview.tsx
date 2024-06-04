@@ -26,7 +26,7 @@ function AppointmentsOverview() {
     );
     const {data: userData} = zAuth()
 
-    const {data: additionalData, isLoading} = useQuery(["category", userData.id], () => dashboard_api.get(userData.id));
+    const {data: additionalData, isLoading} = useQuery(["data", userData.id], () => dashboard_api.get(userData.id));
 
     return (
         <Fragment>

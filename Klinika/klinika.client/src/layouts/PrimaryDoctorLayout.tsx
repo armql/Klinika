@@ -22,7 +22,7 @@ export default function PrimaryDoctorLayout() {
         return response;
     }
 
-    const {isLoading, data} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
+    const {isLoading} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
         onSuccess: (data) => {
             const accountData = {
                 id: data.id,
@@ -40,7 +40,7 @@ export default function PrimaryDoctorLayout() {
     if (isLoading) {
         return <div className="bg-white w-full h-full"/>;
     }
-    
+
     return (
         <Sidebar user="primary">
             <main className="relative overflow-hidden">

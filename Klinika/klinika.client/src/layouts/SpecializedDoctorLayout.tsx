@@ -23,7 +23,7 @@ export default function SpecializedDoctorLayout() {
         return response;
     }
 
-    const {isLoading, data} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
+    const {isLoading} = useQuery(['accountData', userData.id], () => fetchAccountData(userData.id), {
         onSuccess: (data) => {
             const accountData = {
                 id: data.id,
@@ -41,7 +41,7 @@ export default function SpecializedDoctorLayout() {
     if (isLoading) {
         return <div className="bg-white w-full h-full"/>;
     }
-    
+
     return (
         <Sidebar user="spec">
             <main className="relative overflow-hidden">

@@ -184,7 +184,7 @@ export default function Sidebar({user, children}: InnerProp) {
                     )}
 
                 </div>
-                <div className="bottom-0 absolute left-0 right-0">
+                <div className="bottom-0 absolute left-0 right-0 bg-white">
                     <div
                         className={`h-14 overflow-hidden relative group border-dashed flex gap-2 delay-700 items-center ${isCollapsed ? "justify-center" : "justify-start"}`}>
                         <Link to="settings" title={isCollapsed ? "Change your preferences" : ""}

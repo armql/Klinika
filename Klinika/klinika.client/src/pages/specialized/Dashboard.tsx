@@ -29,7 +29,7 @@ export default function Dashboard() {
     const {
         data: stats,
         isLoading
-    } = useQuery(["category", userData.id], () => dashboard_api.get(userData.id));
+    } = useQuery(["overview", userData.id], () => dashboard_api.get(userData.id));
     const statsData = stats as Stats;
     const date = new Date();
     return (
