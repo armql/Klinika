@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Klinika.Server.Models;
 using Klinika.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using MongoDB.Bson;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FeeController : Controller

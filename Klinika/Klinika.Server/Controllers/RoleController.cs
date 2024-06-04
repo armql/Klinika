@@ -188,5 +188,22 @@ namespace Klinika.Server.Controllers
 
             return Ok(new { message = Id + " was removed" });
         }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var specializedDoctorsToDelete = await _dbContext.Roles.Where(s => ids.Contains(s.Id)).ToListAsync();
+            
+            
+            if (specializedDoctorsToDelete.Count == 0 || specializedDoctorsToDelete == null)
+            {
+                return NotFound();
+            }
+            
+            _dbContext.RemoveRange(specializedDoctorsToDelete);
+            await _dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Roles were successfully deleted." });
+        } 
     }
 }

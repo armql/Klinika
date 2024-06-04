@@ -1,6 +1,7 @@
 ﻿using Klinika.Server.Models.Data;
 using Klinika.Server.Models.DTO.Developer;
 using Klinika.Server.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserRolesController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext, RoleController roleController) : ControllerBase

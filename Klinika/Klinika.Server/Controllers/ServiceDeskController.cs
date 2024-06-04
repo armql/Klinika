@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ServiceDeskController(ApplicationDbContext dbContext) : ControllerBase
@@ -139,6 +140,36 @@ namespace Klinika.Server.Controllers
             _dbContext.ServiceDesks.Remove(serviceDesk);
             await _dbContext.SaveChangesAsync();
             return Ok(new { message = serviceDesk.name + " was removed" });
+        }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var intIds = new List<int>();
+
+            foreach (var id in ids)
+            {
+                if (int.TryParse(id, out var intId))
+                {
+                    intIds.Add(intId);
+                }
+                else
+                {
+                    return BadRequest(new { message = $"ID '{id}' is not a valid integer." });
+                }
+            }
+
+            var specializationsToDelete = await _dbContext.ServiceDesks.Where(s => intIds.Contains(s.id)).ToListAsync();
+
+            if (specializationsToDelete == null || specializationsToDelete.Count == 0)
+            {
+                return NotFound(new { message = "No specializations found with the provided IDs." });
+            }
+
+            _dbContext.ServiceDesks.RemoveRange(specializationsToDelete);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "Specializations were successfully deleted." });
         }
     }
 }

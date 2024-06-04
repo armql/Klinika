@@ -23,6 +23,7 @@ export default function ServiceDeskData() {
             create: "ServiceDesk/create",
             update: "ServiceDesk/update",
             delete: "ServiceDesk/delete",
+            bulk_delete: "ServiceDesk/bulkDelete",
         },
         axios_instance
     );
@@ -69,7 +70,10 @@ export default function ServiceDeskData() {
 
     return (
         <DataList>
-            <Filters name="ServiceDesk List"/>
+            <Filters 
+                name="ServiceDesk List"
+                bulkDelete={ServiceDesk_api.bulk_delete}
+            />
             <Table<ServiceDesk>
                 headers={[
                     "ServiceDesk ID",

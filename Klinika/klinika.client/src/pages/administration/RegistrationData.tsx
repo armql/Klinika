@@ -70,13 +70,17 @@ export default function RegistrationData() {
             create: "Account/create",
             update: "Account/update",
             delete: "Account/delete",
+            bulk_delete: "Account/bulkDelete",
         },
         axios_instance
     );
 
     return (
         <DataList>
-            <Filters name="User List"/>
+            <Filters 
+                name="User List"
+                bulkDelete={registration_api.bulk_delete}
+            />
             <Table<ApplicationUser>
                 headers={[
                     "ID",

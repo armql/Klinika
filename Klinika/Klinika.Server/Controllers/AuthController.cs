@@ -84,49 +84,6 @@ namespace Klinika.Server.Controllers
             return Ok(new { message = message, result = result });
         }
 
-        //[HttpPost("login")]
-        //public async Task<ActionResult> LoginUser(Login login)
-        //{
-        //    string message = "";
-
-        //    try
-        //    {
-        //        ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
-
-        //        var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.RememberMe, false);
-
-        //        if (!result.Succeeded)
-        //        {
-        //            return Unauthorized("Check your login credentials and try again.");
-        //        }
-
-        //        var userRoles = await _userManager.GetRolesAsync(user);
-
-        //        var authClaims = new List<Claim>
-        //        {
-        //            new Claim(ClaimTypes.Email, user.Email),
-        //            new Claim(ClaimTypes.NameIdentifier, user.Id),
-        //            new Claim("JWTID", Guid.NewGuid().ToString()),
-        //        };
-
-        //        foreach (var userRole in userRoles)
-        //        {
-        //            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-        //        }
-
-        //        var token = GenerateNewJsonWebToken(authClaims);
-
-        //        message = "Login Successful.";
-        //        return Ok(token);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest("Something went wrong please try again." + ex.Message);
-        //    }
-
-        //    return Ok(new { message = message });
-        //}
-
         [HttpPost("login")]
         public async Task<ActionResult> LoginUser(Login login)
         {

@@ -24,6 +24,7 @@ export default function HelpCenterData() {
             create: "HelpCenter/create",
             update: "HelpCenter/update",
             delete: "HelpCenter/delete",
+            bulk_delete: "HelpCenter/bulkDelete",
         },
         axios_instance
     );
@@ -76,7 +77,10 @@ export default function HelpCenterData() {
 
     return (
         <DataList>
-            <Filters name="Help Center List"/>
+            <Filters 
+                name="Help Center List"
+                bulkDelete={helpcenter_api.bulk_delete}
+            />
             <Table<HelpCenter>
                 headers={[
                     "Help Center ID",

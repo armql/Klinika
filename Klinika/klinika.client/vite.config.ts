@@ -94,7 +94,8 @@ export default defineConfig({
                 'api/Role/get',
                 'api/Role/create',
                 'api/Role/update',
-                'api/Role/delete'
+                'api/Role/delete',
+                'api/Role/bulkDelete'
             ], target),
 
             // HelpCenterCategory
@@ -104,7 +105,8 @@ export default defineConfig({
                 'api/HelpCenterCategory/get',
                 'api/HelpCenterCategory/create',
                 'api/HelpCenterCategory/update',
-                'api/HelpCenterCategory/delete'
+                'api/HelpCenterCategory/delete',
+                'api/HelpCenterCategory/bulkDelete'
             ], target),
 
             // HelpCenter
@@ -113,7 +115,8 @@ export default defineConfig({
                 'api/HelpCenter/get',
                 'api/HelpCenter/create',
                 'api/HelpCenter/update',
-                'api/HelpCenter/delete'
+                'api/HelpCenter/delete',
+                'api/HelpCenter/bulkDelete'
             ], target),
 
             // Account
@@ -128,7 +131,8 @@ export default defineConfig({
                 'api/Account/getCurrent',
                 'api/Account/updateEmail',
                 'api/Account/updatePassword',
-                'api/Account/updateName'
+                'api/Account/updateName',
+                'api/Account/bulkDelete'
             ], target),
 
             // ServiceDesk
@@ -137,7 +141,8 @@ export default defineConfig({
                 'api/ServiceDesk/get',
                 'api/ServiceDesk/create',
                 'api/ServiceDesk/update',
-                'api/ServiceDesk/delete'
+                'api/ServiceDesk/delete',
+                'api/ServiceDesk/bulkDelete'
             ], target),
 
             // Block
@@ -146,7 +151,8 @@ export default defineConfig({
                 'api/Block/get',
                 'api/Block/create',
                 'api/Block/update',
-                'api/Block/delete'
+                'api/Block/delete',
+                'api/Block/bulkDelete'
             ], target),
 
             // Metrics

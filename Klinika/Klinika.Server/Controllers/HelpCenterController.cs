@@ -137,5 +137,35 @@ namespace Klinika.Server.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok(new { message = help.name + " was removed" });
         }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var intIds = new List<int>();
+            
+            foreach (var id in ids)
+            {
+                if (int.TryParse(id, out var intId))
+                {
+                    intIds.Add(intId);
+                }
+                else
+                {
+                    return BadRequest(new { message = $"ID '{id}' is not a valid integer." });
+                }
+            }
+            
+            var consultationsToDelete = await _dbContext.HelpCenters.Where(c => intIds.Contains(c.id)).ToListAsync();
+            
+            if(consultationsToDelete == null || consultationsToDelete.Count == 0)
+            {
+                return NotFound(new { message = "No help centers found." });
+            }
+            
+            _dbContext.HelpCenters.RemoveRange(consultationsToDelete);
+            await _dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Help Centers were successfully deleted." });
+        }
     }
 }

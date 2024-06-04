@@ -2,6 +2,7 @@ using Klinika.Server.Configurations;
 using Klinika.Server.Models;
 using Klinika.Server.Models.Data;
 using Klinika.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using MongoDB.Driver;
 
 namespace Klinika.Server.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class ReportController : Controller

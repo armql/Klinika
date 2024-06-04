@@ -13,6 +13,7 @@ using System.Security.Claims;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SpecializationController : ControllerBase

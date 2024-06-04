@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ImageController : ControllerBase
@@ -102,7 +103,7 @@ namespace Klinika.Server.Controllers
                 fileName = file.FileName,
                 filePath = filePath,
                 fileUrl = fileUrl,
-                createdBy = "currentUser.Email",
+                createdBy = user.Email,
                 creationDate = DateTime.Now
             };
 

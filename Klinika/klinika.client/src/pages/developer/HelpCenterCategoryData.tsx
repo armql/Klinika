@@ -27,13 +27,17 @@ export default function HelpCenterCategoryData() {
             create: "HelpCenterCategory/create",
             update: "HelpCenterCategory/update",
             delete: "HelpCenterCategory/delete",
+            bulk_delete: "HelpCenterCategory/bulkDelete",
         },
         axios_instance
     );
 
     return (
         <DataList>
-            <Filters name="Category List"/>
+            <Filters 
+                name="Category List"
+                bulkDelete={helpcentercategory_api.bulk_delete}
+            />
             <Table<HelpCenterCategory>
                 headers={["Category ID", "Name", "Created by", "Created in"]}
                 all={helpcentercategory_api.paginate}

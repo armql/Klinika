@@ -1,10 +1,11 @@
 using Klinika.Server.Models.DTO.Developer;
 using Klinika.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // MetricsController.cs
 namespace Klinika.Server.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class MetricsController : Controller

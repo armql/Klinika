@@ -79,7 +79,7 @@ namespace Klinika.Server.Controllers
             var newCategory = new HelpCenterCategory()
             {
                 name = userRequest.name,
-                createdBy = "Arlind",
+                createdBy = currentUser.Email,
                 creationDate = DateTime.Now,
             };
 
@@ -154,6 +154,36 @@ namespace Klinika.Server.Controllers
             _dbContext.HelpCenterCategorys.Remove(category);
             await _dbContext.SaveChangesAsync();
             return Ok(new { message = category.name + " was removed" });
+        }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var intIds = new List<int>();
+            
+            foreach (var id in ids)
+            {
+                if (int.TryParse(id, out var intId))
+                {
+                    intIds.Add(intId);
+                }
+                else
+                {
+                    return BadRequest(new { message = $"ID '{id}' is not a valid integer." });
+                }
+            }
+            
+            var consultationsToDelete = await _dbContext.HelpCenterCategorys.Where(c => intIds.Contains(c.id)).ToListAsync();
+            
+            if(consultationsToDelete == null || consultationsToDelete.Count == 0)
+            {
+                return NotFound(new { message = "No Help Center Categorys found." });
+            }
+            
+            _dbContext.HelpCenterCategorys.RemoveRange(consultationsToDelete);
+            await _dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Help Center Categorys were successfully deleted." });
         }
     }
 }

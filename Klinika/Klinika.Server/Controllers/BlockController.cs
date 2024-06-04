@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BlockController(ApplicationDbContext dbContext) : ControllerBase
@@ -138,6 +139,36 @@ namespace Klinika.Server.Controllers
             _dbContext.Blocks.Remove(block);
             await _dbContext.SaveChangesAsync();
             return Ok(new { message = block.name + " was removed" });
+        }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var intIds = new List<int>();
+            
+            foreach (var id in ids)
+            {
+                if (int.TryParse(id, out var intId))
+                {
+                    intIds.Add(intId);
+                }
+                else
+                {
+                    return BadRequest(new { message = $"ID '{id}' is not a valid integer." });
+                }
+            }
+            
+            var consultationsToDelete = await _dbContext.Blocks.Where(c => intIds.Contains(c.id)).ToListAsync();
+            
+            if(consultationsToDelete == null || consultationsToDelete.Count == 0)
+            {
+                return NotFound(new { message = "No blocks found." });
+            }
+            
+            _dbContext.Blocks.RemoveRange(consultationsToDelete);
+            await _dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Blocks were successfully deleted." });
         }
     }
 }

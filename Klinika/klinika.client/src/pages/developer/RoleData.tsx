@@ -28,13 +28,17 @@ export default function RoleData() {
             create: "Role/create",
             update: "Role/update",
             delete: "Role/delete",
+            bulk_delete: "Role/bulkDelete",
         },
         axios_instance
     );
 
     return (
         <DataList>
-            <Filters name="Role List"/>
+            <Filters 
+                name="Role List"
+                bulkDelete={role_api.bulk_delete}
+            />
             <Table<IdentityRole>
                 headers={["Role ID", "Role Name"]}
                 all={role_api.paginate}

@@ -19,6 +19,7 @@ export default function PatientData() {
             create: "Patient/create",
             update: "Patient/update",
             delete: "Patient/delete",
+            bulk_delete: "Patient/bulkDelete",
         },
         axios_instance
     );
@@ -47,7 +48,10 @@ export default function PatientData() {
 
     return (
         <DataList>
-            <Filters name="Patient List"/>
+            <Filters 
+                name="Patient List"
+                bulkDelete={Patient_api.bulk_delete}
+            />
             <Table<Patient>
                 headers={[
                     "Patient ID",

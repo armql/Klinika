@@ -20,6 +20,7 @@ export default function BlockData() {
             get: "Block/get",
             create: "Block/create",
             update: "Block/update",
+            bulk_delete: "Block/bulkDelete",
             delete: "Block/delete",
         },
         axios_instance
@@ -55,7 +56,10 @@ export default function BlockData() {
 
     return (
         <DataList>
-            <Filters name="Block List"/>
+            <Filters 
+                name="Block List"
+                bulkDelete={Block_api.bulk_delete}
+            />
             <Table<Block>
                 headers={["Block ID", "Name", "Specialization Id"]}
                 all={Block_api.paginate}

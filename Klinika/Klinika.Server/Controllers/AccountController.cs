@@ -3,6 +3,7 @@ using Klinika.Server.Models.Data;
 using Klinika.Server.Models.DTO;
 using Klinika.Server.Models.DTO.Developer;
 using Klinika.Server.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext) : ControllerBase
@@ -316,7 +318,7 @@ namespace Klinika.Server.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Something went wrong please try again." + ex.Message);
+                return BadRequest(ex.Message);
             }
 
             return Ok(new { message = message, result = result });
@@ -399,5 +401,22 @@ namespace Klinika.Server.Controllers
             var result = hasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
             return result == PasswordVerificationResult.Success;
         }
+        
+        [HttpDelete("bulkDelete")]
+        public async Task<ActionResult> BulkDelete([FromBody] List<string> ids)
+        {
+            var specializedDoctorsToDelete = await _dbContext.Users.Where(s => ids.Contains(s.Id)).ToListAsync();
+            
+            
+            if (specializedDoctorsToDelete.Count == 0 || specializedDoctorsToDelete == null)
+            {
+                return NotFound();
+            }
+            
+            _dbContext.Users.RemoveRange(specializedDoctorsToDelete);
+            await _dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Accounts were successfully deleted." });
+        } 
     }
 }
