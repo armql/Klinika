@@ -38,8 +38,7 @@ namespace Klinika.Server.Controllers
         }
 
         [HttpGet("paginate")]
-        public ActionResult<IEnumerable<Reservation>> Paginate(string search = "", int pageNumber = 1,
-            int pageSize = 15)
+        public ActionResult<IEnumerable<Reservation>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             if (_dbContext.Reservations == null)
             {
@@ -50,7 +49,24 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.reasonOfConsultation.Contains(search) || s.slot == int.Parse(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(r => r.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(r => r.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(r => r.reasonOfConsultation);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(r => r.reasonOfConsultation);
+                        break;
+                    default:
+                        query = query.Where(r => r.reasonOfConsultation.Contains(search) || r.date.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();

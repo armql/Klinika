@@ -118,13 +118,30 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.id.Contains(search) || s.Specialization.name.Contains(search) || s.User.UserName.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(s => s.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(s => s.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(s => s.User.firstName);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(s => s.User.firstName);
+                        break;
+                    default:
+                        query = query.Where(s => s.id.Contains(search) || s.Specialization.name.Contains(search) || s.User.UserName.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();
 
             var specializedDoctors = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
-            
+
             return Ok(new
             {
                 data = specializedDoctors,

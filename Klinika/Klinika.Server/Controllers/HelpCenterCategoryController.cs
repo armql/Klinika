@@ -48,7 +48,24 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.name.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(h => h.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(h => h.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(h => h.name);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(h => h.name);
+                        break;
+                    default:
+                        query = query.Where(h => h.name.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();

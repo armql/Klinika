@@ -271,7 +271,10 @@ export default function Table<T extends BaseItem>({
                 <div className="absolute bg-opacity-20 top-0 right-0 left-0 bottom-0 bg-black">
                     <div className="p-24 relative">
                         <button type="button"
-                                onClick={() => setConvPDF(false)}
+                                onClick={() => {
+                                    setConvPDF(false);
+                                    deselectAll();
+                                }}
                                 className="absolute right-2 top-2 hover:bg-black hover:bg-opacity-10 bg-white p-2 rounded-full">
                             <X size={24}/>
                         </button>

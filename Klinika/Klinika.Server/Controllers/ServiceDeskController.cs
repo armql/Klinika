@@ -39,23 +39,39 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.name.Contains(search) || s.operatingHours.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(s => s.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(s => s.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(s => s.name);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(s => s.name);
+                        break;
+                    default:
+                        query = query.Where(s => s.name.Contains(search) || s.email.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();
 
-            var services = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+            var serviceDesks = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
 
             return Ok(new
             {
-                data = services,
+                data = serviceDesks,
                 pageNumber,
                 pageSize,
                 totalCount = count,
                 totalPages = (int)Math.Ceiling(count / (double)pageSize)
             });
         }
-
 
         //[Authorize]
         [HttpPost("create")]

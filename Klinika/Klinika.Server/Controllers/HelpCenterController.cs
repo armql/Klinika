@@ -35,8 +35,27 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.subject.Contains(search) || s.name.Contains(search) || s.email.Contains(search) || s.message.Contains(search));
-            }            var count = query.Count();
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(h => h.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(h => h.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(h => h.subject);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(h => h.subject);
+                        break;
+                    default:
+                        query = query.Where(h => h.subject.Contains(search) || h.name.Contains(search) || h.email.Contains(search) || h.message.Contains(search));
+                        break;
+                }
+            }
+
+            var count = query.Count();
 
             var helps = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
 

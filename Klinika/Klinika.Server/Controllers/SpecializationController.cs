@@ -48,18 +48,35 @@ namespace Klinika.Server.Controllers
             {
                 return NotFound();
             }
-
+        
             var query = _dbContext.Specializations.AsQueryable();
-
+        
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.name.Contains(search) || s.createdBy.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(s => s.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(s => s.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(s => s.name);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(s => s.name);
+                        break;
+                    default:
+                        query = query.Where(s => s.name.Contains(search) || s.createdBy.Contains(search));
+                        break;
+                }
             }
-
+        
             var count = query.Count();
-
+        
             var specializations = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
-
+        
             return Ok(new
             {
                 data = specializations,

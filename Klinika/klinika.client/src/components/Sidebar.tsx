@@ -14,6 +14,7 @@ import {CaretDown, Faders, Folder, FolderOpen} from "@phosphor-icons/react";
 import {Link, NavLink} from "react-router-dom";
 import {categoryRender} from "../util/category-render";
 import {zNavigation} from "../features/navigation/__navigation";
+import {zForm} from "../features/handata/__handata.ts";
 
 interface InnerProp {
     user: string;
@@ -36,7 +37,7 @@ export default function Sidebar({user, children}: InnerProp) {
         handleFolder,
         handleRecents,
     } = zNavigation();
-
+    const {deselectAll, setConvPDF} = zForm();
 
     useEffect(() => {
         setType(user);
@@ -156,6 +157,8 @@ export default function Sidebar({user, children}: InnerProp) {
                                                                                 onClick={() => {
                                                                                     handleActiveLink(mark);
                                                                                     handleRecents(mark);
+                                                                                    deselectAll();
+                                                                                    setConvPDF(false);
                                                                                 }}
                                                                                 className={({isActive}) =>
                                                                                     `text-black ${

@@ -37,7 +37,7 @@ namespace Klinika.Server.Controllers
         [HttpGet("paginate")]
         public ActionResult<IEnumerable<Image>> Paginate(string search = "", int pageNumber = 1, int pageSize = 15)
         {
-            if (_dbContext.Specializations == null)
+            if (_dbContext.Images == null)
             {
                 return NotFound();
             }
@@ -46,16 +46,33 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.fileName.Contains(search) || s.createdBy.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(i => i.id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(i => i.id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(i => i.fileName);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(i => i.fileName);
+                        break;
+                    default:
+                        query = query.Where(i => i.fileName.Contains(search) || i.createdBy.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();
 
-            var specializations = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+            var images = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
 
             return Ok(new
             {
-                data = specializations,
+                data = images,
                 pageNumber,
                 pageSize,
                 totalCount = count,

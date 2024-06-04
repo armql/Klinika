@@ -99,16 +99,33 @@ namespace Klinika.Server.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(s => s.Email.Contains(search) || s.firstName.Contains(search) || s.lastName.Contains(search) || s.PhoneNumber.Contains(search));
+                switch (search)
+                {
+                    case "_byLowId":
+                        query = query.OrderBy(u => u.Id);
+                        break;
+                    case "_byHighId":
+                        query = query.OrderByDescending(u => u.Id);
+                        break;
+                    case "_byAsc":
+                        query = query.OrderBy(u => u.firstName);
+                        break;
+                    case "_byDesc":
+                        query = query.OrderByDescending(u => u.firstName);
+                        break;
+                    default:
+                        query = query.Where(u => u.Email.Contains(search) || u.firstName.Contains(search) || u.lastName.Contains(search) || u.PhoneNumber.Contains(search));
+                        break;
+                }
             }
 
             var count = query.Count();
 
-            var services = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
+            var users = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
 
             return Ok(new
             {
-                data = services,
+                data = users,
                 pageNumber,
                 pageSize,
                 totalCount = count,

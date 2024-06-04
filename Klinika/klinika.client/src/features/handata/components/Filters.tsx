@@ -9,7 +9,7 @@ type FiltersProps = {
 };
 
 export default function Filters({name, bulkDelete}: FiltersProps) {
-    const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems} =
+    const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems, handleSearch, search} =
         zForm();
     const {openCreate: create} = zHandler();
 
@@ -30,7 +30,7 @@ export default function Filters({name, bulkDelete}: FiltersProps) {
                     <button
                         title="Funnel items"
                         type="button"
-                        onClick={() => handleCreatedBy("admin")}
+                        onClick={() => handleSearch(search === "_byLowId" ? "_byHighId" : "_byLowId")}
                         className="hover:opacity-60"
                     >
                         <FunnelSimple size={22}/>
@@ -38,7 +38,7 @@ export default function Filters({name, bulkDelete}: FiltersProps) {
                     <button
                         title="Re-order items"
                         type="button"
-                        onClick={() => handleSortOrder(sortOrder ? "desc" : "asc")}
+                        onClick={() => handleSearch(search === "_byAsc" ? "_byDesc" : "_byAsc")}
                         className="hover:opacity-60"
                     >
                         <ArrowsDownUp size={22}/>

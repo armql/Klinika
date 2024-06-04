@@ -1,4 +1,4 @@
-import {FileCsv, FilePdf, Stack, StackMinus, StackSimple} from "@phosphor-icons/react";
+import {FilePdf, Stack, StackMinus, StackSimple} from "@phosphor-icons/react";
 import {Tooltip} from "react-tooltip";
 import Swal from "sweetalert2";
 import {zForm, zPagination} from "../../__handata.ts";
@@ -41,6 +41,7 @@ function Bulk({__delete}: BulkProps) {
                         });
                     }
                 }
+                deselectAll();
             })
         } catch (e) {
             console.log(e)
@@ -90,11 +91,11 @@ function Bulk({__delete}: BulkProps) {
                         className="w-full flex justify-start items-center border hover:bg-zinc-100 bg-zinc-50 px-2 text-zinc-800 gap-2 py-1 rounded-lg text-xs">
                     <FilePdf size={18}/>Bulk to PDF
                 </button>
-                <button type="button"
-                        onClick={() => console.log('Bulk Reorder clicked')}
-                        className="w-full flex justify-start items-center border hover:bg-zinc-100 bg-zinc-50 px-2 text-zinc-800 gap-2 py-1 rounded-lg text-xs">
-                    <FileCsv size={18}/>Bulk to CSV
-                </button>
+                {/*<button type="button"*/}
+                {/*        onClick={() => console.log('Bulk Reorder clicked')}*/}
+                {/*        className="w-full flex justify-start items-center border hover:bg-zinc-100 bg-zinc-50 px-2 text-zinc-800 gap-2 py-1 rounded-lg text-xs">*/}
+                {/*    <FileCsv size={18}/>Bulk to CSV*/}
+                {/*</button>*/}
             </Tooltip>
         </div>
     );
