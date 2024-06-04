@@ -1,5 +1,5 @@
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {Fragment} from "react/jsx-runtime";
 import {Spinner, X} from "@phosphor-icons/react";
 import {z} from "zod";
@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import getErrorMessage from "../../../util/http-handler";
 import {isAxiosError} from "axios";
 import Swal from "sweetalert2";
-import {Checkbox, createGlobalSchema, GlobalError, Input, Select, Textarea,} from "../../validation/__validation";
+import {Checkbox, createGlobalSchema, File, GlobalError, Input, Select, Textarea,} from "../../validation/__validation";
 import {zForm, zHandler} from "../__handata";
 import {FormField} from "../utils/form-fields";
 
@@ -33,6 +33,7 @@ export default function EditForm<T>({
         register,
         setValue,
         handleSubmit,
+        control,
         formState: {errors, isSubmitting, isSubmitSuccessful},
     } = useForm<RefinedInputs>({
         mode: "onChange",
@@ -111,6 +112,7 @@ export default function EditForm<T>({
     };
 
     const generateInputs = (field: FormField) => {
+        const betterOptions = field.options?.map(option => ({value: option.id, label: option.name}));
         let inputElement;
         switch (field.type) {
             case "checkbox":
@@ -126,26 +128,75 @@ export default function EditForm<T>({
                     />
                 );
                 break;
+            case "number":
+                inputElement = (
+                    <Controller
+                        name={field.identifier}
+                        control={control}
+                        render={({field: {onChange, onBlur, value, name, ref}}) => (
+                            <Input
+                                type="number"
+                                htmlFor={field.identifier}
+                                labelName={field.name}
+                                placeholder={field.placeholder}
+                                value={value || ''} // Provide a default value
+                                onChange={async e => {
+                                    onChange(e.target.valueAsNumber);
+                                    return Promise.resolve();
+                                }}
+                                onBlur={async () => {
+                                    onBlur();
+                                    return Promise.resolve();
+                                }}
+                                error={errors[name]?.message}
+                                hidden={field.isHidden}
+                                ref={ref}
+                            />
+                        )}
+                    />
+                );
+                break;
+            case "hidden":
+                inputElement = (
+                    <input
+                        type="hidden"
+                        name={field.identifier}
+                        {...register}
+                        defaultValue={field.value}
+                    />
+                );
+                break;
+            case "file":
+                inputElement = (
+                    <Controller
+                        control={control}
+                        name="file"
+                        render={({field: {onChange, onBlur, name, ref}}) => (
+                            <File
+                                type="file"
+                                htmlFor="file"
+                                labelName="Image"
+                                placeholder="Upload your image"
+                                onChange={e => {
+                                    console.log(e.target.files[0]); // Add this line
+                                    onChange(e.target.files[0]);
+                                }}
+                                onBlur={onBlur}
+                                name={name}
+                                ref={ref}
+                                error={errors.file?.message}
+                            />
+                        )}
+                    />
+                );
+                break;
             case "select":
                 inputElement = (
                     <Select
                         control={control}
                         name={field.identifier}
                         labelName={field.name}
-                        options={field.options}
-                        error={errors[field.identifier]?.message}
-                        hidden={field.isHidden}
-                    />
-                );
-                break;
-            case "date":
-                inputElement = (
-                    <Input
-                        type={field.type}
-                        htmlFor={field.identifier}
-                        labelName={field.name}
-                        placeholder={field.placeholder}
-                        {...register(field.identifier)}
+                        options={betterOptions}
                         error={errors[field.identifier]?.message}
                         hidden={field.isHidden}
                     />
@@ -154,7 +205,6 @@ export default function EditForm<T>({
             case "textarea":
                 inputElement = (
                     <Textarea
-                        type="textarea"
                         htmlFor={field.identifier}
                         labelName={field.name}
                         placeholder={field.placeholder}
@@ -180,6 +230,7 @@ export default function EditForm<T>({
 
         return <Fragment key={field.identifier}>{inputElement}</Fragment>;
     };
+
     if (loadingData) {
         return (
             <div

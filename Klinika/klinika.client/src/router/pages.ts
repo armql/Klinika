@@ -25,9 +25,8 @@ const DeveloperConsultationData = lazy(() => import("../pages/developer/Consulta
 const DeveloperSpecializedDoctorData = lazy(() => import("../pages/developer/SpecializedDoctorData"));
 const DeveloperPatientData = lazy(() => import("../pages/developer/PatientData"));
 const DeveloperImageData = lazy(() => import("../pages/developer/ImageData"));
-const DeveloperUserRolesData = lazy(() => import("../pages/developer/UserRolesData"));
 const DeveloperPrimaryDoctorData = lazy(() => import("../pages/developer/PrimaryDoctorData"));
-const DeveloperChatData = lazy(() => import("../pages/developer/Hub.tsx"));
+const Hub = lazy(() => import("../pages/Hub.tsx"));
 
 
 const SpecializedDashboard = lazy(() => import("../pages/specialized/Dashboard"));
@@ -48,12 +47,12 @@ export {
     Register,
     Login,
     Settings,
+    Hub,
 
     PatientDashboard,
     PatientReservations,
     PatientReservationsList,
     PatientConsultationsList,
-    PatientHub,
 
     DeveloperDashboard,
     DeveloperUserData,
@@ -70,7 +69,6 @@ export {
     DeveloperImageData,
     DeveloperUserRolesData,
     DeveloperPrimaryDoctorData,
-    DeveloperChatData,
 
     SpecializedDashboard,
     SpecializedAppointments,

@@ -30,3 +30,13 @@ main {
     background-size: 200% 200%;
     animation: gradient 20s ease infinite;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

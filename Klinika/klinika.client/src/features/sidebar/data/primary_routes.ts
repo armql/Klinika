@@ -1,4 +1,4 @@
-import {PrimaryAppointments, PrimaryDashboard} from "../../../router/pages";
+import {Hub, PrimaryAppointments, PrimaryDashboard} from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
 export const primary_routes: Data[] = [
@@ -12,6 +12,7 @@ export const primary_routes: Data[] = [
                 links: [
                     {to: "dashboard", text: "Dashboard", component: PrimaryDashboard},
                     {to: "handle-reports", text: "Reports", component: PrimaryAppointments},
+                    {to: "hub", text: "Primary Hub", component: Hub},
                 ],
             },
         ],

@@ -1,10 +1,10 @@
 ﻿import {useState} from 'react';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {Col, Container, Row} from "react-bootstrap";
-import WaitingRoom from "../../hub/components/waitingRoom.tsx";
-import ChatRoom from "../../hub/components/ChatRoom";
+import WaitingRoom from "../hub/components/waitingRoom.tsx";
+import ChatRoom from "../hub/components/ChatRoom.tsx";
 
-type Message = {
+export type Message = {
     user: string;
     profileImage: string;
     message: string;
@@ -67,7 +67,7 @@ export default function Hub() {
             </Row>
             {!conn
                 ? <WaitingRoom joinChatRoom={joinChatRoom}/>
-                : <ChatRoom messages={messages} sendMessage={sendMessage}/>
+                : <ChatRoom messages={messages} sendMessage={sendMessage} leaveConn={() => setConnection(null)}/>
             }
         </Container>
     );

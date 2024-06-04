@@ -1,18 +1,19 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import axios_instance from "../../../api/axios";
-import { SignOut, User } from "@phosphor-icons/react";
-import { UserData, zAuth } from "../../../store/zAuth";
-import { zPersonal } from "../../settings/__settings.ts";
+import {SignOut, User} from "@phosphor-icons/react";
+import {UserData, zAuth} from "../../../store/zAuth";
+import {zPersonal} from "../../settings/__settings.ts";
 
 type Props = {
     effect: boolean;
 };
 
-export default function Profile({ effect }: Props) {
+export default function Profile({effect}: Props) {
     const navigate = useNavigate();
-    const { setData } = zAuth();
-    const { data: accountData } = zPersonal();
-    
+    const {setData} = zAuth();
+    const {data: accountData, setData: setAccountData} = zPersonal();
+
+    // const { setData: setNavData } = zNavigation();
     function logout() {
         try {
             axios_instance.get("/api/Auth/logout").then(() => {
@@ -25,6 +26,7 @@ export default function Profile({ effect }: Props) {
                     iss: "",
                     aud: "",
                 } as UserData);
+                setAccountData(null);
                 navigate("/login");
             });
         } catch (error) {
@@ -45,9 +47,9 @@ export default function Profile({ effect }: Props) {
                     className="h-9 w-9 overflow-hidden flex border justify-center items-center rounded-full bg-zinc-50"
                 >
                     {accountData?.image ? (
-                        <img src={profileImage} alt="profile" className="h-full rounded-full object-cover w-full" />
+                        <img src={profileImage} alt="profile" className="h-full rounded-full object-cover w-full"/>
                     ) : (
-                        <User size={32} className="text-zinc-600" />
+                        <User size={32} className="text-zinc-600"/>
                     )}
                 </div>
                 {!effect && <span className="tracking-wide">{accountData?.firstName} {accountData?.lastName}</span>}
@@ -62,7 +64,7 @@ export default function Profile({ effect }: Props) {
                         effect && "w-full"
                     }`}
                 >
-                    <SignOut size={24} />
+                    <SignOut size={24}/>
                 </button>
             </div>
         </div>

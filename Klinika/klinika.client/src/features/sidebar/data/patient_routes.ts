@@ -1,4 +1,5 @@
 import {
+    Hub,
     PatientConsultationsList,
     PatientDashboard,
     PatientHub,
@@ -44,7 +45,7 @@ export const patient_routes: Data[] = [
                 id: 3,
                 name: "Learning Center",
                 links: [
-                    {to: "hub", text: "Patient Hub", component: PatientHub},
+                    {to: "hub", text: "Patient Hub", component: Hub},
                 ],
             },
         ],

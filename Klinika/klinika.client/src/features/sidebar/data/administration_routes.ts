@@ -1,7 +1,8 @@
 import {
     AdministrationDashboard,
     AdministrationPatientRegistration,
-    AdministrationPatientReservation
+    AdministrationPatientReservation,
+    Hub
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -43,22 +44,17 @@ export const administration_routes: Data[] = [
     //         },
     //     ],
     // },
-    // {
-    //     id: 3,
-    //     category: "Community",
-    //     folders: [
-    //         {
-    //             id: 3,
-    //             name: "Learning Center",
-    //             links: [
-    //                 {to: "learn-more", text: "Learn More", component: PatientConsultationsList},
-    //                 {
-    //                     to: "ask-question",
-    //                     text: "Ask Questions",
-    //                     component: PatientConsultationsList,
-    //                 },
-    //             ],
-    //         },
-    //     ],
-    // },
+    {
+        id: 3,
+        category: "Community",
+        folders: [
+            {
+                id: 3,
+                name: "Learning Center",
+                links: [
+                    {to: "hub", text: "Administration Hub", component: Hub},
+                ],
+            },
+        ],
+    },
 ];

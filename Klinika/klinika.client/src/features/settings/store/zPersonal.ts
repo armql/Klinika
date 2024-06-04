@@ -12,7 +12,7 @@ export type Account = {
 
 type StoreProps = {
     data: Account | null;
-    setData: (data: Account) => void;
+    setData: (data: Account | null) => void;
 };
 
 export const zPersonal = create<StoreProps>(persist(

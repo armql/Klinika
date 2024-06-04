@@ -1,4 +1,4 @@
-import {SpecializedAppointments, SpecializedDashboard} from "../../../router/pages";
+import {Hub, SpecializedAppointments, SpecializedDashboard} from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
 export const specialized_routes: Data[] = [
@@ -37,7 +37,7 @@ export const specialized_routes: Data[] = [
                 id: 3,
                 name: "Learning Center",
                 links: [
-                    {to: "learn-more", text: "Learn More", component: SpecializedDashboard},
+                    {to: "hub", text: "Specialized Hub", component: Hub},
                 ],
             },
         ],

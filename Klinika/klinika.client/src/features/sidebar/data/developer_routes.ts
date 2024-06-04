@@ -1,6 +1,5 @@
 import {
     DeveloperBlockData,
-    DeveloperChatData,
     DeveloperConsultationData,
     DeveloperDashboard,
     DeveloperHelpCenterCategoryData,
@@ -14,6 +13,7 @@ import {
     DeveloperSpecializationData,
     DeveloperSpecializedDoctorData,
     DeveloperUserData,
+    Hub,
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -146,11 +146,7 @@ export const developer_routes: Data[] = [
                 id: 6,
                 name: "Learning Center",
                 links: [
-                    {
-                        to: "chat-data",
-                        text: "Chat",
-                        component: DeveloperChatData,
-                    },
+                    {to: "hub", text: "Developer Hub", component: Hub},
                 ],
             },
         ],
