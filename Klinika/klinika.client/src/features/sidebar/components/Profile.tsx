@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import axios_instance from "../../../api/axios";
+import axios_instance from "../../../services/axios.ts";
 import {SignOut, User} from "@phosphor-icons/react";
 import {UserData, zAuth} from "../../../store/zAuth";
 import {zPersonal} from "../../settings/__settings.ts";

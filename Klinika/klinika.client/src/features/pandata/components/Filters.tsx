@@ -1,14 +1,13 @@
-import {zForm} from "../../handata/__handata.ts";
-
 type FiltersProps = {
     name: string;
-    bulkDelete?: (id: string[]) => Promise<void>;
+    // bulkDelete?: (id: string[]) => Promise<void>;
 };
 
-export default function Filters({name, bulkDelete}: FiltersProps) {
-    const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems} =
-        zForm();
+export default function Filters({name}: FiltersProps) {
+    // const {handleCreatedBy, handleSortOrder, sortOrder, selectedItems} =
+    //     zForm();
     // const {openCreate: create} = zHandler();
+
 
 
     return (

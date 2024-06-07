@@ -1,6 +1,6 @@
-﻿import MessageContainer from "./MessageContainer";
+﻿import MessageContainer from "./MessageContainer.tsx";
 import SendMessageForm from "./SendMessageForm.tsx";
-import {Message} from "../../pages/Hub.tsx";
+import {Message} from "../../../pages/Hub.tsx";
 
 type ChatRoomProps = {
     messages: Message[];

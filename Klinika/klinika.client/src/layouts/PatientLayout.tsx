@@ -5,13 +5,14 @@ import {useQuery} from "react-query";
 import {zAuth} from "../store/zAuth.ts";
 import {zPersonal} from "../features/settings/store/zPersonal.ts";
 import {ApiService} from "../services/ApiServices.ts";
-import axios_instance from "../api/axios.ts";
 import {Account} from "../features/settings/components/PersonalInfo.tsx";
+import axios_instance from "../services/axios.ts";
 
 
 export default function PatientLayout() {
     const {data: userData} = zAuth();
     const {setData: setAccountData} = zPersonal();
+
     const current_api = new ApiService<Account>(
         {
             get: 'Account/get',

@@ -23,6 +23,7 @@ namespace Klinika.Server.Controllers
         private readonly RoleController _roleController;
 
         
+        
         [HttpGet("count")]
         public async Task<ActionResult> CountEntities()
         {

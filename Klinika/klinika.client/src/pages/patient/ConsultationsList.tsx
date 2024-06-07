@@ -1,7 +1,7 @@
 import {Filters, Table} from "../../features/pandata/__pandata.ts";
 import {DataList} from "../../features/handata/__handata.ts";
 import {ApiService} from "../../services/ApiServices.ts";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import {Reservation} from "../developer/ReservationData.tsx";
 
 export default function ReservationsList() {

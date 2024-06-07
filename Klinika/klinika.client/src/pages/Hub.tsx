@@ -1,8 +1,6 @@
 ﻿import {useState} from 'react';
 import {HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
-import WaitingRoom from "../hub/components/waitingRoom.tsx";
-import ChatRoom from "../hub/components/ChatRoom.tsx";
-
+import { WaitingRoom, ChatRoom } from "../features/hub/__hub.ts";
 export type Message = {
     user: string;
     profileImage: string;

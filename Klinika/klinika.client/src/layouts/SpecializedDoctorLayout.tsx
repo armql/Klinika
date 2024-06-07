@@ -4,7 +4,7 @@ import {zAuth} from "../store/zAuth.ts";
 import {zPersonal} from "../features/settings/store/zPersonal.ts";
 import {ApiService} from "../services/ApiServices.ts";
 import {Account} from "../features/settings/components/PersonalInfo.tsx";
-import axios_instance from "../api/axios.ts";
+import axios_instance from "../services/axios.ts";
 import {useQuery} from "react-query";
 
 

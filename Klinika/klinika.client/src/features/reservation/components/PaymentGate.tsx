@@ -2,7 +2,7 @@ import {CardElement, useElements, useStripe} from "@stripe/react-stripe-js";
 import {Check, Spinner} from "@phosphor-icons/react";
 import {zReservation} from "../store/zReservation.ts";
 import {FormEvent, Fragment} from "react";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 import {zHandler} from "../../handata/store/zHandler.ts";
 import {zAuth} from "../../../store/zAuth.ts";
 

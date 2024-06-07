@@ -1,6 +1,6 @@
 import {useQuery} from 'react-query';
 import {useCallback, useEffect, useState} from "react";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 
 interface Metric {
     value: number;

@@ -4,7 +4,7 @@ import Datepicker from "./Datepicker.tsx";
 import {ClockClockwise, Info, MagicWand, Spinner, User} from "@phosphor-icons/react";
 import {Tooltip} from "react-tooltip";
 import {zAuth} from "../../../store/zAuth.ts";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 import {useQuery} from "react-query";
 import {format} from "date-fns";
 import {useNavigate} from "react-router-dom";

@@ -1,7 +1,7 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {ApiService} from "../../../services/ApiServices.ts";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 import {zAppointments} from "../__specialized.ts";
 import {Input, Textarea} from "../../validation/__validation.ts";
 import {z} from "zod";

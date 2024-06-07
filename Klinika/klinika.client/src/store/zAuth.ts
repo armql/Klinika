@@ -1,42 +1,40 @@
-import {create} from "zustand";
-import {createJSONStorage, persist} from "zustand/middleware";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import {authState} from "../util/authState.ts";
 
 export type UserData = {
-    email: string;
     id: string;
-    jwtid: string;
     role: string | "GUEST";
-    exp: number;
-    iss: string;
-    aud: string;
-    jwtToken: string;
-    refreshToken: string;
 };
 
 type StoreProps = {
     data: UserData;
     setData: (data: UserData) => void;
+    jwtToken: string | undefined;
+    setJwtToken: (jwtToken: string | undefined) => void;
 };
 
 export const zAuth = create(
     persist<StoreProps>(
         (set) => ({
             data: {
-                email: "",
                 id: "",
-                jwtid: "",
                 role: "GUEST",
-                exp: 0,
-                iss: "",
-                aud: "",
-                jwtToken: "",
-                refreshToken: "",
             },
-            setData: (data: UserData) => set({data}),
+            jwtToken: undefined,
+            setData: (data: UserData) => {
+                set({ data });
+                authState.setData(data);
+            },
+            setJwtToken: (jwtToken: string | undefined) => {
+                set({ jwtToken });
+                authState.setToken(jwtToken);
+            },
         }),
         {
             name: "auth",
             storage: createJSONStorage(() => localStorage),
+            partialize: (state) => ({ data: state.data })
         }
     )
 );

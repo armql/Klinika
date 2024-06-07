@@ -31,7 +31,7 @@ export default function Login() {
         resolver: zodResolver(schema_login),
     });
     const {setGlobalError, global_error} = zHandler();
-    const {setData} = zAuth();
+    const {setData, setJwtToken} = zAuth();
     const {pathname} = useLocation();
     const [error, setError] = useState("");
     const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -43,26 +43,16 @@ export default function Login() {
             .then((response) => {
                 const decoded = jwtDecode(response.data.jwtToken);
                 const userData = {
-                    email:
-                        decoded[
-                            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-                            ],
                     id: decoded[
                         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
                         ],
-                    jwtid: decoded["JWTID"],
                     role: decoded[
                         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                         ],
-                    exp: decoded["exp"],
-                    iss: decoded["iss"],
-                    aud: decoded["aud"],
-                    jwtToken: response.data.jwtToken,
-                    refreshToken: response.data.refreshToken,
                 };
-
-
                 setData(userData as UserData);
+                setJwtToken(response.data.jwtToken);
+
 
                 const role = userData.role;
                 const finalized_routing = routes[role];

@@ -5,7 +5,7 @@ import {Elements} from "@stripe/react-stripe-js";
 import {zAuth} from "../../store/zAuth.ts";
 import {useEffect, useState} from "react";
 import {specialization_data} from "../../features/reservation/data/specialization_data.ts";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import {useQuery} from "react-query";
 import {CaretLeft} from "@phosphor-icons/react";
 

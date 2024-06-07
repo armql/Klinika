@@ -27,6 +27,29 @@ namespace Klinika.Server.Controllers
         private readonly IConfiguration _configuration = configuration;
         private readonly RoleController _roleController = roleController;
         
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            try
+            {
+                var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+
+                if (authHeader == null || !authHeader.StartsWith("Bearer "))
+                {
+                    return Unauthorized();
+                }
+
+                var jwtToken = authHeader.Substring("Bearer ".Length);
+
+                return Ok(new { jwtToken });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500);
+            }
+        }
+        
         [HttpPost("register")]
         public async Task<ActionResult> RegisterUser(ApplicationUser user)
         {
@@ -85,66 +108,73 @@ namespace Klinika.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> LoginUser(Login login)
+public async Task<ActionResult> LoginUser(Login login)
+{
+    try
+    {
+        ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
+        var response = new LoginResponse();
+
+        if (user == null)
         {
-            try
-            {
-                ApplicationUser user = await _userManager.FindByEmailAsync(login.Email);
-                var response = new LoginResponse();
-
-                if (user == null)
-                {
-                    return BadRequest(new { error = "The email address you entered does not correspond to any account. Please check and try again." });
-                }
-
-                var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.RememberMe, false);
-
-                if (result.IsLockedOut)
-                {
-                    return Unauthorized(new { error = "Your account is locked. Please contact support for assistance." });
-                }
-
-                if (result.IsNotAllowed)
-                {
-                    return Unauthorized(new { error = "You are not allowed to sign in. Please contact support if you believe this is an error." });
-                }
-
-                if (!result.Succeeded)
-                {
-                    return Unauthorized(new { error = "The password you entered is incorrect. Please check and try again." });
-                }
-
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim("JWTID", Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                response.jwtToken = GenerateNewJsonWebToken(authClaims);
-                response.refreshToken = GenerateRefreshToken();
-                response.isLoggedIn = true;
-                
-                user.refreshToken = response.refreshToken;
-                user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
-                await _userManager.UpdateAsync(user);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                // Log the detailed error message for debugging
-                Console.WriteLine(ex);
-                return BadRequest(new { error = "An unexpected error occurred. Please try again later." });
-            }
+            return BadRequest(new { error = "The email address you entered does not correspond to any account. Please check and try again." });
         }
+
+        var result = await _signInManager.PasswordSignInAsync(user, login.Password, login.RememberMe, false);
+
+        if (result.IsLockedOut)
+        {
+            return Unauthorized(new { error = "Your account is locked. Please contact support for assistance." });
+        }
+
+        if (result.IsNotAllowed)
+        {
+            return Unauthorized(new { error = "You are not allowed to sign in. Please contact support if you believe this is an error." });
+        }
+
+        if (!result.Succeeded)
+        {
+            return Unauthorized(new { error = "The password you entered is incorrect. Please check and try again." });
+        }
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var authClaims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim("JWTID", Guid.NewGuid().ToString()),
+        };
+
+        foreach (var userRole in userRoles)
+        {
+            authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+        }
+
+        response.jwtToken = GenerateNewJsonWebToken(authClaims);
+        response.refreshToken = GenerateRefreshToken();
+        response.isLoggedIn = true;
+
+        user.refreshToken = response.refreshToken;
+        user.refreshTokenExpiryTime = DateTime.Now.AddDays(30);
+        await _userManager.UpdateAsync(user);
+
+        // Create a new cookie
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTime.Now.AddDays(30),
+        };
+        Response.Cookies.Append("refreshToken", response.refreshToken, cookieOptions);
+
+        return Ok(response);
+    }
+    catch (Exception ex)
+    {
+        // Log the detailed error message for debugging
+        Console.WriteLine(ex);
+        return BadRequest(new { error = "An unexpected error occurred. Please try again later." });
+    }
+}
 
         [HttpPost("refreshTokenMethod")]
         public async Task<ActionResult<LoginResponse>> RefreshTokeno(RefreshTokenModel model)
@@ -252,56 +282,37 @@ namespace Klinika.Server.Controllers
         }
 
 
-        [HttpPost("refreshToken")]
-        public async Task<ActionResult> RefreshToken(RefreshTokenModel model)
+        [HttpGet("refreshToken")]
+        public async Task<IActionResult> RefreshToken()
         {
-            try
+            // Check if the refresh token exists in the cookies
+            if (Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
             {
-                if (model == null)
+                var user = await _userManager.Users.SingleOrDefaultAsync(u => u.refreshToken == refreshToken);
+        
+                if (user != null && user.refreshTokenExpiryTime > DateTime.Now)
                 {
-                    // Log the null model error
-                    return BadRequest("Model is null");
-                }
-
-                var actionResult = await RefreshTokeno(model);
-
-                if (actionResult == null)
-                {
-                    // Log the null actionResult error
-                    return BadRequest("Action result is null");
-                }
-
-                if (actionResult.Result is OkObjectResult okResult)
-                {
-                    var loginResponse = okResult.Value as LoginResponse;
-
-                    if (loginResponse == null)
+                    var userRoles = await _userManager.GetRolesAsync(user);
+                    var authClaims = new List<Claim>
                     {
-                        // Log the null loginResponse error
-                        return BadRequest("Login response is null");
-                    }
-
-                    if (loginResponse.isLoggedIn)
+                        new Claim(ClaimTypes.NameIdentifier, user.Id),
+                        new Claim("JWTID", Guid.NewGuid().ToString()),
+                    };
+        
+                    foreach (var userRole in userRoles)
                     {
-                        return Ok(loginResponse);
+                        authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                     }
-
-                    return Unauthorized(model);
+        
+                    var jwtToken = GenerateNewJsonWebToken(authClaims);
+        
+                    // Return the new JWT token
+                    return Ok(new { jwtToken });
                 }
-
-                // Handle other possible results (BadRequest, Unauthorized, etc.)
-                if (actionResult.Result is BadRequestObjectResult badRequestResult)
-                {
-                    return BadRequest(badRequestResult.Value);
-                }
-
-                return Unauthorized(model);
             }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+        
+            // If the refresh token does not exist or is not valid, return an unauthorized status
+            return Unauthorized();
         }
 
         [HttpPost("logout"), Authorize]

@@ -1,6 +1,6 @@
 import {Fragment} from "react";
 import {ApiService} from "../../../services/ApiServices.ts";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 import {zAuth} from "../../../store/zAuth.ts";
 import {useQuery} from "react-query";
 import {Spinner} from "@phosphor-icons/react";

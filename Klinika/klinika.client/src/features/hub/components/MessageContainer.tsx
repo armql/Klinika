@@ -1,5 +1,5 @@
 ﻿import {useEffect, useRef} from 'react';
-import {zPersonal} from "../../features/settings/__settings.ts";
+import {zPersonal} from "../../settings/__settings.ts";
 import {User} from "@phosphor-icons/react";
 
 interface Message {

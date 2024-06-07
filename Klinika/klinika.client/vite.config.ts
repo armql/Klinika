@@ -54,7 +54,6 @@ const target = env.ASPNETCORE_HTTPS_PORT
         : "https://localhost:7045";
 
 // https://vitejs.dev/config/
-// https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
     resolve: {
@@ -69,6 +68,7 @@ export default defineConfig({
                 'logout',
                 'pingauth',
                 'api/Auth',
+                'api/Auth/me',
                 'api/Auth/login',
                 'api/Auth/refreshToken',
                 'api/Fee/all',
@@ -185,6 +185,7 @@ export default defineConfig({
                 'api/Consultation/bulkDelete'
             ], target),
 
+            // Patient
             ...createProxyRoutes([
                 'api/Patient/paginate',
                 'api/Patient/get',
@@ -194,6 +195,8 @@ export default defineConfig({
                 'api/Patient/delete',
                 'api/Patient/bulkDelete'
             ], target),
+
+            // SpecializedDoctor
             ...createProxyRoutes([
                 'api/SpecializedDoctor/paginate',
                 'api/SpecializedDoctor/get',
@@ -203,6 +206,8 @@ export default defineConfig({
                 'api/SpecializedDoctor/delete',
                 'api/SpecializedDoctor/bulkDelete'
             ], target),
+
+            // Image
             ...createProxyRoutes([
                 'api/Image/paginate',
                 'api/Image/get',
@@ -212,6 +217,8 @@ export default defineConfig({
                 'api/Image/delete',
                 'api/Image/bulkDelete'
             ], target),
+
+            // UserRoles
             ...createProxyRoutes([
                 'api/UserRoles/paginate',
                 'api/UserRoles/get',
@@ -221,6 +228,8 @@ export default defineConfig({
                 'api/UserRoles/delete',
                 'api/UserRoles/bulkDelete'
             ], target),
+
+            // PrimaryCareDoctor
             ...createProxyRoutes([
                 'api/PrimaryCareDoctor/paginate',
                 'api/PrimaryCareDoctor/get',

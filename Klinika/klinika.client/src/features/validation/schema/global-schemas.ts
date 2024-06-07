@@ -57,8 +57,8 @@ const ageSchema = z
 const selectSchema = z
     .any();
 
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+// const MAX_FILE_SIZE = 5000000;
+// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 const fileSchema = z
     .any()
@@ -105,14 +105,6 @@ const schemaMap: Record<string, T> = {
     password: passwordSchema,
     hidden: hiddenSchema,
 };
-
-// const createGlobalSchema = (fields: FormField[]) => {
-//     const globalSchemaFields = fields.map((field) => ({
-//         [field.identifier]: schemaMap[field.type],
-//     }));
-//
-//     return z.object(Object.assign({}, ...globalSchemaFields));
-// };
 
 const createGlobalSchema = (fields: FormField[]) => {
     const globalSchemaFields = fields.map((field) => {

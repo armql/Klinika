@@ -1,6 +1,5 @@
 import {AxiosInstance, AxiosResponse} from "axios";
 
-// Define a type for your API endpoints
 type ApiEndpoints = {
     category?: string;
     category2?: string;
@@ -26,31 +25,21 @@ export class ApiService<T> {
     }
 
     category = async (): Promise<T[]> => {
-        if (this.endpoints.category) {
-            const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-                this.endpoints.category
-            );
-            return response.data;
-        } else {
-            throw new Error("Category endpoint is undefined");
-        }
+        if (!this.endpoints.category) throw new Error("First category endpoint is undefined");
+
+        const response: AxiosResponse<T[]> = await this.axiosInstance.get(this.endpoints.category);
+        return response.data;
     };
 
     category2 = async (): Promise<T[]> => {
-        if (this.endpoints.category2) {
-            const response: AxiosResponse<T[]> = await this.axiosInstance.get(
-                this.endpoints.category2
-            );
-            return response.data;
-        } else {
-            throw new Error("Category endpoint is undefined");
-        }
+        if (!this.endpoints.category2) throw new Error("Second category endpoint is undefined");
+
+        const response: AxiosResponse<T[]> = await this.axiosInstance.get(this.endpoints.category2);
+        return response.data;
     };
 
     createImage = async (image: File): Promise<T> => {
-        if (!this.endpoints.create_image) {
-            throw new Error("create_image endpoint is undefined");
-        }
+        if (!this.endpoints.create_image) throw new Error("Image creation endpoint is undefined");
 
         const formData = new FormData();
         formData.append('file', image);
@@ -98,6 +87,8 @@ export class ApiService<T> {
     };
 
     create = async (item: T): Promise<T> => {
+        if (!this.endpoints.create) throw new Error("Create endpoint is undefined");
+
         const response: AxiosResponse<T> = await this.axiosInstance.post(
             this.endpoints.create,
             item
@@ -116,12 +107,10 @@ export class ApiService<T> {
     delete = async (id: number | string): Promise<void> => {
         await this.axiosInstance.delete(`${this.endpoints.delete}?id=${id}`);
     };
-    bulk_delete = async (id: string[]): Promise<void> => {
-        if (this.endpoints.bulk_delete) {
 
-            await this.axiosInstance.delete(this.endpoints.bulk_delete, {data: id});
-        } else {
-            throw new Error("Bulk delete endpoint is undefined");
-        }
+    bulk_delete = async (id: string[]): Promise<void> => {
+        if (!this.endpoints.bulk_delete) throw new Error("Bulk delete endpoint is undefined");
+
+        await this.axiosInstance.delete(this.endpoints.bulk_delete, {data: id});
     };
 }

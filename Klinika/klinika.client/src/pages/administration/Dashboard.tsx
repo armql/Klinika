@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {Reorder} from "framer-motion";
 import UsersTraffic from "../../features/dashboard/components/UsersTraffic.tsx";
 import SimpleStats from "../../features/dashboard/components/SimpleStats.tsx";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import Shortcuts from "../../features/dashboard/components/Shortcuts.tsx";
 
 type StatsProps = {

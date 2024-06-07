@@ -1,7 +1,7 @@
 ﻿import {useState} from "react";
 import {Button} from "react-bootstrap";
 import Form from 'react-bootstrap/Form'
-import {zPersonal} from "../../features/settings/__settings.ts";
+import {zPersonal} from "../../settings/__settings.ts";
 import ReactSelect from "react-select";
 
 const waitingRooms = [

@@ -2,7 +2,7 @@ import {Fragment} from "react";
 import {HandWaving, PencilSimple} from "@phosphor-icons/react";
 import {ApiService} from "../../services/ApiServices.ts";
 import {Reservation} from "../developer/ReservationData.tsx";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import {zAuth} from "../../store/zAuth.ts";
 import {useQuery} from "react-query";
 import {format, parse} from "date-fns";

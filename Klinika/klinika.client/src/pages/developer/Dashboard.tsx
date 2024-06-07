@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {Reorder} from "framer-motion";
 import UsersTraffic from "../../features/dashboard/components/UsersTraffic.tsx";
 import SimpleStats from "../../features/dashboard/components/SimpleStats.tsx";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import Shortcuts from "../../features/dashboard/components/Shortcuts.tsx";
 
 type StatsProps = {
@@ -56,7 +56,9 @@ export default function Dashboard() {
                                       className="w-full rounded-md active:border-zinc-300 border-zinc-50 hover:border-zinc-100 active:cursor-grab h-[350px] border-2 border-dashed overflow-hidden">
                             <div className="bg-zinc-50  w-full h-full flex items-center justify-center">
                                 {item === 1 &&
-                                    <UsersTraffic/>}
+                                    <div className="w-full h-full">
+                                    </div>
+                                }
                                 {item === 2 &&
                                     <div className="w-full h-full">
                                     </div>

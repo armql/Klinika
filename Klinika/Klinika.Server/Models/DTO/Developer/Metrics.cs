@@ -10,7 +10,7 @@ public class Metrics
     [BsonElement("_id")]
     public string? Id { get; set; }
 
-    public int value { get; set; } = 0;
+    public int Value { get; set; } = 0;
     public DateTime creationDate { get; set; }
 
     public Metrics()

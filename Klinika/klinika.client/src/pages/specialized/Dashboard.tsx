@@ -1,6 +1,6 @@
 import {Notebook, UserPlus} from "@phosphor-icons/react";
 import {ApiService} from "../../services/ApiServices.ts";
-import axios_instance from "../../api/axios.ts";
+import axios_instance from "../../services/axios.ts";
 import {useQuery} from "react-query";
 import {zAuth} from "../../store/zAuth.ts";
 import {Announcement} from "../../features/dashboard/__dashboard.ts";

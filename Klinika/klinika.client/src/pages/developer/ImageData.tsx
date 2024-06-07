@@ -1,4 +1,4 @@
-﻿import axios_instance from "../../api/axios";
+﻿import axios_instance from "../../services/axios.ts";
 import {ApiService} from "../../services/ApiServices";
 import {BaseItem, CreateForm, DataList, Filters, Table, zHandler,} from "../../features/handata/__handata";
 import {FormField} from "../../features/handata/utils/form-fields";

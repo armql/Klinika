@@ -5,7 +5,7 @@ import {zPersonal} from "../__settings.ts";
 import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {ApiService} from "../../../services/ApiServices.ts";
 import {Reservation} from "../../../pages/developer/ReservationData.tsx";
-import axios_instance from "../../../api/axios.ts";
+import axios_instance from "../../../services/axios.ts";
 import {useForm} from "react-hook-form";
 
 export type Account = {
