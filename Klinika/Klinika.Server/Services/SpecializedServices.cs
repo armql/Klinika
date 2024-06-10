@@ -10,11 +10,11 @@ public class SpecializedServices
 {
     private readonly IMongoCollection<Metrics> _metricsCollection;
     
-    public SpecializedServices(IOptions<MongoSettings> clientSettings)
+    public SpecializedServices(IOptions<MongoSettings> clientSettings, IConfiguration configuration)
     {
-        var client = new MongoClient(clientSettings.Value.ConnectionString);
-        var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.Specialized);
+        var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+        var mongoDb = client.GetDatabase(configuration["MongoDatabase:DatabaseName"]);
+        _metricsCollection = mongoDb.GetCollection<Metrics>(configuration["MongoDatabase:Specialized"]);
     }
         
     public async Task<List<Metrics>> GetAllAsync()

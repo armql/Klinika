@@ -62,7 +62,6 @@ export default function Table<T extends BaseItem>({
             onSettled: () => {
                 setLoading(false);
             },
-
         }
     );
 

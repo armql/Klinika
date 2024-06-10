@@ -12,9 +12,9 @@ export default function ProtectedRoutes({ children, suspense }: InnerProp) {
   const { pathname } = useLocation();
   const { data } = zAuth();
 
-  const identifiedrole = data.role;
-  if (!pathname.includes(routes[identifiedrole])) {
-    return <Navigate to={routes[identifiedrole]} />;
+  const identifiedRole = data.role;
+  if (!pathname.includes(routes[identifiedRole])) {
+    return <Navigate to={routes[identifiedRole]} />;
   }
 
   if (suspense) {

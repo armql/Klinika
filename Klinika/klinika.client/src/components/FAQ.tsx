@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import  {Fragment, useEffect, useState} from "react";
 import Faq from "react-faq-component";
 
 const data = {
@@ -45,7 +45,7 @@ const config = {
 };
 
 export default function HelpCenter() {
-    const [rows, setRowsOption] = useState();
+    const [rows] = useState();
 
     useEffect(() => {
         if (rows) {
@@ -65,7 +65,7 @@ export default function HelpCenter() {
     }, [rows]);
 
     return (
-        <div>
+        <Fragment>
             <h1 className="text-3xl font-bold text-center mb-6">FAQ [Frequently Asked Questions]</h1>
             <Faq
                 data={data}
@@ -75,6 +75,6 @@ export default function HelpCenter() {
             <hr/>
 
             <h1 className="text-3xl mt-10 font-bold text-center mb-6">Still having problems? Then contact us!</h1>
-        </div>
+        </Fragment>
     );
 }

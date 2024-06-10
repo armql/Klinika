@@ -10,11 +10,11 @@ public class PatientsServices
 {
     private readonly IMongoCollection<Metrics> _metricsCollection;
     
-    public PatientsServices(IOptions<MongoSettings> clientSettings)
+    public PatientsServices(IOptions<MongoSettings> clientSettings, IConfiguration configuration)
     {
-        var client = new MongoClient(clientSettings.Value.ConnectionString);
-        var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.Patients);
+        var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+        var mongoDb = client.GetDatabase(configuration["MongoDatabase:DatabaseName"]);
+        _metricsCollection = mongoDb.GetCollection<Metrics>(configuration["MongoDatabase:Patients"]);
     }
         
     public async Task<List<Metrics>> GetAllAsync()

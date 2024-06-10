@@ -10,7 +10,7 @@ using MongoDB.Bson;
 
 namespace Klinika.Server.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FeeController : Controller

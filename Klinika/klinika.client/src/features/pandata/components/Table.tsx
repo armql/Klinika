@@ -119,38 +119,9 @@ export default function Table<T extends BaseItem>({
         }
     };
 
-
     const handleItem = (id: number | string) => {
         const stringId = String(id);
         return selectedItems.includes(stringId);
-    };
-
-    const deleteItem = async (id: number | string) => {
-        try {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    getDeleted(id).then(() => {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Deleted",
-                            text: "Successfully deleted",
-                        }).then(() => {
-                            refetch();
-                        });
-                    });
-                }
-            });
-        } catch (error) {
-            console.error(error);
-        }
     };
 
     const styles: CSSProperties = {

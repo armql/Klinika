@@ -10,11 +10,11 @@ public class RegisteredServices
 {
     private readonly IMongoCollection<Metrics> _metricsCollection;
     
-    public RegisteredServices(IOptions<MongoSettings> clientSettings)
+    public RegisteredServices(IOptions<MongoSettings> clientSettings, IConfiguration configuration)
     {
-        var client = new MongoClient(clientSettings.Value.ConnectionString);
-        var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.Registered);
+        var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+        var mongoDb = client.GetDatabase(configuration["MongoDatabase:DatabaseName"]);
+        _metricsCollection = mongoDb.GetCollection<Metrics>(configuration["MongoDatabase:Registered"]);
     }
         
     public async Task<List<Metrics>> GetAllAsync()

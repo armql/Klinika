@@ -90,10 +90,9 @@ export const router = createBrowserRouter([
                 .map((category) => {
                     return category.folders.map((folder) => {
                         return folder.links.map((link) => {
-                            const Component = link.component;
                             return {
                                 path: link.to,
-                                element: <Component/>,
+                                element: <link.component/>,
                             };
                         });
                     });
@@ -125,10 +124,9 @@ export const router = createBrowserRouter([
                 .map((category) => {
                     return category.folders.map((folder) => {
                         return folder.links.map((link) => {
-                            const Component = link.component;
                             return {
                                 path: link.to,
-                                element: <Component/>,
+                                element: <link.component/>,
                             };
                         });
                     });
@@ -160,10 +158,9 @@ export const router = createBrowserRouter([
                 .map((category) => {
                     return category.folders.map((folder) => {
                         return folder.links.map((link) => {
-                            const Component = link.component;
                             return {
                                 path: link.to,
-                                element: <Component/>,
+                                element: <link.component/>,
                             };
                         });
                     });
@@ -195,10 +192,9 @@ export const router = createBrowserRouter([
                 .map((category) => {
                     return category.folders.map((folder) => {
                         return folder.links.map((link) => {
-                            const Component = link.component;
                             return {
                                 path: link.to,
-                                element: <Component/>,
+                                element: <link.component/>,
                             };
                         });
                     });
@@ -230,10 +226,9 @@ export const router = createBrowserRouter([
                 .map((category) => {
                     return category.folders.map((folder) => {
                         return folder.links.map((link) => {
-                            const Component = link.component;
                             return {
                                 path: link.to,
-                                element: <Component/>,
+                                element: <link.component/>,
                             };
                         });
                     });

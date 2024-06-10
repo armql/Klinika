@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {authState} from "../util/authState.ts";
+import {UserData} from "../store/zAuth.ts";
 
 const axios_instance = axios.create({
     baseURL: "/api/",
@@ -20,12 +21,12 @@ axios_instance.interceptors.response.use(
     async (error) => {
         if (error.response) {
             const originalRequest = error.config;
-            if (error.response.status === 401 && !originalRequest._retry) {
-                originalRequest._retry = true;
+            if (error.response.status === 401 && (!originalRequest._retryCount || originalRequest._retryCount < 3)) {
+                originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
                 try {
                     const response = await axios_instance.get("Auth/refreshToken");
                     const decoded = jwtDecode(response.data.jwtToken);
-                    const userData = {
+                    const userData: UserData = {
                         id: decoded[
                             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
                             ],
@@ -38,6 +39,10 @@ axios_instance.interceptors.response.use(
                     originalRequest.headers.Authorization = `Bearer ${response.data.jwtToken}`;
                     return axios_instance(originalRequest);
                 } catch (err) {
+                    if (err.response.status === 401) {
+                        authState.setData(undefined);
+                        return Promise.reject(error);
+                    }
                     console.log(err);
                 }
             }

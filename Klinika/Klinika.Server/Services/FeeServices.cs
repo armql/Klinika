@@ -12,11 +12,12 @@ namespace Klinika.Server.Services
     {
         private readonly IMongoCollection<Fee> _feeCollection;
 
-        public FeeServices(IOptions<MongoSettings> clientSettings)
+        public FeeServices(IOptions<MongoSettings> clientSettings, IConfiguration configuration)
         {
-            var client = new MongoClient(clientSettings.Value.ConnectionString);
-            var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-            _feeCollection = mongoDb.GetCollection<Fee>(clientSettings.Value.Fees);
+            var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+            var databaseName = configuration["MongoDatabase:DatabaseName"];
+            var mongoDb = client.GetDatabase(databaseName);
+            _feeCollection = mongoDb.GetCollection<Fee>(configuration["MongoDatabase:Fees"]);
         }
 
         public async Task<List<Fee>> GetAllFeesAsync()

@@ -8,6 +8,7 @@ export type Specialization = BaseItem & {
     name: string;
     createdBy: string;
 };
+
 const formFields: FormField[] = [
     {
         type: "text",
@@ -15,7 +16,6 @@ const formFields: FormField[] = [
         name: "Specialization Name",
         placeholder: "Enter your specialization name",
     },
-    
 ];
 
 export default function SpecializationData() {

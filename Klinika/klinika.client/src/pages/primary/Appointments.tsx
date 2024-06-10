@@ -21,7 +21,10 @@ export default function Appointments() {
             paginate: "Report/paginate",
             create: "Report/prescribe",
             category: "Account/getAll",
-            category2: 'Specialization/getAll'
+            category2: 'Specialization/getAll',
+            get: 'Report/get',
+            update: 'Report/edit',
+            delete: 'Report/delete',
         },
         axios_instance
     );

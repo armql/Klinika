@@ -14,5 +14,8 @@ export const authState = {
     },
     getData: function() {
         return this.data;
+    },
+    setContent: function() {
+        return this.data;
     }
 };

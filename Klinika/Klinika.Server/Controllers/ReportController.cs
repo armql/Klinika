@@ -4,6 +4,7 @@ using Klinika.Server.Models.Data;
 using Klinika.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -21,13 +22,14 @@ public class ReportController : Controller
     private readonly IMongoCollection<Report> _reportCollection;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public ReportController(FeeServices feeServices, IOptions<MongoSettings> clientSettings, UserManager<ApplicationUser> userManager)
+    public ReportController(FeeServices feeServices, IConfiguration configuration, UserManager<ApplicationUser> userManager)
     {
-        _feeServices = feeServices;
-        var client = new MongoClient(clientSettings.Value.ConnectionString);
-        var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _reportCollection = mongoDb.GetCollection<Report>(clientSettings.Value.Report);
+        var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+        var databaseName = configuration["MongoDatabase:DatabaseName"];
+        var mongoDb = client.GetDatabase(databaseName);
+        _reportCollection = mongoDb.GetCollection<Report>(configuration["MongoDatabase:Report"]);
         _userManager = userManager;
+        _feeServices = feeServices;
     }
 
     [HttpGet("paginate")]
@@ -108,9 +110,63 @@ public class ReportController : Controller
             UserId = request.UserId,
             PrimaryCareId = request.PrimaryCareId
         };
+        
+        
 
         await _reportCollection.InsertOneAsync(report);
 
         return Ok(new { message = $"Prescription for user {request.UserId} for specialization {request.SpecializationName} has been added." });
+    }
+    
+    [HttpGet("get")]
+    public async Task<ActionResult<Report>> Get(string id)
+    {
+        var report = await _reportCollection.Find(r => r._id == new ObjectId(id)).FirstOrDefaultAsync();
+
+        if (report == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(report);
+    }
+    
+    [HttpPatch("edit")]
+    public async Task<IActionResult> Edit(string id, [FromBody] JsonPatchDocument<Report> patchDoc)
+    {
+        if (patchDoc != null)
+        {
+            var report = await _reportCollection.Find(r => r._id == new ObjectId(id)).FirstOrDefaultAsync();
+
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            patchDoc.ApplyTo(report);
+
+            await _reportCollection.ReplaceOneAsync(r => r._id == new ObjectId(id), report);
+
+            return Ok(new { message = "Report with the id " + id + " was updated." });
+        }
+        else
+        {
+            return BadRequest();
+        }
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var report = await _reportCollection.Find(r => r._id == new ObjectId(id)).FirstOrDefaultAsync();
+
+        if (report == null)
+        {
+            return NotFound();
+        }
+
+        await _reportCollection.DeleteOneAsync(r => r._id == new ObjectId(id));
+
+        return Ok(new { message = "Report with the id " + id + " was deleted." });
     }
 }

@@ -10,11 +10,11 @@ public class ReservationServices
 {
     private readonly IMongoCollection<Metrics> _metricsCollection;
     
-    public ReservationServices(IOptions<MongoSettings> clientSettings)
+    public ReservationServices(IOptions<MongoSettings> clientSettings, IConfiguration configuration)
     {
-        var client = new MongoClient(clientSettings.Value.ConnectionString);
-        var mongoDb = client.GetDatabase(clientSettings.Value.Database);
-        _metricsCollection = mongoDb.GetCollection<Metrics>(clientSettings.Value.Reservations);
+        var client = new MongoClient(configuration["MongoDatabase:ConnectionString"]);
+        var mongoDb = client.GetDatabase(configuration["MongoDatabase:DatabaseName"]);
+        _metricsCollection = mongoDb.GetCollection<Metrics>(configuration["MongoDatabase:Reservations"]);
     }
         
     public async Task<List<Metrics>> GetAllAsync()

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Klinika.Server.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BlockController(ApplicationDbContext dbContext) : ControllerBase
