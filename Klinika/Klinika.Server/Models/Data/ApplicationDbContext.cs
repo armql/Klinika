@@ -37,6 +37,9 @@ namespace Klinika.Server.Models.Data
         
         public DbSet<Image> Images { get; set; }
         
+        
+        public DbSet<Planet> Planets { get; set; }
+        public DbSet<Satellite> Satellites { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

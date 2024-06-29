@@ -13,7 +13,8 @@ import {
     DeveloperSpecializationData,
     DeveloperSpecializedDoctorData,
     DeveloperUserData,
-    Hub,
+    DeveloperPlanetData,
+    Hub, DeveloperSatelliteData,
 } from "../../../router/pages";
 import {Data} from "../../navigation/store/zNavigation";
 
@@ -126,13 +127,29 @@ export const developer_routes: Data[] = [
                 ],
             },
             {
-                id: 9,
+                id: 11,
                 name: "Images",
                 links: [
                     {
                         to: "image-data",
                         text: "Images List",
                         component: DeveloperImageData,
+                    },
+                ],
+            },
+            {
+                id: 12,
+                name: "Planets & Satellites",
+                links: [
+                    {
+                        to: "planets-data",
+                        text: "Planets List",
+                        component: DeveloperPlanetData,
+                    },
+                    {
+                        to: "satellites-data",
+                        text: "Satellites List",
+                        component: DeveloperSatelliteData,
                     },
                 ],
             },

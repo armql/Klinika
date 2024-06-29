@@ -57,6 +57,7 @@ export default function Table<T extends BaseItem>({
         () => all(currentPage, itemsPerPage, searchValue),
         {
             onSuccess: (data: ResponseData<T>) => {
+                console.log(data);
                 setTotalPages(data.totalPages);
             },
             onSettled: () => {

@@ -245,6 +245,28 @@ export default defineConfig({
                 'api/Report/paginate',
                 'api/Report/prescribe',
             ], target),
+
+            // PLANET
+            ...createProxyRoutes([
+                'api/Planet/paginate',
+                'api/Planet/getAll',
+                'api/Planet/get',
+                'api/Planet/create',
+                'api/Planet/update',
+                'api/Planet/delete-soft',
+                'api/Planet/bulkDelete'
+            ], target),
+
+            // SATELLITE
+            ...createProxyRoutes([
+                'api/Satellite/paginate',
+                'api/Satellite/getAll',
+                'api/Satellite/get',
+                'api/Satellite/create',
+                'api/Satellite/update',
+                'api/Satellite/delete-soft',
+                'api/Satellite/bulkDelete'
+            ], target),
         },
         port: 5173,
         https: {

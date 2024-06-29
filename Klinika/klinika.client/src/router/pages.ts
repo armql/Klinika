@@ -25,6 +25,9 @@ const DeveloperSpecializedDoctorData = lazy(() => import("../pages/developer/Spe
 const DeveloperPatientData = lazy(() => import("../pages/developer/PatientData"));
 const DeveloperImageData = lazy(() => import("../pages/developer/ImageData"));
 const DeveloperPrimaryDoctorData = lazy(() => import("../pages/developer/PrimaryDoctorData"));
+const DeveloperPlanetData = lazy(() => import("../pages/developer/PlanetData"));
+const DeveloperSatelliteData = lazy(() => import("../pages/developer/SatelliteData"));
+
 const Hub = lazy(() => import("../pages/Hub.tsx"));
 
 
@@ -67,6 +70,8 @@ export {
     DeveloperPatientData,
     DeveloperImageData,
     DeveloperPrimaryDoctorData,
+    DeveloperPlanetData,
+    DeveloperSatelliteData,
 
     SpecializedDashboard,
     SpecializedAppointments,
